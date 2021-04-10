@@ -1,3 +1,1 @@
-# N21_G13_QuanLyBatDongSan
-
-A project that manage a real esate agency app
+Quản lý Bất động sản
