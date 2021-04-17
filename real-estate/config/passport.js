@@ -11,7 +11,7 @@ passport.deserializeUser((user, done) => {
     done(null, user)
 })
 
-passport.use(new LocalStrategy({
+passport.use('local-login',new LocalStrategy({
     usernameField: "username",
     passwordField: "password",
     passReqToCallback: true

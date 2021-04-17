@@ -6,6 +6,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 
+const registerRouter = require('./controllers/register');
+const loginRouter = require('./controllers/login');
+const logoutRouter = require('./controllers/logout');
 const indexRouter = require('./controllers/index');
 
 const authenticate = require('./middleware/authenticate');
@@ -31,7 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', indexRouter);
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
+app.use('/register', registerRouter)
+app.use('/',authenticate.authen, indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
