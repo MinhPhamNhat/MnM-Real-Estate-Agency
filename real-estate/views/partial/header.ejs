@@ -1,27 +1,34 @@
 
   <!-- Start header section -->
-  <header id="aa-header">  
+  <header id="header">  
         <div class="container">
           <div class="row">
             <div class="col-md-12">
-              <div class="aa-header-area">
+              <div class="header-area">
                 <div class="row">
                   <div class="col-md-6 col-sm-6 col-xs-6">
-                    <div class="aa-header-left">
-                      <div class="aa-telephone-no">
+                    <div class="header-left">
+                      <div class="telephone-no">
                         <span class="fa fa-phone"></span>
                         1-900-523-3564
                       </div>
-                      <div class="aa-email hidden-xs">
+                      <div class="email hidden-xs">
                         <span class="fa fa-envelope-o"></span> info@markups.com
                       </div>
                     </div>              
                   </div>
                   <div class="col-md-6 col-sm-6 col-xs-6">
-                      <div class="aa-header-right">
-                        <a href="/register" class="aa-register">Register</a>
-                        <a href="/login" class="aa-login">Login</a>
+                    <% if(!locals.logined) {%>
+                      <div class="header-right">
+                        <a href="/register" class="register">Register</a>
+                        <a href="/login" class="login">Login</a>
                       </div>
+                    <%}else{%>
+                      <div class="header-right">
+                          <a href="/profile/<%= locals.user.accountId %>" class="register"><%=locals.user.name%></a>
+                          <a href="/logout" class="login">Logout</a>
+                      </div>
+                    <%}%>
                   </div>
                 </div>
               </div>
@@ -31,7 +38,7 @@
       </header>
       <!-- End header section -->
       <!-- Start menu section -->
-      <section id="aa-menu-area">
+      <section id="menu-area">
         <nav class="navbar navbar-default main-navbar" role="navigation">  
           <div class="container">
             <div class="navbar-header">
@@ -44,21 +51,21 @@
               </button>
               <!-- LOGO -->                                               
               <!-- Text based logo -->
-              <a class="navbar-brand aa-logo " href="/"> Bán <span>Nhà</span></a>
+              <a class="navbar-brand logo <%= active==="home"?"active":"" %>" href="/"> Bán <span>Nhà</span></a>
               <!-- Image based logo -->
-              <!-- <a class="navbar-brand aa-logo-img" href="/"><img src="/images/logo.png" alt="logo"></a> -->                     
+              <!-- <a class="navbar-brand logo-img" href="/"><img src="/images/logo.png" alt="logo"></a> -->                     
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-              <ul id="top-menu" class="nav navbar-nav navbar-right aa-main-nav">
-                <li><a href="/">HOME</a></li>
-                <li class="dropdown ">
+              <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
+                <li <%= active==="home"?"class=active":"" %>><a href="/">HOME</a></li>
+                <li class="dropdown <%= active==="properties"?"active":"" %>">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="/properties">PROPERTIES <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">                
                     <li><a href="/properties">PROPERTIES</a></li>
                     <li><a href="/detail">PROPERTIES DETAIL</a></li>                                            
                   </ul>
                 </li>
-                <li ><a href="/gallery">GALLERY</a></li>                                         
+                <li <%= active==="gallery"?"class=active":"" %>><a href="/gallery">GALLERY</a></li>                                         
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="/blog-archive">BLOG <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">                
@@ -67,6 +74,9 @@
                   </ul>
                 </li>
                 <li><a href="/contact">CONTACT</a></li>
+                <% if(locals.logined) {%>
+                <li <%= active==="add"?"class=active":"" %>><a href="/add-properties">ADD PROPERTIES</a></li>    
+                <%}%>
               </ul>                          
             </div>     
           </div>          

@@ -47,7 +47,7 @@ jQuery(function($){
   /*  2. AGENTS SLIDER
   /* ----------------------------------------------------------- */    
 
-    jQuery('.aa-agents-slider').slick({
+    jQuery('.agents-slider').slick({
       dots: false,
       arrows: false,
       infinite: true,
@@ -90,7 +90,7 @@ jQuery(function($){
   /*  3. TESTIMONIAL SLIDER 
   /* ----------------------------------------------------------- */    
 
-    jQuery('.aa-testimonial-slider').slick({
+    jQuery('.testimonial-slider').slick({
         dots: false,      
         infinite: true,
         speed: 500,      
@@ -101,7 +101,7 @@ jQuery(function($){
   /*  4. CLIENT BRAND SLIDER (SLICK SLIDER)
   /* ----------------------------------------------------------- */  
 
-   jQuery('.aa-client-brand-slider').slick({
+   jQuery('.client-brand-slider').slick({
       dots: false,
       arrows: false,
       infinite: true,
@@ -145,7 +145,7 @@ jQuery(function($){
   /*  5. TOP SLIDER (SLICK SLIDER)
   /* ----------------------------------------------------------- */    
 
-    jQuery('.aa-top-slider').slick({
+    jQuery('.top-slider').slick({
       dots: false,
       infinite: true,
       arrows: true,
@@ -158,7 +158,7 @@ jQuery(function($){
   /*  6. LATEST PRODUCT SLIDER (SLICK SLIDER)
   /* ----------------------------------------------------------- */      
 
-    jQuery('.aa-properties-details-img').slick({
+    jQuery('.properties-details-img').slick({
       dots: false,
       infinite: true,
       arrows: true,
@@ -184,9 +184,9 @@ jQuery(function($){
   /* ----------------------------------------------------------- */        
 
     jQuery(function(){
-      if(jQuery('body').is('.aa-price-range')){
+      if(jQuery('body').is('.price-range')){
         // FOR AREA SECTION
-       var skipSlider = document.getElementById('aa-sqrfeet-range');
+       var skipSlider = document.getElementById('sqrfeet-range');
         noUiSlider.create(skipSlider, {
             range: {
               'min': 0,
@@ -217,7 +217,7 @@ jQuery(function($){
 
         // FOR PRICE SECTION
 
-        var skipSlider2 = document.getElementById('aa-price-range');
+        var skipSlider2 = document.getElementById('price-range');
         noUiSlider.create(skipSlider2, {
             range: {
                 'min': 0,
@@ -291,7 +291,7 @@ jQuery(function($){
   /* ----------------------------------------------------------- */
 
    jQuery(window).load(function() { // makes sure the whole site is loaded      
-      jQuery('#aa-preloader-area').delay(300).fadeOut('slow'); // will fade out      
+      jQuery('#preloader-area').delay(300).fadeOut('slow'); // will fade out      
     })
    
 
@@ -300,13 +300,13 @@ jQuery(function($){
   /*  13. GRID AND LIST LAYOUT CHANGER 
   /* ----------------------------------------------------------- */
 
-  jQuery("#aa-list-properties").click(function(e){
+  jQuery("#list-properties").click(function(e){
     e.preventDefault(e);
-    jQuery(".aa-properties-nav").addClass("aa-list-view");
+    jQuery(".properties-nav").addClass("list-view");
   });
-  jQuery("#aa-grid-properties").click(function(e){
+  jQuery("#grid-properties").click(function(e){
     e.preventDefault(e);
-    jQuery(".aa-properties-nav").removeClass("aa-list-view");
+    jQuery(".properties-nav").removeClass("list-view");
   });
 
 
@@ -314,7 +314,7 @@ jQuery(function($){
   /*  14. RELATED ITEM SLIDER (SLICK SLIDER)
   /* ----------------------------------------------------------- */      
 
-    jQuery('.aa-related-item-slider').slick({
+    jQuery('.related-item-slider').slick({
       dots: false,
       infinite: false,
       speed: 300,
