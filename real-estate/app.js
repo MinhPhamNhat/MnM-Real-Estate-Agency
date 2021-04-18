@@ -10,13 +10,19 @@ const registerRouter = require('./controllers/register');
 const loginRouter = require('./controllers/login');
 const logoutRouter = require('./controllers/logout');
 const indexRouter = require('./controllers/index');
+const propertyRouter = require('./controllers/property');
+const locationRouter = require('./controllers/location');
 
 const authenticate = require('./middleware/authenticate');
 const app = express();
 
+require('dotenv').config()
 require('./config/passport')
 require("./config/database")
+require("./config/firebase")
 
+const HOST = process.env.HOST
+const PORT = 8080||process.env.PORT
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -37,25 +43,31 @@ app.use(passport.session());
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/register', registerRouter)
-app.use('/',authenticate.authen, indexRouter);
+app.use('/',authenticate.signUser, indexRouter);
+app.use('/property',authenticate.signUser, propertyRouter);
+app.use('/location',authenticate.signUser, locationRouter);
 
+
+app.locals.getFlooredFixed = (v, d) => {
+  return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
+}
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('404');
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('404');
+// });
 
 
-app.listen(8080, ()=>console.log("http://localhost:8080"))
+app.listen(PORT, ()=>console.log("http://"+HOST+":"+PORT))
 
 module.exports = app;

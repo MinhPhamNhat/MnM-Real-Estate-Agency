@@ -1,7 +1,7 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const Account = require('../repository/account')
-const User = require('../repository/user')
+const Account = require('../repository/AccountRes')
+const User = require('../repository/UserRes')
 
 passport.serializeUser((user, done) => {
     done(null, user)

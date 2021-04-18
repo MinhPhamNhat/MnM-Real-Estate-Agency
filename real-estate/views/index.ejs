@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('partial/head', {title: "Home"}) -%>
-
-    <body class="price-range">
+    <body class="price-range"  onload="setNoUiSliderOption(<%= range.minPrice %>,<%= range.maxPrice %>,<%= range.minArea %>,<%= range.maxArea %>); setSlider([<%= range.minArea %>,<%= range.maxArea %>], [<%= range.minPrice %>,<%= range.maxPrice %>]); loadCity(); ">
         <!-- Pre Loader -->
         <div id="preloader-area">
             <div class="pulse"></div>
@@ -117,237 +116,233 @@
                 <div class="container">
                     <div class="advance-search-area">
                         <div class="form">
-                            <div class="advance-search-top">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="single-advance-search">
-                                            <input type="text" placeholder="Type Your Location">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="single-advance-search">
-                                            <select>
-                   <option value="0" selected>Category</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
-                  </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="single-advance-search">
-                                            <select>
-                    <option value="0" selected>Type</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
-                  </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="single-advance-search">
-                                            <select>
-                    <option value="0" selected>Type</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
-                  </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="single-advance-search">
-                                            <input class="search-btn" type="submit" value="Search">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="advance-search-bottom">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="single-filter-search">
-                                            <span>AREA (SQ)</span>
-                                            <span>FROM</span>
-                                            <span id="skip-value-lower" class="example-val">30.00</span>
-                                            <span>TO</span>
-                                            <span id="skip-value-upper" class="example-val">100.00</span>
-                                            <div id="sqrfeet-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
+                            <form action="/properties/1" method="POST">
+                                <div class="advance-search-top">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="single-advance-search">
+                                                <label for="keyword">Thông tin bất động sản</label>
+                                                <input type="text" name="keyword" id="keyword" placeholder="Nhập keyword">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="single-filter-search">
-                                            <span>PRICE ($)</span>
-                                            <span>FROM</span>
-                                            <span id="skip-value-lower2" class="example-val">30.00</span>
-                                            <span>TO</span>
-                                            <span id="skip-value-upper2" class="example-val">100.00</span>
-                                            <div id="price-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
+                                        <div class="col-md-2">
+                                            <div class="single-advance-search">
+                                                <label for="isSale">Hình thức</label>
+                                                <select id="isSale" name="isSale">
+                                                    <option value="any" selected>Tất cả</option>
+                                                    <option value="rent">Cho thuê</option>
+                                                    <option value="sale">Bán</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="single-advance-search">
+                                                <label for="type">Loại hình</label>
+                                                <select name="type" id="type">
+                                                    <option value="any" selected>Tất cả</option>
+                                                    <option value="appartment">Căn hộ chung cư</option>
+                                                    <option value="street-house">Nhà mặt phố</option>
+                                                    <option value="personal-house">Nhà riêng</option>
+                                                    <option value="villa">Nhà biệt thự</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="single-advance-search">
+                                                <label for="city">Tỉnh/Thành</label>
+                                                <select name="city" id="city" class="city-picker">
+                                                    <option value="any" selected>Tất cả</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="single-advance-search">
+                                                <label for="district">Quận/Huyện</label>
+                                                <select name="district" id="district" class="district-picker">
+                                                    <option value="any" selected>Tất cả</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="single-advance-search">
+                                                <div class="more-choice">
+                                                    <span>Thêm <i class='fas fa-angle-down'></i></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            
+                                <div class="advance-search-bottom">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="single-filter-search">
+                                                <span>Diện tích </span>
+                                                <span>Từ</span>
+                                                <span id="skip-value-lower" class="example-val"></span>
+                                                <span>Đến</span>
+                                                <span id="skip-value-upper" class="example-val"></span>
+                                                <span class="set-area"><i class='fas fa-angle-down'></i></span>
+                                                <div class="input-set-area">
+                                                    <input type="number" id="area-from" name="areaFrom"> - 
+                                                    <input type="number" id="area-to" name="areaTo">
+                                                </div>
+                                                <div id="sqrfeet-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="single-filter-search">
+                                                <span>Giá </span>
+                                                <span>Từ</span>
+                                                <span id="skip-value-lower2" class="example-val"></span>
+                                                <span>Đến</span>
+                                                <span id="skip-value-upper2" class="example-val"></span>
+                                                <span class="set-price"><i class='fas fa-angle-down'></i></span>
+                                                <div class="input-set-price">
+                                                    <input type="number" id="price-from" name="priceFrom"> - 
+                                                    <input type="number" id="price-to" name="priceTo">
+                                                </div>
+                                                <div id="price-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="single-advance-search">
+                                                <input class="search-btn" type="submit" value="Tìm kiếm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="advance-search-middle">
+                                    <div class="show-more">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="single-advance-search">
+                                                    <label for="rooms">Số phòng</label>
+                                                    <select name="rooms" id="rooms">
+                                                        <option value="any" selected>Tất cả</option>
+                                                        <option value="1" >01</option>
+                                                        <option value="2" >02</option>
+                                                        <option value="3" >03</option>
+                                                        <option value="4" >04</option>
+                                                        <option value="more" >05+</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="single-advance-search">
+                                                    <label for="floors">Số lầu</label>
+                                                    <select name="floors" id="floors">
+                                                        <option value="any" selected>Tất cả</option>
+                                                        <option value="1" >01</option>
+                                                        <option value="2" >02</option>
+                                                        <option value="3" >03</option>
+                                                        <option value="4" >04</option>
+                                                        <option value="more" >05+</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="single-advance-search">
+                                                    <label for="bathrooms">Số nhà vệ sinh</label>
+                                                    <select name="bathrooms" id="bathrooms">
+                                                        <option value="any" selected>Tất cả</option>
+                                                        <option value="1" >01</option>
+                                                        <option value="2" >02</option>
+                                                        <option value="3" >03</option>
+                                                        <option value="4" >04</option>
+                                                        <option value="more" >05+</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="single-advance-search">
+                                                    <label for="bedrooms">Số phòng ngủ</label>
+                                                    <select name="bedrooms" id="bedrooms">
+                                                        <option value="any" selected>Tất cả</option>
+                                                        <option value="1" >01</option>
+                                                        <option value="2" >02</option>
+                                                        <option value="3" >03</option>
+                                                        <option value="4" >04</option>
+                                                        <option value="more" >05+</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </section>
             <!-- / Advance Search -->
 
+            
+
             <!-- Latest property -->
             <section id="latest-property">
                 <div class="container">
                     <div class="latest-property-area">
                         <div class="title">
-                            <h2>Latest Properties</h2>
+                            <h2>Bất động sản gần đây</h2>
                             <span></span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum sit ea nobis quae vero voluptatibus.</p>
                         </div>
                         <div class="latest-properties-content">
                             <div class="row">
-
-                                        <div class="col-md-4">
-                                            <article class="properties-item">
-                                                <a href="#" class="properties-item-img">
-                                                    <img src="/images/item/2.jpg" alt="img">
-                                                </a>
-                                                <div class="tag for-rent">
-                                                    For Rent
+                                <% data.forEach(value =>{%>
+                                    <div class="col-md-4">
+                                        <article class="properties-item item-<%=value._id%>">
+                                            <a href="/properties/<%=value._id%>" class="properties-item-img">
+                                                <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
+                                            </a>
+                                            <% if (locals.user){%>
+                                                <% if(locals.user.accountId===value.authorId){%>
+                                                    <div class="property-btn">
+                                                            <span class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</span>
+                                                            <span class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</span>
+                                                    </div>
+                                                <%}%>
+                                            <%}%>
+                                            
+                                            <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
+                                                <%= value.isSale?"For Sale":"For Rent" %>
+                                            </div>
+                                            <div class="properties-item-content">
+                                                <div class="properties-info">
+                                                    <% if (value.features.rooms) {%>
+                                                        <span><%=value.features.rooms%> Phòng</span>
+                                                    <%}%>
+                                                    <% if (value.features.bathrooms) {%>
+                                                        <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
+                                                    <%}%>
+                                                    <% if (value.features.bedrooms) {%>
+                                                        <span><%=value.features.bedrooms%> Phòng ngủ</span>
+                                                    <%}%>
+                                                    <% if (value.features.floors) {%>
+                                                        <span><%=value.features.floors%> Tầng</span>
+                                                    <%}%>
                                                 </div>
-                                                <div class="properties-item-content">
-                                                    <div class="properties-info">
-                                                        <span>5 Rooms</span>
-                                                        <span>2 Beds</span>
-                                                        <span>3 Baths</span>
-                                                        <span>1100 SQ FT</span>
-                                                    </div>
-                                                    <div class="properties-about">
-                                                        <h3><a href="#">Appartment Title</a></h3>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                                    </div>
-                                                    <div class="properties-detial">
-                                                        <span class="price">
-                      $11000
-                    </span>
-                                                        <a href="#" class="secondary-btn">View Details</a>
-                                                    </div>
+                                                <div class="properties-about">
+                                                    <h3>
+                                                        <a href="/properties/<%=value._id%>">
+                                                            <%= value.title %>
+                                                        </a>
+                                                    </h3>
+                                                    <p><%= value.location.district %>, <%= value.location.city %></p>
                                                 </div>
-                                            </article>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <article class="properties-item">
-                                                <a href="#" class="properties-item-img">
-                                                    <img src="/images/item/3.jpg" alt="img">
-                                                </a>
-                                                <div class="tag sold-out">
-                                                    Sold Out
+                                                <div class="properties-detial">
+                                                    <span class="price">
+                                                            <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
+                                                    </span>
+                                                    <a href="/properties/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:#59ABE3;color:white`:`style=background-color:#20ceb3;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
                                                 </div>
-                                                <div class="properties-item-content">
-                                                    <div class="properties-info">
-                                                        <span>5 Rooms</span>
-                                                        <span>2 Beds</span>
-                                                        <span>3 Baths</span>
-                                                        <span>1100 SQ FT</span>
-                                                    </div>
-                                                    <div class="properties-about">
-                                                        <h3><a href="#">Appartment Title</a></h3>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                                    </div>
-                                                    <div class="properties-detial">
-                                                        <span class="price">
-                      $15000
-                    </span>
-                                                        <a href="#" class="secondary-btn">View Details</a>
-                                                    </div>
-                                                </div>
-                                            </article>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <article class="properties-item">
-                                                <a href="#" class="properties-item-img">
-                                                    <img src="/images/item/4.jpg" alt="img">
-                                                </a>
-                                                <div class="tag for-sale">
-                                                    For Sale
-                                                </div>
-                                                <div class="properties-item-content">
-                                                    <div class="properties-info">
-                                                        <span>5 Rooms</span>
-                                                        <span>2 Beds</span>
-                                                        <span>3 Baths</span>
-                                                        <span>1100 SQ FT</span>
-                                                    </div>
-                                                    <div class="properties-about">
-                                                        <h3><a href="#">Appartment Title</a></h3>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                                    </div>
-                                                    <div class="properties-detial">
-                                                        <span class="price">
-                      $35000
-                    </span>
-                                                        <a href="#" class="secondary-btn">View Details</a>
-                                                    </div>
-                                                </div>
-                                            </article>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <article class="properties-item">
-                                                <a href="#" class="properties-item-img">
-                                                    <img src="/images/item/5.jpg" alt="img">
-                                                </a>
-                                                <div class="tag sold-out">
-                                                    Sold Out
-                                                </div>
-                                                <div class="properties-item-content">
-                                                    <div class="properties-info">
-                                                        <span>5 Rooms</span>
-                                                        <span>2 Beds</span>
-                                                        <span>3 Baths</span>
-                                                        <span>1100 SQ FT</span>
-                                                    </div>
-                                                    <div class="properties-about">
-                                                        <h3><a href="#">Appartment Title</a></h3>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                                    </div>
-                                                    <div class="properties-detial">
-                                                        <span class="price">
-                      $11000
-                    </span>
-                                                        <a href="#" class="secondary-btn">View Details</a>
-                                                    </div>
-                                                </div>
-                                            </article>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <article class="properties-item">
-                                                <a href="#" class="properties-item-img">
-                                                    <img src="/images/item/6.jpg" alt="img">
-                                                </a>
-                                                <div class="tag for-rent">
-                                                    For Rent
-                                                </div>
-                                                <div class="properties-item-content">
-                                                    <div class="properties-info">
-                                                        <span>5 Rooms</span>
-                                                        <span>2 Beds</span>
-                                                        <span>3 Baths</span>
-                                                        <span>1100 SQ FT</span>
-                                                    </div>
-                                                    <div class="properties-about">
-                                                        <h3><a href="#">Appartment Title</a></h3>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                                    </div>
-                                                    <div class="properties-detial">
-                                                        <span class="price">
-                      $15000
-                    </span>
-                                                        <a href="#" class="secondary-btn">View Details</a>
-                                                    </div>
-                                                </div>
-                                            </article>
-                                        </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                <% })%>
                             </div>
                         </div>
                     </div>
@@ -357,6 +352,7 @@
 
             <%- include('partial/foot') -%>
                 <%- include('partial/footer') -%>
+                <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
     </body>
 

@@ -57,25 +57,9 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
-                <li <%= active==="home"?"class=active":"" %>><a href="/">HOME</a></li>
-                <li class="dropdown <%= active==="properties"?"active":"" %>">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="/properties">PROPERTIES <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">                
-                    <li><a href="/properties">PROPERTIES</a></li>
-                    <li><a href="/detail">PROPERTIES DETAIL</a></li>                                            
-                  </ul>
-                </li>
-                <li <%= active==="gallery"?"class=active":"" %>><a href="/gallery">GALLERY</a></li>                                         
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="/blog-archive">BLOG <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">                
-                    <li><a href="/blog-archive">BLOG</a></li>
-                    <li><a href="/blog-single">BLOG DETAILS</a></li>                                            
-                  </ul>
-                </li>
-                <li><a href="/contact">CONTACT</a></li>
+                <li <%= active==="home"?"class=active":"" %>><a href="/">TRANG CHỦ</a></li>
                 <% if(locals.logined) {%>
-                <li <%= active==="add"?"class=active":"" %>><a href="/add-properties">ADD PROPERTIES</a></li>    
+                <li <%= active==="add"?"class=active":"" %>><a href="/properties/add-property">ĐĂNG TIN</a></li>    
                 <%}%>
               </ul>                          
             </div>     
