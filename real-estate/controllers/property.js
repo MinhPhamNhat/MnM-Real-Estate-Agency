@@ -11,15 +11,14 @@ const uuid = uuidv4()
 
 
 router.get('/add-property',authenticate.authen,(req, res, next) => {
-    console.log({
-        HELLO: "HELLO"
-    })
     res.render('add-property', {type: false})
 })
 
 router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, next) => {
     var data = req.body
-
+    console.log({
+        HELLO: data
+    })
     if (req.files.length) {
         const bucket = firebase.storage().bucket()
         var images = req.files.map(img => {
