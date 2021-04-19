@@ -94,87 +94,18 @@
                 </ul>
                 <!-- <h4><b>Bản đồ bất động sản</b></h4> -->
                 <!-- <div id="map"></div> -->
+              </div>
+              <!-- Properties social share -->
+              <div class="properties-social">
+                  <ul>
+                      <li>Share</li>
+                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                      <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                      <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                  </ul>
+              </div>
             </div>
-            <!-- Properties social share -->
-            <div class="properties-social">
-                <ul>
-                    <li>Share</li>
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                    <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                </ul>
-            </div>
-             <!-- Nearby properties -->
-             <div class="nearby-properties">
-               <div class="title">
-                 <h2>Nearby Properties</h2>
-                 <span></span>
-               </div>
-               <div class="nearby-properties-area">
-                 <div class="row">
-                   <div class="col-md-6">
-                     <article class="properties-item">
-                        <a class="properties-item-img" href="#">
-                          <img alt="img" src="/images/item/1.jpg">
-                        </a>
-                        <div class="tag for-sale">
-                          For Sale
-                        </div>
-                        <div class="properties-item-content">
-                          <div class="properties-info">
-                            <span>5 Rooms</span>
-                            <span>2 Beds</span>
-                            <span>3 Baths</span>
-                            <span>1100 SQ FT</span>
-                          </div>
-                          <div class="properties-about">
-                            <h3><a href="#">Appartment Title</a></h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>                      
-                          </div>
-                          <div class="properties-detial">
-                            <span class="price">
-                              $35000
-                            </span>
-                            <a class="secondary-btn" href="#">View Details</a>
-                          </div>
-                        </div>
-                      </article>
-                   </div>
-                   <div class="col-md-6">
-                     <article class="properties-item">
-                      <a class="properties-item-img" href="#">
-                        <img alt="img" src="/images/item/2.jpg">
-                      </a>
-                      <div class="tag for-sale">
-                        For Sale
-                      </div>
-                      <div class="properties-item-content">
-                        <div class="properties-info">
-                          <span>5 Rooms</span>
-                          <span>2 Beds</span>
-                          <span>3 Baths</span>
-                          <span>1100 SQ FT</span>
-                        </div>
-                        <div class="properties-about">
-                          <h3><a href="#">Appartment Title</a></h3>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>                      
-                        </div>
-                        <div class="properties-detial">
-                          <span class="price">
-                            $35000
-                          </span>
-                          <a class="secondary-btn" href="#">View Details</a>
-                        </div>
-                      </div>
-                    </article>
-                   </div>
-                 </div>
-               </div>
-
-             </div>
-
-            </div>           
           </div>
         </div>
         <!-- Start properties sidebar -->
@@ -182,62 +113,11 @@
           <aside class="properties-sidebar">
             <!-- Start Single properties sidebar -->
             <div class="properties-single-sidebar">
-              <h3>Properties Search</h3>
-              <form action="">
-                <div class="single-advance-search">
-                  <input type="text" placeholder="Type Your Location">
-                </div>
-                <div class="single-advance-search">
-                  <select id="" name="">
-                   <option selected="" value="0">Category</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
-                  </select>
-                </div>
-                <div class="single-advance-search">
-                  <select id="" name="">
-                    <option selected="" value="0">Type</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
-                  </select>
-                </div>
-                <div class="single-advance-search">
-                  <select id="" name="">
-                    <option selected="" value="0">Type</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
-                  </select>
-                </div>
-                <div class="single-filter-search">
-                  <span>AREA (SQ)</span>
-                  <span>FROM</span>
-                  <span id="skip-value-lower" class="example-val">30.00</span>
-                  <span>TO</span>
-                  <span id="skip-value-upper" class="example-val">100.00</span>
-                  <div id="sqrfeet-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
-                  </div>                  
-                </div>
-                <div class="single-filter-search">
-                  <span>PRICE ($)</span>
-                  <span>FROM</span>
-                  <span id="skip-value-lower2" class="example-val">30.00</span>
-                  <span>TO</span>
-                  <span id="skip-value-upper2" class="example-val">100.00</span>
-                  <div id="price-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
-                  </div>      
-                </div>
-                <div class="single-advance-search">
-                  <input type="submit" value="Search" class="search-btn">
-                </div>
-              </form>
-            </div> 
-            <!-- Start Single properties sidebar -->
+              <h3>Người <%= data.isSale?"bán":"cho thuê" %></h3>
+              <a href="/profile/<%=data.authorId%>"><i class="fa fa-user" aria-hidden="true" style="margin-right: 10px;"></i><%= data.nameContact %></a>
+              <p><i class="fa fa-phone" aria-hidden="true" style="margin-right: 10px;"></i><%= locals.formatPhone(data.phoneContact) %></p>
+            </div>
+              <!-- Start Single properties sidebar -->
             <div class="properties-single-sidebar">
               <h3>Populer Properties</h3>
               <div class="media">
@@ -248,9 +128,9 @@
                 </div>
                 <div class="media-body">
                   <h4 class="media-heading"><a href="#">This is Title</a></h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>                
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                   <span>$65000</span>
-                </div>              
+                </div>
               </div>
               <div class="media">
                 <div class="media-left">
@@ -260,29 +140,97 @@
                 </div>
                 <div class="media-body">
                   <h4 class="media-heading"><a href="#">This is Title</a></h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>                
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                   <span>$65000</span>
-                </div>              
-              </div>
-              <div class="media">
-                <div class="media-left">
-                  <a href="#">
-                    <img class="media-object" src="/images/item/1.jpg" alt="img">
-                  </a>
                 </div>
-                <div class="media-body">
-                  <h4 class="media-heading"><a href="#">This is Title</a></h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>                
-                  <span>$65000</span>
-                </div>              
               </div>
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#">
+                      <img class="media-object" src="/images/item/1.jpg" alt="img">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading"><a href="#">This is Title</a></h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <span>$65000</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+            
+        <br>
+        <!-- Nearby properties -->
+        <div class="nearby-properties">
+          <div class="title">
+            <h2>Bất động sản gần đây</h2>
+            <span></span>
+          </div>
+          <div class="swiper-container">
+            <div class="swiper-wrapper">
+              <% nearBy.forEach(value=>{%>
+                  <div class="swiper-slide">
+                      <article class="properties-item item-<%=value._id%>">
+                          <a href="/properties/<%=value._id%>" class="properties-item-img">
+                          <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
+                          </a>
+                          <% if (locals.user){%>
+                            <% if(locals.user.accountId===value.authorId){%>
+                                <div class="property-btn">
+                                    <span class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</span>
+                                    <span class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</span>
+                                </div>
+                            <%}%>
+                          <%}%>
+                          
+                          <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
+                              <%= value.isSale?"For Sale":"For Rent" %>
+                          </div>
+                          <div class="properties-item-content">
+                              <div class="properties-info">
+                              <% if (value.features.rooms) {%>
+                                  <span><%=value.features.rooms%> Phòng</span>
+                              <%}%>
+                              <% if (value.features.bathrooms) {%>
+                                  <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
+                              <%}%>
+                              <% if (value.features.bedrooms) {%>
+                                  <span><%=value.features.bedrooms%> Phòng ngủ</span>
+                              <%}%>
+                              <% if (value.features.floors) {%>
+                                  <span><%=value.features.floors%> Tầng</span>
+                              <%}%>
+                              </div>
+                              <div class="properties-about">
+                                  <h3>
+                                      <a href="/properties/<%=value._id%>">
+                                          <%= value.title %>
+                                      </a>
+                                  </h3>
+                                  <p><%= value.location.district %>, <%= value.location.city %></p>
+                              </div>
+                              <div class="properties-detial">
+                                  <span class="price">
+                                          <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
+                                  </span>
+                                  <a href="/properties/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:#59ABE3;color:white`:`style=background-color:#20ceb3;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                              </div>
+                          </div>
+                      </article>
+                  </div>
+              <%})%>
             </div>
-          </aside>
+                <!-- Add Arrows -->
+              <div class="swiper-button-next"><img src="https://staticfile.batdongsan.com.vn/images/icons/slide-next.png"></div>
+              <div class="swiper-button-prev"><img src="https://staticfile.batdongsan.com.vn/images/icons/slide-prev.png"></div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-  <!-- / Properties  -->
+    </section>
+    <!-- / Properties  -->
+
   <%- include('partial/foot') -%>
   <%- include('partial/footer') -%>
   </body>

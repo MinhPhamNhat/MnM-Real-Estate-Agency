@@ -53,6 +53,13 @@ app.use('/location',authenticate.signUser, locationRouter);
 app.locals.getFlooredFixed = (v, d) => {
   return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
 }
+app.locals.formatPhone = (value) =>{
+  if (value[1] === "1"){
+    return value.slice(0,5) + " " + value.slice(5,8) + " " + value.slice(8,12)
+  }else{
+    return value.slice(0,4) + " " + value.slice(4,7) + " " + value.slice(7,11)
+  }
+}
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
