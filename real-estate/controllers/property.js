@@ -72,4 +72,10 @@ router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, 
     }
 })
 
+// POST: /page => Search for properties
+router.post('/search', async (req, res, next) => {
+    console.log(req.body)
+    res.render("properties")
+})
+
 module.exports = router
