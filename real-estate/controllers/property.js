@@ -14,6 +14,11 @@ router.get('/add-property',authenticate.authen,(req, res, next) => {
     res.render('add-property', {type: false})
 })
 
+router.get('/:id',(req, res, next) => {
+
+    res.render('detail')
+})
+
 router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, next) => {
     var data = req.body
     if (req.files.length) {
