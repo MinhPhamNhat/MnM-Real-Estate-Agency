@@ -15,10 +15,23 @@ router.get('/add-property',authenticate.authen,(req, res, next) => {
     res.render('add-property', {type: false})
 })
 
-// GET: /id => Get property detail 
-router.get('/:id',(req, res, next) => {
-    
-    res.render('detail')
+// GET: /id => Get detail property by id
+router.get('/:id', async(req, res, next) => {
+    var id = req.params.id
+    if(id){
+        try{
+            var data = await Property.getPropertyById(id)
+            if (data.code===0){
+                res.render('detail', {data: data.data})
+            }else{
+                res.render("404")  
+            }
+        }catch{
+            res.render("404")  
+        } 
+    }else{
+        res.render("404")
+    }
 })
 
 // POST: / => Add propery
