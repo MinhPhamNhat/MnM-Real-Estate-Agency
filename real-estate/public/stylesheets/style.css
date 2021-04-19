@@ -746,7 +746,7 @@ img {
     border: medium none;
     border-radius: 5px;
     color: #fff;
-    background-color: #59ABE3;
+    background-color: rgb(0, 105, 211);
     font-size: 18px;
     font-weight: bold;
     height: 40px;
@@ -905,11 +905,15 @@ input::-webkit-inner-spin-button {
 }
 
 .properties-item .for-rent{
-    background-color: #20ceb3;
+    background-color: darkgoldenrod;
 }
 
+.properties-item .for-sale {
+    background-color: darkviolet;
+  }
+  
 .properties-item .sold-out {
-    background-color: #ff0000;
+    background-color: rgb(0, 105, 211);
 }
 
 .properties-item .properties-item-content {
@@ -973,7 +977,7 @@ input::-webkit-inner-spin-button {
     padding: 3px 0;
 }
 
-.properties-item .properties-item-content .properties-detial .dot {
+ .dot {
     margin-right: 10px;
     margin-left: 10px;
 }
@@ -1753,10 +1757,8 @@ input::-webkit-inner-spin-button {
 }
 
 #properties .properties-sidebar {
-    background-color: #f8f8f8;
     display: inline;
     float: left;
-    padding: 10px 20px;
     width: 100%;
 }
 
@@ -1799,7 +1801,7 @@ input::-webkit-inner-spin-button {
 #properties .properties-sidebar .properties-single-sidebar .single-advance-search .search-btn {
     border: medium none;
     border-radius: 5px;
-    background-color: #59ABE3;
+    background-color: rgb(0, 105, 211);
     color: #fff;
     font-weight: bold;
     margin-top: 15px;
@@ -1831,6 +1833,7 @@ input::-webkit-inner-spin-button {
 #properties .properties-sidebar .properties-single-sidebar .single-filter-search .noUi-handle {
     border: none;
     box-shadow: none;
+    background-color: rgb(0, 105, 211);
     height: 25px;
     left: -17px;
     top: -12px;
@@ -3933,18 +3936,31 @@ input::-webkit-inner-spin-button {
     position: absolute;
     top:0px;
     right: 0px;
-    float: left;
-    
+    padding: 5px;
+    text-align: end;
+}
+
+.property-btn img{
+    padding: 3px;
+    background-color: rgba(247, 247, 247, 0.568);
+    border-radius: 50%;
+    height: 30px;
+    width: auto;
+    cursor: pointer;
+    transition: 1s;
 }
 
 .delete-property-btn,
 .edit-property-btn{
     padding: 5px;
+    margin: 5px;
     border-radius: 5px;
     cursor: pointer;
     color: white;
 }
-
+.option-btn{
+    display: none;
+}
 .edit-property-btn{
     background-color: olivedrab;
     transition: 0.3s;
@@ -3984,4 +4000,105 @@ input::-webkit-inner-spin-button {
 .sort-modal table .radio-sort span{
     padding: 0px 10px 10px 10px;
     cursor: pointer;
+}
+
+.properties-item-content .properties-info{
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.phone-contact-container{
+    margin-top: 10px;;
+    display: flex;
+    flex-direction: row;
+}
+.phone-contact, .copy{
+    color: white;
+    margin-top: 5px;;
+    cursor: pointer;
+    padding: 10px;
+    width: fit-content;
+    border-radius: 5px;
+    margin-right: 5px;;
+}
+
+.inform{
+    position: absolute;
+    padding: 5px;
+    color: white;
+    background-color: #aaa;
+    border-radius: 5px;
+    top: 50px;
+    left: 50px;
+    display: none;
+    transition: 1;
+}
+
+.profile-name span{
+    padding: 5px 10px 5px 10px;
+    color: white;
+    border-radius: 5px;;
+    background-color: rgb(0, 105, 211);
+    margin-left: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.profile-email i{
+    margin-right: 10px;
+}
+
+.properties-single-sidebar{
+    margin: 3px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px 10px 10px 20px;
+}
+
+.email-contact i{
+    margin-right: 10px;;
+}
+
+.contact-require{
+    padding: 10px;
+    width: fit-content;
+    cursor: pointer;
+    border: 1px rgb(0, 105, 211) solid;
+    border-radius: 5px;   
+    transition: 0.3s;
+    margin-top: 5px;
+    color: rgb(0, 105, 211);
+}
+
+.contact-require:hover{
+    color: white;
+    background-color: rgb(0, 105, 211);
+}
+
+.see-more-btn{
+    text-align: end;
+    font-size: 16px;;
+    padding: 10px 0px 0px 10px;
+    color: black;
+    margin: 10px;
+    border-radius: 5px;
+    
+}
+
+.see-more-btn a:hover{
+    color: rgb(0, 105, 211);
+}
+
+.media-heading{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+
+}
+
+.profile-modal td{
+    padding: 5px;
+    padding-right: 10px;
 }

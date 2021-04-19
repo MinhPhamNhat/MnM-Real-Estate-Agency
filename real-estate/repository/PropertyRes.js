@@ -24,6 +24,7 @@ const parseBaseProperty = async (property) => {
 
 module.exports = {
     createProperty: async(data, authorId) => {
+        console.log(data)
         if (data.price<=0){
             return { code: -1, message: "Failed" }
         }

@@ -45,11 +45,11 @@
                                 <p style="text-align: center">Thêm các thông tin về bất động sản của bạn</p>
                                 <table style="width: 100%">
                                     <tr>
-                                        <td><label for="title">Tiêu đề : <span class="required">*</span></label></td>
+                                        <td><label for="title">Tiêu đề : <span class="required">(*)</span></label></td>
                                         <td colspan="3"><input style="width: 100%" type="text" value="<%= locals.data?data.title:''%>" name="title" required></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="type">Hình thức : <span class="required">*</span></label></td>
+                                        <td><label for="type">Hình thức : <span class="required">(*)</span></label></td>
                                         <td colspan="3" class="property-type">
                                             <div>
                                                 <input type="radio" name="isSale" value="True" id="for-sale" <%= locals.data?(data.isSale?'checked':''):'checked' %>>
@@ -63,13 +63,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="city">Tỉnh/Thành : <span class="required">*</span></label></td>
+                                        <td><label for="city">Tỉnh/Thành : <span class="required">(*)</span></label></td>
                                         <td>
                                             <select name="city" id="city" class="city-picker" required>
                                                 <option value="">--Chọn tỉnh/thành--</option>
                                             </select>
                                         </td>
-                                        <td><label for="district">Quận/Huyện : <span class="required">*</span></label></td>
+                                        <td><label for="district">Quận/Huyện : <span class="required">(*)</span></label></td>
                                         <td>
                                             <select name="district" id="district" class="district-picker" required>
                                                 <option value="">--Chọn quận/huyện--</option>
@@ -77,18 +77,18 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><label for="type">Loại hình : <span class="required">*</span></label></td>
+                                        <td><label for="type">Loại hình : <span class="required">(*)</span></label></td>
                                         <td><select name="type" id="type">
                                                 <option value="appartment" <%= locals.data?(data.type==='appartment'?'selected':''):'selected'%>>Căn hộ chung cư</option>
                                                 <option value="personal-house" <%= locals.data?(data.type==='personal-house'?'selected':''):''%>>Nhà riêng</option>
                                                 <option value="street-house" <%= locals.data?(data.type==='street-house'?'selected':''):''%>>Nhà mặt phố</option>
                                                 <option value="villa" <%= locals.data?(data.type==='villa'?'selected':''):''%>>Nhà biệt thự</option>                                        
                                         </select></td>
-                                        <td><label for="area">Diện tích (m²) : <span class="required">*</span></label></td>
+                                        <td><label for="area">Diện tích (m²) : <span class="required">(*)</span></label></td>
                                         <td><input type="number" id="area" value="<%= locals.data?data.area:''%>" name="area" step="0.01" required></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="price">Giá : <span class="required">*</span></label></td>
+                                        <td><label for="price">Giá : <span class="required">(*)</span></label></td>
                                         <% if (locals.data) {%>
                                             <% if (data.price===0){%>
                                                 <td><input type="number" id="price" step="0.01" name="price" disabled></td>
@@ -102,7 +102,7 @@
                                         <%}else{%>
                                             <td><input type="number" id="price" step="0.01" name="price" required></td>
                                         <%}%>
-                                        <td><label for="unit">Đơn vị : <span class="required">*</span></label></td>
+                                        <td><label for="unit">Đơn vị : <span class="required">(*)</span></label></td>
                                         <td>
                                             <select name="unit" id="unit">
                                                 <% if (locals.data) {%>
@@ -138,13 +138,13 @@
 
                                     </tr>
                                     <tr>
-                                        <td><label for="address">Địa chỉ : <span class="required">*</span></label></td>
+                                        <td><label for="address">Địa chỉ : <span class="required">(*)</span></label></td>
                                         <td colspan="3"><input style="width: 100%" type="text" id="address" name="address" value="<%= locals.data?data.address:''%>" required></td>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
                                             </br>
-                                            <p>Trường có dấu <span class="required"><strong>*</strong></span> là bắt buộc</p>
+                                            <p>Trường có dấu <strong><span class="required">(*)</span></strong> là bắt buộc</p>
                                         </td>
                                     </tr>
                                 </table>

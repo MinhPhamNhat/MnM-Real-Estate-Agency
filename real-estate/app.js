@@ -13,6 +13,7 @@ const logoutRouter = require('./controllers/logout');
 const indexRouter = require('./controllers/index');
 const propertyRouter = require('./controllers/property');
 const locationRouter = require('./controllers/location');
+const profileRouter = require('./controllers/profile');
 
 const authenticate = require('./middleware/authenticate');
 const app = express();
@@ -48,6 +49,7 @@ app.use('/register', registerRouter)
 app.use('/',authenticate.signUser, indexRouter);
 app.use('/property',authenticate.signUser, propertyRouter);
 app.use('/location',authenticate.signUser, locationRouter);
+app.use('/profile',authenticate.signUser, profileRouter);
 
 
 app.locals.getFlooredFixed = (v, d) => {
@@ -65,7 +67,6 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

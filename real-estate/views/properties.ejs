@@ -57,51 +57,54 @@
                 <% data.forEach(value=>{%>
                   <li>
                     <article class="properties-item item-<%=value._id%>">
-                      <a href="/property/<%=value._id%>" class="properties-item-img">
-                        <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
-                      </a>
-                      <% if (locals.user){%>
-                        <% if(locals.user.accountId===value.authorId){%>
-                            <div class="property-btn">
-                              <span class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</span>
-                              <span class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</span>
-                            </div>
+                        <a href="/property/<%=value._id%>" class="properties-item-img">
+                            <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
+                        </a>
+                        <% if (locals.user){%>
+                            <% if(locals.user.accountId===value.authorId){%>
+                                <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
+                                    <img src="/images/option.png">
+                                    <div class="option-btn">
+                                        <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
+                                        <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
+                                    </div>
+                                </div>
+                            <%}%>
                         <%}%>
-                      <%}%>
-                      
-                      <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
-                          <%= value.isSale?"For Sale":"For Rent" %>
-                      </div>
-                      <div class="properties-item-content">
-                        <div class="properties-info">
-                          <% if (value.features.rooms) {%>
-                              <span><%=value.features.rooms%> Phòng</span>
-                          <%}%>
-                          <% if (value.features.bathrooms) {%>
-                              <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
-                          <%}%>
-                          <% if (value.features.bedrooms) {%>
-                              <span><%=value.features.bedrooms%> Phòng ngủ</span>
-                          <%}%>
-                          <% if (value.features.floors) {%>
-                              <span><%=value.features.floors%> Tầng</span>
-                          <%}%>
+                        
+                        <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
+                            <%= value.isSale?"For Sale":"For Rent" %>
                         </div>
-                        <div class="properties-about">
-                            <h3>
-                                <a href="/property/<%=value._id%>" title="<%= value.title %>">
-                                    <%= value.title %>
-                                </a>
-                            </h3>
-                            <p><%= value.location.district %>, <%= value.location.city %></p>
+                        <div class="properties-item-content">
+                            <div class="properties-info">
+                                <% if (value.features.rooms) {%>
+                                    <span><%=value.features.rooms%> Phòng</span>
+                                <%}%>
+                                <% if (value.features.bathrooms) {%>
+                                    <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
+                                <%}%>
+                                <% if (value.features.bedrooms) {%>
+                                    <span><%=value.features.bedrooms%> Phòng ngủ</span>
+                                <%}%>
+                                <% if (value.features.floors) {%>
+                                    <span><%=value.features.floors%> Tầng</span>
+                                <%}%>
+                            </div>
+                            <div class="properties-about">
+                                <h3>
+                                    <a href="/property/<%=value._id%>" title="<%= value.title %>">
+                                        <%= value.title %>
+                                    </a>
+                                </h3>
+                                <p><%= value.location.district %>, <%= value.location.city %></p>
+                            </div>
+                            <div class="properties-detial">
+                                <span class="price">
+                                        <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
+                                </span>
+                                <a href="/property/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                            </div>
                         </div>
-                        <div class="properties-detial">
-                            <span class="price">
-                              <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
-                            </span>
-                            <a href="/property/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:#59ABE3;color:white`:`style=background-color:#20ceb3;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                        </div>
-                      </div>
                     </article>
                   </li>
                 <%})%>

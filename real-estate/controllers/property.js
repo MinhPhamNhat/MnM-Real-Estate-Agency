@@ -9,7 +9,8 @@ const firebase = require('firebase-admin')
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid');
 const uuid = uuidv4()
-const func = require('../function/function')
+const func = require('../function/function');
+const User = require('../repository/UserRes');
 
 
 // GET: /add-property => Get add-property page
@@ -95,9 +96,23 @@ router.get('/:id', async(req, res, next) => {
         try{
             var data = await Property.getPropertyById(id)
             if (data.code===0){
-                var nearBy = await Property.getBaseProperty({_id:{$ne: id},'location.cityId': data.data.location.cityId, 'location.districtId': data.data.location.districtId}, 0,undefined
+                var nearBy = await Property.getBaseProperty(
+                    {_id:{$ne: id},
+                    'location.cityId': data.data.location.cityId, 
+                    'location.districtId': data.data.location.districtId
+                }, 0,undefined
                 ,{date: -1})
-                res.render('detail', {data: data.data, nearBy: nearBy.data})
+                var author = await User.findUserById(data.data.authorId)
+                var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId},0,3,{date: -1})
+                var numOfDoc = await Statistic.getNumberOfProperty({authorId: data.data.authorId})
+                console.log(numOfDoc)
+                res.render('detail', {
+                    data: data.data, 
+                    nearBy: nearBy.data, 
+                    author: author.data, 
+                    authorProperty: authorProperty.data,
+                    numOfDoc
+                })
             }else{
                 res.render("404")  
             }

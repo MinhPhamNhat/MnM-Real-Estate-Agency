@@ -100,6 +100,7 @@ $(document).ready(() => {
         var propertyId = e.target.dataset.id
         window.location.href = window.location.origin+"/property/edit-property/"+propertyId
     })
+    
 
     $(".confirm-yes").on('click', (e) => {
         var propertyId = e.target.dataset.id
@@ -125,8 +126,59 @@ $(document).ready(() => {
         $(".confirm-modal").modal("hide")
     })
 
-})
+   $(".phone-contact").on('click', () => {
+        if (!$(".phone-contact span").hasClass("show-phone")){
+            $(".phone-contact span").addClass("show-phone")
+            var phone = $("#phone-copy")[0].dataset.phone
+            $(".phone-contact span").text(formatPhone(phone))
+        }else{
+            $(".phone-contact span").removeClass("show-phone")
+            $(".phone-contact span").text('Bấm để hiện số')
+        }
+    })
 
+    $(".copy").on('click',()=>{
+        var copyText = $("#phone-copy")[0].dataset.phone
+        const el = document.createElement('textarea');
+        el.value = copyText;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        $(".inform").show()
+        setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
+    })
+
+    $(".property-btn").hover((e)=>{
+        var id = e.target.dataset.id
+        if ($(`.option-${id} .option-btn`).css("display") === 'none'){
+            $(`.option-${id} img`).css("transform","rotate(90deg)")
+            $(`.option-${id} img`).css("box-shadow","0 0px 15px rgba(0, 0, 0, 1)")
+            $(`.option-${id} .option-btn div`).css("box-shadow","0 0px 15px rgba(0, 0, 0, 1)")
+            $(`.option-${id} .option-btn`).fadeIn(300)
+        }
+    }, (e)=> {
+        var id = e.target.dataset.id
+        if ($(`.option-${id} .option-btn`).css("display") === 'block'){
+            $(`.option-${id} img`).css("transform","rotate(0deg)")
+            $(`.option-${id} img`).css("box-shadow","none")
+            $(`.option-${id} .option-btn div`).css("box-shadow","none")
+            $(`.option-${id} .option-btn`).fadeOut(300)
+        }
+    })
+
+    $(".profile-name span").on('click', (e) => {
+        $(".profile-modal").modal("show")
+    })
+    
+
+})
+const alphaOnly = (event)=> {
+    var key = event.keyCode;
+    if ((key >= 33 && key <= 64) || (key >= 91 && key <= 96) || (key >= 123 && key <= 126)){
+        event.preventDefault() 
+    }
+  };
 var swiper = new Swiper('.swiper-container', {
     slidesPerView: 3,
     spaceBetween: 30,
@@ -203,6 +255,13 @@ var swiper = new Swiper('.swiper-container', {
     return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
   }
 
+  const formatPhone = (value) =>{
+    if (value[1] === "1"){
+      return value.slice(0,5) + " " + value.slice(5,8) + " " + value.slice(8,12)
+    }else{
+      return value.slice(0,4) + " " + value.slice(4,7) + " " + value.slice(7,11)
+    }
+  }
   
   var currentPage = 1
 
@@ -232,6 +291,7 @@ var swiper = new Swiper('.swiper-container', {
     var district = $("#properties #district").val()
     
     var formData = {page, noItem, sortPrice, sortArea, sortDate, keyword, type, city, district, isSale, areaFrom, areaTo, priceFrom, priceTo, bedrooms, rooms, floors, bathrooms, userId}
+    Object.keys(formData).forEach(key => formData[key] === undefined && delete formData[key])
     
     var container = $(".properties-nav")
     container.find("li").remove()
@@ -287,45 +347,50 @@ var swiper = new Swiper('.swiper-container', {
             var tag;
             if (userId){
                 if (userId === value.authorId){
-                    tag = `<div class="property-btn">
-                                <span class="delete-property-btn" data-id="${value._id}">Xoá tin</span>
-                                <span class="edit-property-btn" data-id="${value._id}">Thay đổi tin</span>
-                            </div>`
+                    tag = `<div class="property-btn option-${value._id}" data-id="${value._id}">
+                                <img src="/images/option.png">
+                                <div class="option-btn">
+                                    <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
+                                    <div class="edit-property-btn" data-id="${value._id}">Thay đổi tin</div>
+                                </div>
+                            </div>
+                            `
                 }
             }
             container.append(`
-            <li>
-                <article class="properties-item item-${value._id}">
-                <a href="/properties/${value._id}" class="properties-item-img">
-                <img src="${value.thumbnail||"/images/no-image.png"}" alt="img">
-                </a>
-                ${tag||''}
-                <div class="tag for-${value.isSale ? "sale":"rent"}">
-                    ${ value.isSale?"For Sale":"For Rent" }
-                </div>
-                <div class="properties-item-content">
-                    <div class="properties-info">
-                    ${value.features.rooms?`<span>${value.features.rooms} Phòng</span>`:''}
-                    ${value.features.bathrooms?`<span>${value.features.bathrooms} Phòng vệ sinh</span>`:''}
-                    ${value.features.bedrooms?`<span>${value.features.bedrooms} Phòng ngủ</span>`:''}
-                    ${value.features.floors?`<span>${value.features.floors} Tầng</span>`:''}
+                <li>
+                    <article class="properties-item item-${value._id}">
+                    <a href="/property/${value._id}" class="properties-item-img">
+                        <img src="${value.thumbnail||"/images/no-image.png"}" alt="img">
+                    </a>
+                    ${tag||''}
+                    <div class="tag for-${value.isSale ? "sale":"rent"}">
+                        ${ value.isSale?"For Sale":"For Rent" }
                     </div>
-                    <div class="properties-about">
-                        <h3>
-                            <a href="/properties/${value._id}">
-                                ${ value.title }
-                            </a>
-                        </h3>
-                        <p>${ value.location.district }, ${ value.location.city }</p>
+                    <div class="properties-item-content">
+                        <div class="properties-info">
+                        ${value.features.rooms?`<span>${value.features.rooms} Phòng</span>`:''}
+                        ${value.features.bathrooms?`<span>${value.features.bathrooms} Phòng vệ sinh</span>`:''}
+                        ${value.features.bedrooms?`<span>${value.features.bedrooms} Phòng ngủ</span>`:''}
+                        ${value.features.floors?`<span>${value.features.floors} Tầng</span>`:''}
+                        </div>
+                        <div class="properties-about">
+                            <h3>
+                                <a href="/property/${value._id}" title="${ value.title }">
+                                    ${ value.title }
+                                </a>
+                            </h3>
+                            <p>${ value.location.district }, ${ value.location.city }</p>
+                        </div>
+                        <div class="properties-detial">
+                            <span class="price">
+                                    <strong>${ value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")}${ value.isSale?"":" / tháng"}</strong><span class="dot">·</span><strong>${ value.area} m²</strong>
+                            </span>
+                            <a href="/property/${value._id}" class="btn" ${ value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` }> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                        </div>
                     </div>
-                    <div class="properties-detial">
-                        <span class="price">
-                                <strong>${ value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")}${ value.isSale?"":" / tháng"}</strong><span class="dot">·</span><strong>${ value.area} m²</strong>
-                        </span>
-                        <a href="/properties/${value._id}" class="btn" ${ value.isSale?`style=background-color:#59ABE3;color:white`:`style=background-color:#20ceb3;color:white` }> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </article>`)
+                </article>
+            </li>`)
         })
     })
   }

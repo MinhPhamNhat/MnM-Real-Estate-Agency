@@ -21,5 +21,5 @@ module.exports = {
             target.splice(0,1)
         }
         return target
-    }
+    },
 }

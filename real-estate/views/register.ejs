@@ -14,35 +14,35 @@
               </div>
               <form action="register" class="contactform" method="POST">                                                 
                 <div class="single-field">
-                  <label for="name">Name <span class="required">*</span></label>
+                  <label for="name">Name <span class="required">(*)</span></label>
                   <input type="text" required="required" aria-required="true" value="<%= data['name'] %>" name="name">
                   <% if (err.param === 'name'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
                   <%}%>
                 </div>
                 <div class="single-field">
-                  <label for="email">Email <span class="required">*</span></label>
+                  <label for="email">Email <span class="required">(*)</span></label>
                   <input type="email" required="required" aria-required="true" value="<%= data['email'] %>" name="email">
                   <% if (err.param === 'email'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
                   <%}%>
                 </div>
                 <div class="single-field">
-                  <label for="username">Username <span class="required">*</span></label>
+                  <label for="username">Username <span class="required">(*)</span></label>
                   <input type="text" required="required" aria-required="true" value="<%= data['username'] %>" name="username">
                   <% if (err.param === 'username'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
                   <%}%>
                 </div>
                 <div class="single-field">
-                  <label for="password">Password <span class="required">*</span></label>
+                  <label for="password">Password <span class="required">(*)</span></label>
                   <input type="password" name="password"> 
                   <% if (err.param === 'password'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
                   <%}%>
                 </div>
                 <div class="single-field">
-                  <label for="confirm-password">Confirm Password <span class="required">*</span></label>
+                  <label for="confirm-password">Confirm Password <span class="required">(*)</span></label>
                   <input type="password" name="confirm-password"> 
                   <% if (err.param === 'confirm-password'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
