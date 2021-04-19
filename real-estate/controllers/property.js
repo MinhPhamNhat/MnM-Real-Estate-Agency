@@ -22,7 +22,9 @@ router.get('/:id', async(req, res, next) => {
         try{
             var data = await Property.getPropertyById(id)
             if (data.code===0){
-                res.render('detail', {data: data.data})
+                var nearBy = await Property.getBaseProperty({_id:{$ne: id},'location.cityId': data.data.location.cityId, 'location.districtId': data.data.location.districtId}, 0,undefined
+                ,{date: -1})
+                res.render('detail', {data: data.data, nearBy: nearBy.data})
             }else{
                 res.render("404")  
             }
@@ -33,6 +35,7 @@ router.get('/:id', async(req, res, next) => {
         res.render("404")
     }
 })
+
 
 // POST: / => Add propery
 router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, next) => {
