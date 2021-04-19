@@ -2,6 +2,8 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const Account = require('../repository/AccountRes')
 const User = require('../repository/UserRes')
+const validator = require('../middleware/validator')
+const { validationResult } = require("express-validator")
 
 passport.serializeUser((user, done) => {
     done(null, user)
@@ -15,7 +17,8 @@ passport.use('local-login',new LocalStrategy({
     usernameField: "username",
     passwordField: "password",
     passReqToCallback: true
-}, async(req, username, password, done) => {
+},async(req, username, password, done) => {
+    
     if (username && password) {
         var check = await Account.checkAccount(username, password)
         var data = JSON.parse(check)
@@ -27,6 +30,6 @@ passport.use('local-login',new LocalStrategy({
             done(null, false, { message: data.message })
         }
     } else {
-        done(null, false, { message: "Please enter username or password" })
+        done(null, false, { message: "Vui lòng nhập username và password" })
     }
 }));

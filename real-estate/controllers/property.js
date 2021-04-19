@@ -10,15 +10,18 @@ const { v4: uuidv4 } = require('uuid');
 const uuid = uuidv4()
 
 
+// GET: /add-property => Get add-property page
 router.get('/add-property',authenticate.authen,(req, res, next) => {
     res.render('add-property', {type: false})
 })
 
+// GET: /id => Get property detail 
 router.get('/:id',(req, res, next) => {
-
+    
     res.render('detail')
 })
 
+// POST: / => Add propery
 router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, next) => {
     var data = req.body
     if (req.files.length) {

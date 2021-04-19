@@ -3,6 +3,8 @@ const router = express.Router()
 const passport = require('passport')
 const validator = require('../middleware/validator')
 const { validationResult } = require("express-validator")
+
+// GET: / => Get login page
 router.get('/', (req, res, next) => {
     var message = req.flash("error")
     if (message.length) 
@@ -11,6 +13,11 @@ router.get('/', (req, res, next) => {
         res.render("login")
 })
 
-router.post('/', passport.authenticate("local-login", { successReturnToOrRedirect: '/', failureRedirect: '/login', failureFlash: true }))
+// POST: / => Get login data, validate and create session
+router.post('/', passport.authenticate("local-login", { 
+    successReturnToOrRedirect: '/', 
+    failureRedirect: '/login', 
+    failureFlash: true,
+    badRequestMessage: "Vui lòng nhập tài khoản và mật khẩu" }))
 
 module.exports = router
