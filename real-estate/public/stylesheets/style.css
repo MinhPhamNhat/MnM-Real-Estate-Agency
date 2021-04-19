@@ -3958,4 +3958,30 @@ input::-webkit-inner-spin-button {
     background-color: #333333;
     transition: 0.3s;
 }
+.properties-content-head-left{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+}
+.sort-holder{
+    display: inline-block;
+    height: 23px;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0px 3px 0px 3px;
+    border: 1px gray solid;
+    border-radius: 3px;
+    margin-right: 10px;
+    cursor: pointer;
+}
 
+.sort-modal table .radio-sort td{
+    padding: 0px 10px 10px 10px;
+}
+
+.sort-modal table .radio-sort span{
+    padding: 0px 10px 10px 10px;
+    cursor: pointer;
+}

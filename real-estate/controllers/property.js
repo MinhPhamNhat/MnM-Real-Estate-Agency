@@ -9,6 +9,7 @@ const firebase = require('firebase-admin')
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid');
 const uuid = uuidv4()
+const func = require('../function/function')
 
 
 // GET: /add-property => Get add-property page
@@ -18,11 +19,11 @@ router.get('/add-property',authenticate.authen,(req, res, next) => {
 
 // GET: search/page => Search for properties
 router.get('/search', async (req, res, next) => {
-    var page = req.query.page
+    var page = Number(req.query.page)
     page = page||1
     var data = req.query
     var query = {
-        authorId: data.userId,
+        authorId: data.userId==="undefined"?undefined:data.userId,
         isSale: data.isSale === "any"||!data.isSale?undefined:data.isSale==='sale',
         type:  data.type === "any"||!data.type?undefined:data.type,
         'location.cityId':  data.city === "any"||!data.city?undefined:data.city,
@@ -40,15 +41,23 @@ router.get('/search', async (req, res, next) => {
         'features.bathrooms': data.bathrooms === "any"||!data.bathrooms?undefined:data.bathrooms === "more"?{$gte: 5}:data.bathrooms,
         'features.bedrooms': data.bedrooms === "any"||!data.bedrooms?undefined:data.bedrooms === "more"?{$gte: 5}:data.bedrooms
     }
-    var sortBy = {date: -1};
-    if(data.sortBy === "price-desc"){
-        sortBy = {price: -1}
-    }else if (data.sortBy === "price-asc"){
-        sortBy = {price: 1}
-    }else if (data.sortBy==="area-desc"){
-        sortBy = {area: -1}
-    }else if (data.sortBy==="area-asc"){
-        sortBy = {area: 1}
+    var sortBy = {}
+    if(data.sortPrice === "asc-price"){
+        sortBy = {...sortBy,price: 1}
+    }else if(data.sortPrice === "desc-price"){
+        sortBy = {...sortBy,price: -1}
+    }
+
+    if(data.sortArea === "asc-area"){
+        sortBy = {...sortBy,area: 1}
+    }else if(data.sortArea === "desc-area"){
+        sortBy = {...sortBy,area: -1}
+    } 
+
+    if(data.sortDate === "asc-date"){
+        sortBy = {...sortBy,date: 1}
+    }else if(data.sortDate === "desc-date"){
+        sortBy = {...sortBy,date: -1}
     }
 
     var skip = page&&data.noItem?(parseInt(data.noItem)*(parseInt(page)-1)):0
@@ -57,10 +66,15 @@ router.get('/search', async (req, res, next) => {
     var properties = await Property.getBaseProperty(query,skip, limit ,sortBy)
 
     var getRange = await Statistic.getMinMaxRange()
+
+    var numOfDoc = await Statistic.getNumberOfProperty(query)
+    console.log(limit)
+    var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/limit))
+
     if (data.submit === "form")
-    res.render("properties", {data: properties.data, searchData: data, range: getRange})
+    res.render("properties", {data: properties.data, searchData: data, range: getRange, pageRange, page})
     else
-    res.json({data: properties.data, userId: req.user?req.user.accountId:'' })
+    res.json({data: properties.data, userId: req.user?req.user.accountId:'', pageRange, page })
 })
 
 // GET: /id => Get detail property by id

@@ -1,5 +1,5 @@
-<div class="modal confirm-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade confirm-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title"><h3>Bạn có muốn xoá bất động sản này không ?</h3></h5>
@@ -10,6 +10,71 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-danger confirm-yes">Xoá</button>
           <button type="button" class="btn btn-secondary confirm-no" data-dismiss="modal">Huỷ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade sort-modal " tabindex="-1" role="dialog">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><h3><strong>Sắp xếp theo</strong></h3></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute;top: 20px;right: 20px">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+            <table>
+              <tr>
+                <td colspan="3"><h4><strong>Theo giá</strong></h4></td>
+              </tr>
+              <tr class="radio-sort">
+                <td>
+                  <input type="radio" id="default-price" name="by-price" value="default-price" checked>
+                  <span class="default-price">Mặc định</span>
+                </td>
+                <td>
+                  <input type="radio" id="desc-price" name="by-price" value="desc-price">
+                  <span class="desc-price">Từ cao đến thấp</span>
+                </td>
+                <td>
+                  <input type="radio" id="asc-price" name="by-price" value="asc-price">
+                  <span class="asc-price">Từ thấp đến cao</span>
+                </td>
+              </tr>
+              <td colspan="3"><h4><strong>Theo diện tích</strong></h4></td>
+              <tr class="radio-sort">
+                <td>
+                  <input type="radio" id="default-area" name="by-area" value="default-area" checked>
+                  <span class="default-area">Mặc định</span>
+                </td>
+                <td>
+                  <input type="radio" id="desc-area" name="by-area" value="desc-area">
+                  <span class="desc-area">Từ cao đến thấp</span>
+                </td>
+                <td>
+                  <input type="radio" id="asc-area" name="by-area" value="asc-area">
+                  <span class="asc-area">Từ thấp đến cao</span>
+                </td>
+              </tr>
+              <td colspan="3"><h4><strong>Theo thời gian</strong></h4></td>
+              
+              <tr class="radio-sort">
+                <td>
+                  <input type="radio" id="default-date" name="by-date" value="default-date" checked>
+                  <span class="default-date">Mặc định</span>
+                </td>
+                <td>
+                  <input type="radio" id="desc-date" name="by-date" value="desc-date">
+                  <span class="desc-date">Từ nay đến trước</span>
+                </td>
+                <td>
+                  <input type="radio" id="asc-date" name="by-date" value="asc-date">
+                  <span class="asc-date">Từ trước đến nay</span>
+                </td>
+              </tr>
+            </table>
         </div>
       </div>
     </div>
