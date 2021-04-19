@@ -17,6 +17,17 @@ router.get('/add-property',authenticate.authen,(req, res, next) => {
     res.render('add-property', {type: false})
 })
 
+// GET: //edit-property => Edit property
+router.get('/edit-property/:id',authenticate.authen, async (req, res, next) => {
+    const id = req.params.id
+    var property = await Property.getPropertyById(id)
+    if (property.code===0){
+        res.render('add-property', {data: property.data, type: true})
+    }else{
+        res.render('404')
+    }
+})
+
 // GET: search/page => Search for properties
 router.get('/search', async (req, res, next) => {
     var page = Number(req.query.page)
@@ -68,7 +79,7 @@ router.get('/search', async (req, res, next) => {
     var getRange = await Statistic.getMinMaxRange()
 
     var numOfDoc = await Statistic.getNumberOfProperty(query)
-    
+
     var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/limit))
 
     if (data.submit === "form")
@@ -136,5 +147,49 @@ router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, 
     }
 })
 
+// POST: /edit-property/id
+router.post('/edit-property/:id',authenticate.authen ,upload.array('files', 15),async (req, res, next) => {
+    const id = req.params.id
+    var data = req.body
+    if (req.files.length) {
+        const bucket = firebase.storage().bucket()
+        var images = req.files.map(img => {
+            var blob = bucket.file(img.filename)
+            const blobWriter = blob.createWriteStream({
+                metadata: {
+                    contentType: img.mimetype,
+                    metadata: {
+                        firebaseStorageDownloadTokens: uuid,
+                    }
+                }
+            })
+            var buffer = fs.readFileSync(path.join(__dirname, "../uploads/"+img.filename))
+            blobWriter.end(buffer)
+            blobWriter.on('error', (err) => {
+                res.render("404")
+            })
+            return `https://firebasestorage.googleapis.com/v0/b/${process.env.STORAGE_BUCKET}/o/${img.filename}?alt=media&token=${uuid}`
+        })
+        data.thumbnail = await Promise.all(images)
+        req.files.forEach(img=>{
+            if (fs.existsSync(path.join(__dirname, "../uploads/"+img.filename)))
+            fs.unlinkSync(path.join(__dirname, "../uploads/"+img.filename))
+        })
+    }
+    var newProperty = await Property.editProperty(id, data, req.user.accountId)
+
+    if (newProperty.code===0) {
+        await new Promise(r => setTimeout(r, 2000));
+        res.redirect(`/property/${newProperty.data._id}`)
+    } else {
+        res.render("404")
+    }
+})
+
+router.delete("/:id",authenticate.authen ,async (req, res, next) =>{
+    var id = req.params.id
+    var result = await Property.deleteProperty(id, req.user.accountId)
+    res.json(result)
+})
 
 module.exports = router

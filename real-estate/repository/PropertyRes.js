@@ -82,4 +82,50 @@ module.exports = {
             return { code: -1, message: "failed" }
         }
     },
+    
+    editProperty: async(_id, data, authorId) => {
+        if (data.price<=0){
+            return { code: -1, message: "Failed" }
+        }
+        var saveProperty ={
+            title: data.title,
+            isSale: data.isSale === "True" ? true : false,
+            type: data.type,
+            location: {
+                cityId: data.city,
+                districtId: data.district,
+            },
+            address: data.address,
+            price: data.unit==="n"?0:(Number(data.price) * (data.unit==="hm"?100:data.unit==="b"?1000:data.unit==="hb"?100000:1)),
+            area: data.area,
+            description: data.description,
+            features: {
+                rooms: data.rooms,
+                bedrooms: data.bedrooms,
+                bathrooms: data.bathrooms,
+                floors: data.floors,
+            },
+            thumbnail: data.thumbnail,
+            phoneContact: data.phone,
+            nameContact: data.name,
+            emailContact: data.email,
+            date: new Date(),
+        }
+        Object.keys(saveProperty).forEach(key => saveProperty[key] === undefined && delete saveProperty[key])
+        var newProperty = await Property.findOneAndUpdate({_id, authorId}, saveProperty, {new: true}).exec()
+        if (newProperty) {
+            return { code: 0, message: "Success", data: newProperty }
+        } else {
+            return { code: -1, message: "Failed" }
+        }
+    },
+
+    deleteProperty: async(_id, authorId) => {
+        var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
+        if (oldProperty) {
+            return { code: 0, message: "Success"}
+        } else {
+            return { code: -1, message: "Failed" }
+        }
+    }
 }

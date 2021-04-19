@@ -90,6 +90,41 @@ $(document).ready(() => {
         }
     })
 
+    
+    $('body').on('click', ".delete-property-btn", (e)=>{
+        $(".confirm-modal").modal("show")
+        $(".confirm-yes").attr("data-id", e.target.dataset.id)
+    })
+
+    $('body').on('click', ".edit-property-btn", (e)=>{
+        var propertyId = e.target.dataset.id
+        window.location.href = window.location.origin+"/property/edit-property/"+propertyId
+    })
+
+    $(".confirm-yes").on('click', (e) => {
+        var propertyId = e.target.dataset.id
+        fetch(`/property/${propertyId}`,{method:"DELETE"}).then(data=>data.json())
+        .then(data=>{
+            if (data.code===0){
+                var path = window.location.pathname
+                if (path.includes("/property/search")){
+                    searchData(currentPage)
+                }else if (path.includes("/profile/")){
+                    if (currentPage)
+                        searchData(currentPage)
+                    else{
+                        searchData(1)
+                    }
+                }else
+                window.location.href =  window.location.origin
+            }else{
+                window.location.href = window.location.origin+"/404"
+            }
+        })
+        
+        $(".confirm-modal").modal("hide")
+    })
+
 })
 
 var swiper = new Swiper('.swiper-container', {
