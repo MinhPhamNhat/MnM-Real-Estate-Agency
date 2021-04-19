@@ -140,7 +140,7 @@ router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, 
     var newProperty = await Property.createProperty(data, req.user.accountId)
 
     if (newProperty.code === 0) {
-        await new Promise(r => setTimeout(r, 1500));
+        await new Promise(r => setTimeout(r, 2000));
         res.redirect(`/property/${newProperty.data._id}`)
     } else {
         res.render("404")
@@ -186,6 +186,7 @@ router.post('/edit-property/:id',authenticate.authen ,upload.array('files', 15),
     }
 })
 
+// DELETE: /id => Delete propety
 router.delete("/:id",authenticate.authen ,async (req, res, next) =>{
     var id = req.params.id
     var result = await Property.deleteProperty(id, req.user.accountId)
