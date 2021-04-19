@@ -36,7 +36,6 @@ router.get('/:id', async(req, res, next) => {
     }
 })
 
-
 // POST: / => Add propery
 router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, next) => {
     var data = req.body
@@ -77,8 +76,33 @@ router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, 
 
 // POST: /page => Search for properties
 router.post('/search', async (req, res, next) => {
-    console.log(req.body)
-    res.render("properties")
+    var data = req.body
+    var query = {
+        authorId: data.userId,
+        isSale: data.isSale === "any"||!data.isSale?undefined:data.isSale==='sale',
+        type:  data.type === "any"||!data.type?undefined:data.type,
+        'location.cityId':  data.city === "any"||!data.city?undefined:data.city,
+        'location.districtId': data.district === "any"||!data.district?undefined: data.district,
+        area: data.areaFrom&&data.areaTo?{
+            $gte: Number(data.areaFrom),
+            $lte: Number(data.areaTo)
+        }:undefined,
+        price: data.priceFrom&&data.priceTo?{
+            $gte: Number(data.priceFrom),
+            $lte: Number(data.priceTo)
+        }:undefined,
+        'features.rooms': data.rooms === "any"||!data.rooms?undefined:data.rooms === "more"?{$gte: 5}:data.rooms,
+        'features.floors': data.floors === "any"||!data.floors?undefined:data.floors === "more"?{$gte: 5}:data.floors,
+        'features.bathrooms': data.bathrooms === "any"||!data.bathrooms?undefined:data.bathrooms === "more"?{$gte: 5}:data.bathrooms,
+        'features.bedrooms': data.bedrooms === "any"||!data.bedrooms?undefined:data.bedrooms === "more"?{$gte: 5}:data.bedrooms
+    }
+    var sortBy = {date: -1};
+    var skip = 0
+    var limit = 6
+
+    var properties = await Property.getBaseProperty(query,skip, limit ,sortBy)
+
+    res.render("properties", {data: properties.data})
 })
 
 module.exports = router
