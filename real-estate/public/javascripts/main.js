@@ -177,9 +177,6 @@ var swiper = new Swiper('.swiper-container', {
         var path = window.location.href
         var userId = path.replace((window.location.origin+"/profile/"),"")
     }
-    $(`.properties-content-bottom li`).removeClass("active")
-    $(`.properties-content-bottom .pagination-${page}`).addClass("active")
-        
 
     var noItem = $(".show-no-item option:selected").val()
     var sortPrice = $(".sort-modal .radio-sort input:checked")[0].value
@@ -244,6 +241,13 @@ var swiper = new Swiper('.swiper-container', {
         container.find("li").remove()
         var data = result.data
         var userId = result.userId
+        $("li[class*=pagination-]").remove()
+        var pageRange = result.pageRange 
+        var page = result.page 
+        pageRange.forEach(value=>{
+            $(`<li class="pagination-${value} ${page===value?'active':'' }"><a onclick=searchData(${value})>${value}</a></li>`).insertBefore( ".next-page" )
+        })
+
         data.forEach(value=> {
             var tag;
             if (userId){

@@ -68,7 +68,7 @@ router.get('/search', async (req, res, next) => {
     var getRange = await Statistic.getMinMaxRange()
 
     var numOfDoc = await Statistic.getNumberOfProperty(query)
-    console.log(limit)
+    
     var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/limit))
 
     if (data.submit === "form")

@@ -113,15 +113,15 @@
             <div class="properties-content-bottom">
               <nav>
                 <ul class="pagination">
-                  <li>
+                  <li class="previous-page" >
                     <a href="#" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
-                  <% pageRange.forEach(value=>{%>
-                    <li class="pagination-<%=value%> <%= page===value?'active':'' %>"><a onclick=searchData(<%=value%>)><%=value%></a></li>
-                  <%})%>
-                  <li>
+                    <% pageRange.forEach(value=>{%>
+                      <li class="pagination-<%=value%> <%= page===value?'active':'' %>"><a onclick=searchData(<%=value%>)><%=value%></a></li>
+                    <%})%>
+                  <li class="next-page">
                     <a href="#" aria-label="Next">
                       <span aria-hidden="true">&raquo;</span>
                     </a>

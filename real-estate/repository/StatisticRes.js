@@ -18,7 +18,6 @@ module.exports = {
 
     getNumberOfProperty: async (query)=>{
         Object.keys(query).forEach(key => query[key] === undefined && delete query[key])
-        console.log(query)
         return await Property.countDocuments(query).exec()
     }
 
