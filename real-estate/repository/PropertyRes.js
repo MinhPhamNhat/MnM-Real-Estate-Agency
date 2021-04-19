@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const Property = require('../models/PropertySchema')
 const City = require('./CityRes')
 const District = require('./DistrictRes')

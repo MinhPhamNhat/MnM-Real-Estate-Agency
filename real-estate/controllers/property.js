@@ -16,9 +16,6 @@ router.get('/add-property',authenticate.authen,(req, res, next) => {
 
 router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, next) => {
     var data = req.body
-    console.log({
-        HELLO: data
-    })
     if (req.files.length) {
         const bucket = firebase.storage().bucket()
         var images = req.files.map(img => {
@@ -48,7 +45,7 @@ router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, 
 
     if (newProperty.code === 0) {
         await new Promise(r => setTimeout(r, 1500));
-        res.redirect(`/properties/${newProperty.data._id}`)
+        res.redirect(`/property/${newProperty.data._id}`)
     } else {
         res.render("404")
     }
