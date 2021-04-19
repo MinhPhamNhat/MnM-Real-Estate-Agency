@@ -173,7 +173,7 @@
               <% nearBy.forEach(value=>{%>
                   <div class="swiper-slide">
                       <article class="properties-item item-<%=value._id%>">
-                          <a href="/properties/<%=value._id%>" class="properties-item-img">
+                          <a href="/property/<%=value._id%>" class="properties-item-img">
                           <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
                           </a>
                           <% if (locals.user){%>
@@ -205,7 +205,7 @@
                               </div>
                               <div class="properties-about">
                                   <h3>
-                                      <a href="/properties/<%=value._id%>">
+                                      <a href="/property/<%=value._id%>">
                                           <%= value.title %>
                                       </a>
                                   </h3>
@@ -215,7 +215,7 @@
                                   <span class="price">
                                           <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
                                   </span>
-                                  <a href="/properties/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:#59ABE3;color:white`:`style=background-color:#20ceb3;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                                  <a href="/property/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:#59ABE3;color:white`:`style=background-color:#20ceb3;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
                               </div>
                           </div>
                       </article>

@@ -116,7 +116,7 @@
                 <div class="container">
                     <div class="advance-search-area">
                         <div class="form">
-                            <form action="/property/search" method="POST">
+                            <form action="/property/search" method="GET">
                                 <div class="advance-search-top">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -209,6 +209,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="single-advance-search">
+                                                <input type="hidden" name="submit" value="form">
                                                 <input class="search-btn" type="submit" value="Tìm kiếm">
                                             </div>
                                         </div>

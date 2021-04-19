@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <%- include('partial/head', {title: "Properties"}) -%>
-  <body class="price-range">  
+  <body class="price-range" onload="setNoUiSliderOption(<%= range.minPrice %>,<%= range.maxPrice %>,<%= range.minArea %>,<%= range.maxArea %>); setSlider([<%= searchData.areaFrom %>,<%= searchData.areaTo %>], [<%= searchData.priceFrom %>,<%= searchData.priceTo %>]); loadCity('<%=searchData.city%>'); loadDistrict('<%=searchData.city%>', '<%=searchData.district%>')">  
   <!-- Pre Loader -->
   <div id="preloader-area" >
     <div class="pulse"></div>
@@ -10,8 +10,8 @@
     <a class="scrollToTop" href="#"><i class="fa fa-angle-double-up"></i></a>
   <!-- END SCROLL TOP BUTTON -->
   <%- include('partial/header', {active: "properties"}) -%>
-  <!-- Start Proerty header  -->
 
+  <!-- Start Proerty header  -->
   <section id="property-header">
     <div class="container">
       <div class="row">
@@ -28,7 +28,6 @@
     </div>
   </section> 
   <!-- End Proerty header  -->
-
   <!-- Start Properties  -->
   <section id="properties">
     <div class="container">
@@ -39,20 +38,21 @@
             <div class="properties-content-head">              
               <div class="properties-content-head-left">
                 <form action="" class="sort-form">
-                  <label for="">Sort by</label>
-                  <select name="">
-                    <option value="1" selected="Default">Default</option>
-                    <option value="2">Name</option>
-                    <option value="3">Price</option>
-                    <option value="4">Date</option>
+                  <label for="sort-by">Sắp xếp theo</label>
+                  <select name="sortBy" id="sort-by" class="sort-by" form="search-form">
+                    <option value="default" <%= searchData.sortBy==='default'||!searchData.sortBy?"selected":""%>>Mặc định</option>
+                    <option value="price-asc" <%= searchData.sortBy==='price-asc'?"selected":""%>>Giá từ thấp đến cao</option>
+                    <option value="price-desc" <%= searchData.sortBy==='price-desc'?"selected":""%>>Giá từ cao đến thấp</option>
+                    <option value="area-asc" <%= searchData.sortBy==='area-asc'?"selected":""%>>Diện tích từ thấp đến cao</option>
+                    <option value="area-desc" <%= searchData.sortBy==='area-desc'?"selected":""%>>Diện tích từ cao đến thấp</option>
                   </select>
                 </form>
                 <form action="" class="show-form">
-                  <label for="">Show</label>
-                  <select name="">
-                    <option value="1" selected="12">6</option>
-                    <option value="2">12</option>
-                    <option value="3">24</option>
+                  <label for="show-no-item">Hiển thị</label>
+                  <select name="noItem" id="show-no-item" class="show-no-item" form="search-form">
+                    <option value="6"  <%= searchData.noItem==='6'||!searchData.noItem?"selected":""%>>6</option>
+                    <option value="12" <%= searchData.noItem==='12'?"selected":""%>>12</option>
+                    <option value="24" <%= searchData.noItem==='24'?"selected":""%>>24</option>
                   </select>
                 </form>
               </div>
@@ -78,6 +78,7 @@
                             </div>
                         <%}%>
                       <%}%>
+                      
                       <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
                           <%= value.isSale?"For Sale":"For Rent" %>
                       </div>
@@ -117,6 +118,8 @@
               </ul>
             </div>
             <!-- Start properties content bottom -->
+            
+  
             <div class="properties-content-bottom">
               <nav>
                 <ul class="pagination">
@@ -125,11 +128,11 @@
                       <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li class="active"><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
+                  <li class="pagination-1 active"><a onclick=searchData(1)>1</a></li>
+                  <li class="pagination-2"><a onclick=searchData(2)>2</a></li>
+                  <li class="pagination-3"><a onclick=searchData(3)>3</a></li>
+                  <li class="pagination-4"><a onclick=searchData(4)>4</a></li>
+                  <li class="pagination-5"><a onclick=searchData(5)>5</a></li>
                   <li>
                     <a href="#" aria-label="Next">
                       <span aria-hidden="true">&raquo;</span>
@@ -141,64 +144,128 @@
           </div>
         </div>
         <!-- Start properties sidebar -->
+        
         <div class="col-md-4">
           <aside class="properties-sidebar">
             <!-- Start Single properties sidebar -->
             <div class="properties-single-sidebar">
-              <h3>Properties Search</h3>
-              <form action="">
+              <h3>Tìm kiếm bất động sản</h3>
+              
                 <div class="single-advance-search">
-                  <input type="text" placeholder="Type Your Location">
+                  <label for="keyword">Thông tin bất động sản</label>
+                  <input type="text" name="keyword" id="keyword" placeholder="Nhập keyword" value="<%= searchData.keyword %>">
                 </div>
                 <div class="single-advance-search">
-                  <select id="" name="">
-                   <option selected="" value="0">Category</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
+                  <label for="isSale">Hình thức</label>
+                  <select id="isSale" name="isSale">
+                      <option value="any" <%= searchData.type==='any'?"selected":""%>>Tất cả</option>
+                      <option value="rent" <%= searchData.isSale==='rent'?"selected":""%>>Cho thuê</option>
+                      <option value="sale" <%= searchData.isSale==='sale'?"selected":""%>>Bán</option>
                   </select>
                 </div>
                 <div class="single-advance-search">
-                  <select id="" name="">
-                    <option selected="" value="0">Type</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
+                  <label for="type">Loại hình</label>
+                  <select name="type" id="type">
+                      <option value="any" <%= searchData.type==='any'?"selected":""%>>Tất cả</option>
+                      <option value="appartment" <%= searchData.type==='appartment'?"selected":""%>>Căn hộ chung cư</option>
+                      <option value="street-house" <%= searchData.type==='street-house'?"selected":""%>>Nhà mặt phố</option>
+                      <option value="personal-house" <%= searchData.type==='personal-house'?"selected":""%>>Nhà riêng</option>
+                      <option value="villa" <%= searchData.type==='villa'?"selected":""%>>Nhà biệt thự</option>
                   </select>
                 </div>
                 <div class="single-advance-search">
-                  <select id="" name="">
-                    <option selected="" value="0">Type</option>
-                    <option value="1">Flat</option>
-                    <option value="2">Land</option>
-                    <option value="3">Plot</option>
-                    <option value="4">Commercial</option>
+                  <label for="city">Tỉnh/Thành</label>
+                  <select name="city" id="city" class="city-picker" >
+                      <option value="any" <%= searchData.city==='any'?"selected":""%>>Tất cả</option>
+                      
+                  </select>
+                </div>
+                <div class="single-advance-search">
+                  <label for="district">Quận/Huyện</label>
+                  <select name="district" id="district" class="district-picker">
+                      <option value="any" <%= searchData.district==='any'?"selected":""%>>Tất cả</option>
                   </select>
                 </div>
                 <div class="single-filter-search">
-                  <span>AREA (SQ)</span>
-                  <span>FROM</span>
-                  <span id="skip-value-lower" class="example-val">30.00</span>
-                  <span>TO</span>
-                  <span id="skip-value-upper" class="example-val">100.00</span>
+                  <span>Diện tích </span>
+                  <span>Từ</span>
+                  <span id="skip-value-lower" class="example-val"></span>
+                  <span>Đến</span>
+                  <span id="skip-value-upper" class="example-val"></span>
+                  <span class="set-area"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                  <div  style="display: none;" class="input-set-area">
+                      <input type="number" id="area-from" name="areaFrom"> - 
+                      <input type="number" id="area-to" name="areaTo">
+                  </div>
                   <div id="sqrfeet-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
-                  </div>                  
+                  </div>                 
                 </div>
                 <div class="single-filter-search">
-                  <span>PRICE ($)</span>
-                  <span>FROM</span>
-                  <span id="skip-value-lower2" class="example-val">30.00</span>
-                  <span>TO</span>
-                  <span id="skip-value-upper2" class="example-val">100.00</span>
+                  <span>Giá </span>
+                  <span>Từ</span>
+                  <span id="skip-value-lower2" class="example-val"></span>
+                  <span>Đến</span>
+                  <span id="skip-value-upper2" class="example-val"></span>
+                  <span class="set-price"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                  <div style="display: none;" class="input-set-price">
+                      <input type="number" id="price-from" name="priceFrom"> - 
+                      <input type="number" id="price-to" name="priceTo">
+                  </div>
                   <div id="price-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
-                  </div>      
+                  </div>     
                 </div>
                 <div class="single-advance-search">
-                  <input type="submit" value="Search" class="search-btn">
+                  <span class="more-choice">Thêm <i class="fa fa-caret-down" aria-hidden="true"></i></span>
                 </div>
-              </form>
+                <div class="show-more">
+                  <div class="single-advance-search">
+                      <label for="rooms">Số phòng</label>
+                      <select name="rooms" id="rooms">
+                          <option value="any" <%= searchData.rooms==='any'?"selected":""%>>Tất cả</option>
+                          <option value="1" <%= searchData.rooms==='1'?"selected":""%>>01</option>
+                          <option value="2" <%= searchData.rooms==='2'?"selected":""%>>02</option>
+                          <option value="3" <%= searchData.rooms==='3'?"selected":""%>>03</option>
+                          <option value="4" <%= searchData.rooms==='4'?"selected":""%>>04</option>
+                          <option value="more" <%= searchData.rooms==='more'?"selected":""%>>05+</option>
+                      </select>
+                  </div>
+                  <div class="single-advance-search">
+                      <label for="floors">Số lầu</label>
+                      <select name="floors" id="floors">
+                          <option value="any" <%= searchData.floors==='any'?"selected":""%>>Tất cả</option>
+                          <option value="1" <%= searchData.floors==='1'?"selected":""%>>01</option>
+                          <option value="2" <%= searchData.floors==='2'?"selected":""%>>02</option>
+                          <option value="3" <%= searchData.floors==='3'?"selected":""%>>03</option>
+                          <option value="4" <%= searchData.floors==='4'?"selected":""%>>04</option>
+                          <option value="more" <%= searchData.floors==='more'?"selected":""%>>05+</option>
+                      </select>
+                  </div>
+                  <div class="single-advance-search">
+                      <label for="bathrooms">Số nhà vệ sinh</label>
+                      <select name="bathrooms" id="bathrooms">
+                          <option value="any" <%= searchData.bathrooms==='any'?"selected":""%>>Tất cả</option>
+                          <option value="1" <%= searchData.bathrooms==='1'?"selected":""%>>01</option>
+                          <option value="2" <%= searchData.bathrooms==='2'?"selected":""%>>02</option>
+                          <option value="3" <%= searchData.bathrooms==='3'?"selected":""%>>03</option>
+                          <option value="4" <%= searchData.bathrooms==='4'?"selected":""%>>04</option>
+                          <option value="more" <%= searchData.bathrooms==='more'?"selected":""%>>05+</option>
+                      </select>
+                  </div>
+                  <div class="single-advance-search">
+                      <label for="bedrooms">Số phòng ngủ</label>
+                      <select name="bedrooms" id="bedrooms">
+                          <option value="any" <%= searchData.bedrooms==='any'?"selected":""%>>Tất cả</option>
+                          <option value="1" <%= searchData.bedrooms==='1'?"selected":""%>>01</option>
+                          <option value="2" <%= searchData.bedrooms==='2'?"selected":""%>>02</option>
+                          <option value="3" <%= searchData.bedrooms==='3'?"selected":""%>>03</option>
+                          <option value="4" <%= searchData.bedrooms==='4'?"selected":""%>>04</option>
+                          <option value="more" <%= searchData.bedrooms==='more'?"selected":""%>>05+</option>
+                      </select>
+                  </div>
+                </div>
+                <div class="single-advance-search">
+                  <input type="submit" value="Tìm kiếm" class="search-btn search-second">
+                </div>
             </div> 
             <!-- Start Single properties sidebar -->
             <div class="properties-single-sidebar">
@@ -246,8 +313,8 @@
     </div>
   </section>
   <!-- / Properties  -->
-
   <%- include('partial/foot') -%>
   <%- include('partial/footer') -%>
+
   </body>
 </html>
