@@ -136,30 +136,7 @@
                         </div>
                         
                         <div class="col-md-4">
-                            <aside class="properties-sidebar">
-                                <div class="properties-single-sidebar">
-                                    <div class="profile-name">
-                                        <%= profile.name %> <%- locals.user?profile.accountId === locals.user.accountId?`<span data-id='${profile.accountId}'>Cập nhật</span>`:'':'' -%>
-                                    </div>
-                                    <hr style="height:1px; border: none; background-color: black;
-                                    margin-top: 10px; ">
-                                    <div class="profile-email">
-                                        <i class="fa fa-envelope-o" aria-hidden="true"></i> <%= profile.email %>
-                                    </div>
-                                    <% if(profile.phone){ %>
-                                        <div class="phone-contact-container">
-                                            <p class="phone-contact" style="background-color: rgb(0, 105, 211)">
-                                            <i class="fa fa-phone" aria-hidden="true" style="margin-right: 10px;"></i><span>Bấm để hiện số</span>
-                                            </p> 
-                                            <p class="copy" style="background-color:rgb(0, 105, 211)"><i class="fa fa-clipboard" aria-hidden="true"></i></p>
-                                            <div type="hidden" id="phone-copy" data-phone="<%=profile.phone%>"></div>
-                                        </div>
-                                    <%}%>
-                                    <div class="user-property-info">
-                                        Tin đăng (<%=numOfDoc%>)
-                                    </div>
-                                </div>
-                            </aside>
+                                <%- include('partial/right-profile') -%>
                         </div>
                     </div>
                 </div>
