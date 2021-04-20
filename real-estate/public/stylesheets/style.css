@@ -3818,7 +3818,6 @@ input::-webkit-inner-spin-button {
 }
 
 
-
 .nearby-properties .swiper-container {
     width: 100%;
     height: 100%;
@@ -3910,8 +3909,8 @@ input::-webkit-inner-spin-button {
   position: absolute;
 }
 .property-attach .swiper-slide img{
-    height: 200px;
-    width: 150px;
+    height: 220px;
+    width: 370px;
 
 }
 .property-attach .swiper-button-next{
@@ -4175,4 +4174,33 @@ input::-webkit-inner-spin-button {
     color: white;
     margin-bottom: 5px;
     border-radius: 50%;
+}
+
+.description{
+    height: 100%;
+    margin: 0;
+}
+
+.description #label{
+    width: 250px;
+}
+.upload .suggestions{
+    display: flex;
+    flex-direction: row;
+}
+
+.upload .suggestions .text{
+    margin-left: 10px;
+    text-align: left;
+}
+.description textarea{
+    width: 100%;
+    height: 300px;
+}
+.suggestions{
+    border: 1px #98d9ff solid;
+    padding: 10px;
+    border-radius: 5px;
+    color: #0059a1;
+    background-color: #d3eaff
 }

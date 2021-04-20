@@ -18,7 +18,7 @@ router.get('/add-property',authenticate.authen,(req, res, next) => {
     res.render('add-property', {type: false})
 })
 
-// GET: //edit-property => Edit property
+// GET: /edit-property => Edit property
 router.get('/edit-property/:id',authenticate.authen, async (req, res, next) => {
     const id = req.params.id
     var property = await Property.getPropertyById(id)
@@ -29,7 +29,7 @@ router.get('/edit-property/:id',authenticate.authen, async (req, res, next) => {
     }
 })
 
-// GET: search/page => Search for properties
+// GET: /search/page => Search for properties
 router.get('/search', async (req, res, next) => {
     var page = Number(req.query.page)
     page = page||1
@@ -93,13 +93,13 @@ router.get('/search', async (req, res, next) => {
 router.get('/:id', async(req, res, next) => {
     var id = req.params.id
     if(id){
-        try{
             var data = await Property.getPropertyById(id)
             if (data.code===0){
+                console.log(data)
                 var nearBy = await Property.getBaseProperty(
                     {_id:{$ne: id},
-                    'location.cityId': data.data.location.cityId, 
-                    'location.districtId': data.data.location.districtId
+                    'location.cityId': data.data.location.city.id, 
+                    'location.districtId': data.data.location.district.id
                 }, 0,undefined
                 ,{date: -1})
                 var author = await User.findUserById(data.data.authorId)
@@ -115,9 +115,6 @@ router.get('/:id', async(req, res, next) => {
             }else{
                 res.render("404")  
             }
-        }catch{
-            res.render("404")  
-        } 
     }else{
         res.render("404")
     }

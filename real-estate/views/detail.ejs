@@ -56,7 +56,7 @@
                 </h2>
                 <p><%= data.address %></p>
                 <% if (locals.user) {%>
-                    <% if (data.authorId===locals.user.accountId){%>
+                    <% if (data.author.accountId===locals.user.accountId){%>
                     <span class="delete-property-btn" data-id="<%=data._id%>">Xoá tin</span>
                     <span class="edit-property-btn" data-id="<%=data._id%>">Thay đổi tin</span>
                     <%}%>
@@ -114,12 +114,12 @@
             <!-- Start Single properties sidebar -->
             <div class="properties-single-sidebar">
               <h3>Người <%= data.isSale?"bán":"cho thuê" %></h3>
-              <a class="profile-name" href="/profile/property/<%=data.authorId%>"><i class="fa fa-user" aria-hidden="true" style="margin-right: 10px;"></i><%= data.nameContact %></a>
-              <% if(data.emailContact) {%>
-                <p class="email-contact"><i class="fa fa-envelope" aria-hidden="true"></i><%=data.emailContact%></p>
-              <%}%>
+              <a class="profile-name" href="/profile/property/<%=data.author.accountId%>">
+                <i class="fa fa-user" aria-hidden="true" style="margin-right: 10px;"></i><%= data.author.name %>
+              </a>
+              <p class="email-contact"><i class="fa fa-envelope" aria-hidden="true"></i><%=data.author.email%></p>
               <% if (numOfDoc){%>
-                <p><a href="/profile/property/<%=data.authorId%>">Xem thêm (<%=numOfDoc%>) bất động sản khác</a></p>
+                <p><a href="/profile/property/<%=data.author.accountId%>">Xem thêm (<%=numOfDoc%>) bất động sản khác</a></p>
               <%}%>
               <div class="phone-contact-container">
                 <div class="inform">Đã sao chép</div>
@@ -128,14 +128,14 @@
                 </p> 
                 <p class="copy" style="background-color: <%= data.isSale?'darkviolet':'darkgoldenrod' %>"><i class="fa fa-clipboard" aria-hidden="true"></i></p>
               
-                <div type="hidden" id="phone-copy" data-phone="<%=data.phoneContact%>"></div>
+                <div type="hidden" id="phone-copy" data-phone="<%=data.author.phone%>"></div>
               </div>
-              <div class="contact-require" data-id="<%=data.authorId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
+              <div class="contact-require" data-id="<%=data.author.accountId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
             </div>
-              <!-- Start Single properties sidebar -->"
+              <!-- Start Single properties sidebar -->
             <% if(authorProperty.length) {%>
               <div class="properties-single-sidebar">
-                <h3>Bất động sản của <%= data.nameContact %></h3>
+                <h3>Bất động sản của <%= data.author.name %></h3>
               <% authorProperty.forEach(value=>{%>
                 <div class="media">
                   <div class="media-left">
@@ -149,13 +149,13 @@
                   </div>
                   <div class="media-body">
                     <h4 class="media-heading"><a title="<%=value.title%>"  href="/property/<%=value._id%>"><%=value.title%></a></h4>
-                    <p><%=value.location.city%>, <%=value.location.district%></p>
+                    <p><%=value.location.city.name%>, <%=value.location.district.name%></p>
                     <span><strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong></span>
                   </div>
                 </div>
               <%})%>
               <div class="see-more-btn">
-                <a href="/profile/property/<%=data.authorId%>" >Xem thêm  <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                <a href="/profile/property/<%=data.author.accountId%>" >Xem thêm  <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
               </div>
             </div>
             <%}%>
@@ -179,7 +179,7 @@
                             <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
                         </a>
                         <% if (locals.user){%>
-                            <% if(locals.user.accountId===value.authorId){%>
+                            <% if(locals.user.accountId===value.accountId){%>
                                 <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
                                     <img src="/images/option.png">
                                     <div class="option-btn">
@@ -214,7 +214,7 @@
                                         <%= value.title %>
                                     </a>
                                 </h3>
-                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district %>, <%= value.location.city %></p>
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district.name %>, <%= value.location.city.name %></p>
                             </div>
                             <div class="properties-detial">
                                 <span class="price">

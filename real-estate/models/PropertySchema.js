@@ -19,9 +19,6 @@ const propertySchema = mongoose.Schema({
         floors: Number,
     },
     thumbnail: Array,
-    phoneContact: String,
-    nameContact: String,
-    emailContact: String,
     date: Date,
     authorId: String,
 })

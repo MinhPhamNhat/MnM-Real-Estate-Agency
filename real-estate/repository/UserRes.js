@@ -12,6 +12,7 @@ module.exports = {
     },
 
     updateUser: async(userId, data) =>{
+        Object.keys(data).forEach(key => (!data[key] || data[key] === 'undefined') && delete data[key])
         var userHandler = await User.findOneAndUpdate({accountId: userId}, data).exec()
         if (userHandler){
             return {code: 0, message: "Success", data: userHandler}

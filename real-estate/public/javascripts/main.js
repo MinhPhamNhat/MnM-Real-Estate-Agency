@@ -274,9 +274,9 @@ const alphaOnly = (event)=> {
     }
   };
 var swiper = new Swiper('.swiper-container', {
-    slidesPerView: 3,
-    spaceBetween: 30,
-    slidesPerGroup: 3,
+    slidesPerView: 2,
+    spaceBetween:10,
+    slidesPerGroup: 2,
     loop: true,
     loopFillGroupWithBlank: true,
     freeMode: true,
@@ -440,7 +440,7 @@ var swiper = new Swiper('.swiper-container', {
         data.forEach(value=> {
             var tag;
             if (userId){
-                if (userId === value.authorId){
+                if (userId === value.author.accountId){
                     tag = `<div class="property-btn option-${value._id}" data-id="${value._id}">
                                 <img src="/images/option.png">
                                 <div class="option-btn">
@@ -474,7 +474,7 @@ var swiper = new Swiper('.swiper-container', {
                                     ${ value.title }
                                 </a>
                             </h3>
-                            <p><i class="fa fa-map-marker" aria-hidden="true"></i> ${ value.location.district }, ${ value.location.city }</p>
+                            <p><i class="fa fa-map-marker" aria-hidden="true"></i> ${ value.location.district.name }, ${ value.location.city.name }</p>
                         </div>
                         <div class="properties-detial">
                             <span class="price">
