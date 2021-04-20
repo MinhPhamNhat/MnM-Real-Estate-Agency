@@ -110,7 +110,7 @@ $(document).ready(() => {
                 var path = window.location.pathname
                 if (path.includes("/property/search")){
                     searchData(currentPage)
-                }else if (path.includes("/profile/")){
+                }else if (path.includes("/profile/property/")){
                     if (currentPage)
                         searchData(currentPage)
                     else{
@@ -139,12 +139,8 @@ $(document).ready(() => {
 
     $(".copy").on('click',()=>{
         var copyText = $("#phone-copy")[0].dataset.phone
-        const el = document.createElement('textarea');
-        el.value = copyText;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
+        copy(copyText)
+        $(".inform").text("Đã sao chép số")
         $(".inform").show()
         setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
     })
@@ -171,8 +167,106 @@ $(document).ready(() => {
         $(".profile-modal").modal("show")
     })
     
+    $(".contact-require").on('click', (e) =>{
+        $('.contact-require-modal').modal("show")
+    })
+
+    $(".confirm-send").on('click', (e) => {
+        var propertyOwner = $(".contact-require")[0].dataset.id
+        var propertyId = $(".contact-require")[0].dataset.property
+        var name = $(".contact-require-modal .name-input").val()
+        var email = $(".contact-require-modal .email-input").val()
+        var phone = $(".contact-require-modal .phone-input").val()
+        var desc = $(".contact-require-modal .desc-input").val()
+        var formData = {propertyOwner, propertyId, name, email, phone, desc}
+        Object.keys(formData).forEach(key => formData[key] === undefined && delete formData[key])
+        fetch("/contact", 
+        {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(data=>data.json())
+        .then(data=>{
+            if (data.code===0){
+                $(".inform").text("Đã yêu cầu liên lạc")
+                $(".inform").show()
+                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
+            }else{
+                $(".inform").text("Yêu cầu liên lạc thất bại")
+                $(".inform").show()
+                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
+            }
+        })
+        $('.contact-require-modal').modal("hide")
+    })
+
+    $(".contact-phone").click((e)=>{
+        var id = e.target.dataset.id
+        if (!$(`.contact-phone .contact-${id}`).hasClass("show-phone")){
+            var phone = $(`.contact-phone .contact-${id}`)[0].dataset.phone
+            $(`.contact-phone .contact-${id}`).text(formatPhone(phone))
+            $(`.contact-phone .contact-${id}`).addClass("show-phone")
+        }
+        else{
+            $(`.contact-phone .contact-${id}`).removeClass("show-phone")
+            $(`.contact-phone .contact-${id}`).text("Bấm để hiện số")
+        }
+    })
+
+    $(".contact-detail").click((e) => {
+        var {name, phone, id, email, desc} = e.target.dataset
+        $(".contact-modal .modal-name-contact").text(name||"Không rõ")
+        $(".contact-modal .modal-phone-contact").text(formatPhone(phone))
+        $(".contact-modal .modal-phone-contact").attr("data-phone",phone)
+        $(".contact-modal .modal-email-contact").text(email||"Không rõ")
+        $(".contact-modal .modal-desc-contact").text(desc||"Không rõ")
+        $(".contact-modal").modal("show")
+    })
+
+    $(".modal-phone-contact").click((e) => {
+        var text = e.target.dataset.phone
+        copy(text)
+        $(".modal-inform").text("Đã sao chép số")
+        $(".modal-inform").show()
+        setTimeout(()=>{$( ".modal-inform" ).fadeOut(1600)}, 1000)
+    })
+
+    $(".contact-remove").click((e)=>{
+        var id = e.target.dataset.id
+        $(".confirm-contact-modal").modal("show")
+        $(".confirm-contact-modal .confirm-remove").attr("data-id", id)
+    })
+
+    $(".confirm-contact-modal .confirm-remove").click((e)=>{
+        var id = e.target.dataset.id
+        fetch(`/contact/${id}`, {method: "DELETE"}).then(data=>data.json())
+        .then(data=>{
+            if (data.code===0){
+                $(`.contact-id-${id}`).remove()
+                $(".inform").text("Đã xóa số liên lạc")
+                $(".inform").show()
+                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
+            }else{
+                $(".inform").text("Xóa số liên lạc thất bại")
+                $(".inform").show()
+                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
+            }
+        })
+        $(".confirm-contact-modal").modal("hide")
+    })
 
 })
+const copy = (copyText) =>{
+    const el = document.createElement('textarea');
+    el.value = copyText;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+}
 const alphaOnly = (event)=> {
     var key = event.keyCode;
     if ((key >= 33 && key <= 64) || (key >= 91 && key <= 96) || (key >= 123 && key <= 126)){
@@ -267,9 +361,9 @@ var swiper = new Swiper('.swiper-container', {
 
   const searchData = (page) =>{
     currentPage = page
-    if (window.location.pathname.includes("/profile/")){
+    if (window.location.pathname.includes("/profile/property/")){
         var path = window.location.href
-        var userId = path.replace((window.location.origin+"/profile/"),"")
+        var userId = path.replace((window.location.origin+"/profile/property/"),"")
     }
 
     var noItem = $(".show-no-item option:selected").val()
@@ -380,7 +474,7 @@ var swiper = new Swiper('.swiper-container', {
                                     ${ value.title }
                                 </a>
                             </h3>
-                            <p>${ value.location.district }, ${ value.location.city }</p>
+                            <p><i class="fa fa-map-marker" aria-hidden="true"></i> ${ value.location.district }, ${ value.location.city }</p>
                         </div>
                         <div class="properties-detial">
                             <span class="price">

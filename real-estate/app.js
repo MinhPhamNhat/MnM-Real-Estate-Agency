@@ -14,7 +14,7 @@ const indexRouter = require('./controllers/index');
 const propertyRouter = require('./controllers/property');
 const locationRouter = require('./controllers/location');
 const profileRouter = require('./controllers/profile');
-
+const contactRouter = require('./controllers/contact')
 const authenticate = require('./middleware/authenticate');
 const app = express();
 
@@ -50,7 +50,7 @@ app.use('/',authenticate.signUser, indexRouter);
 app.use('/property',authenticate.signUser, propertyRouter);
 app.use('/location',authenticate.signUser, locationRouter);
 app.use('/profile',authenticate.signUser, profileRouter);
-
+app.use('/contact', contactRouter)
 
 app.locals.getFlooredFixed = (v, d) => {
   return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);

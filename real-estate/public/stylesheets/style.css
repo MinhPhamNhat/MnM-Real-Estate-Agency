@@ -216,6 +216,7 @@ img {
 
 #header .header-area .header-right .register {
     border-right: 1px solid #f8f8f8;
+    margin-left: 10px;;
     color: #fff;
     margin-right: 5px;
     padding-right: 10px;
@@ -4008,11 +4009,11 @@ input::-webkit-inner-spin-button {
     text-overflow: ellipsis;
 }
 .phone-contact-container{
-    margin-top: 10px;;
+    margin-top: 10px;
     display: flex;
     flex-direction: row;
 }
-.phone-contact, .copy{
+.phone-contact, .copy, .modal-phone-contact{
     color: white;
     margin-top: 5px;;
     cursor: pointer;
@@ -4026,10 +4027,21 @@ input::-webkit-inner-spin-button {
     position: absolute;
     padding: 5px;
     color: white;
-    background-color: #aaa;
+    background-color: #333333;
     border-radius: 5px;
     top: 50px;
     left: 50px;
+    display: none;
+    transition: 1;
+}
+.modal-inform{
+    position: absolute;
+    padding: 5px;
+    color: white;
+    background-color: #333333;
+    border-radius: 5px;
+    top: 60px;
+    left: 280px;
     display: none;
     transition: 1;
 }
@@ -4098,7 +4110,69 @@ input::-webkit-inner-spin-button {
 
 }
 
-.profile-modal td{
+.profile-modal td, .contact-require-modal td{
     padding: 5px;
     padding-right: 10px;
+}
+.contact-list td, .contact-list th {
+    border: 1px solid #888;
+    text-align: left;
+    padding: 8px;
+  }
+  
+.contact-list tr:nth-child(even) td {
+    background-color: #dddddd;
+}
+
+.contact-phone{
+    width: 150px;;
+    cursor: pointer;
+}
+
+.contact-detail,
+.contact-remove,
+.contact-property{
+    cursor: pointer;
+}
+
+.new td{
+    font-weight: bold;
+}
+
+.contact-detail:hover,
+.contact-remove:hover,
+.contact-property:hover{
+    color:rgb(0, 105, 211)
+}
+
+.contact-modal td{
+    padding: 10px;
+}
+
+.nO-new-contact{
+    background-color: red;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 0px;
+    left: 330px;
+    color: white;
+    font-size: 10px;
+    border-radius: 50%;
+}
+.fa-map-marker{
+    margin-right: 5px;;
+}
+.noti-contact {
+    position: absolute;
+    
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    background-color: red;
+    font-size: 10px;
+    color: white;
+    margin-bottom: 5px;
+    border-radius: 50%;
 }

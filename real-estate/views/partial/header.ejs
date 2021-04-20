@@ -20,13 +20,18 @@
                   <div class="col-md-6 col-sm-6 col-xs-6">
                     <% if(!locals.logined) {%>
                       <div class="header-right">
-                        <a href="/register" class="register">Register</a>
-                        <a href="/login" class="login">Login</a>
+                        <a href="/register" class="register">Đăng ký</a>
+                        <a href="/login" class="login">Đăng nhập</a>
                       </div>
                     <%}else{%>
                       <div class="header-right">
-                          <a href="/profile/<%= locals.user.accountId %>" class="register"><%=locals.user.name%></a>
-                          <a href="/logout" class="login">Logout</a>
+                        <button type="button" class="btn btn-secondary contact-noti" onclick="window.location.href = window.location.origin+'/profile/contact'" data-toggle="tooltip" data-placement="bottom" title="Bạn có <%=locals.numOfNoti%> yêu cầu liên hệ mới">
+                          <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                          <% if (locals.numOfNoti){ %>
+                            <span class="nO-new-contact"><%=locals.numOfNoti%> </span>
+                          <%}%>
+                        </button> <a href="/profile/property/<%= locals.user.accountId %>" class="register"><%=locals.user.name%></a>
+                          <a href="/logout" class="login">Đăng xuất</a>
                       </div>
                     <%}%>
                   </div>

@@ -105,7 +105,6 @@ router.get('/:id', async(req, res, next) => {
                 var author = await User.findUserById(data.data.authorId)
                 var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId},0,3,{date: -1})
                 var numOfDoc = await Statistic.getNumberOfProperty({authorId: data.data.authorId})
-                console.log(numOfDoc)
                 res.render('detail', {
                     data: data.data, 
                     nearBy: nearBy.data, 

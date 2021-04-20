@@ -114,12 +114,12 @@
             <!-- Start Single properties sidebar -->
             <div class="properties-single-sidebar">
               <h3>Người <%= data.isSale?"bán":"cho thuê" %></h3>
-              <a class="profile-name" href="/profile/<%=data.authorId%>"><i class="fa fa-user" aria-hidden="true" style="margin-right: 10px;"></i><%= data.nameContact %></a>
+              <a class="profile-name" href="/profile/property/<%=data.authorId%>"><i class="fa fa-user" aria-hidden="true" style="margin-right: 10px;"></i><%= data.nameContact %></a>
               <% if(data.emailContact) {%>
                 <p class="email-contact"><i class="fa fa-envelope" aria-hidden="true"></i><%=data.emailContact%></p>
               <%}%>
               <% if (numOfDoc){%>
-                <a href="/profile/<%=data.authorId%>">Xem thêm (<%=numOfDoc%>) bất động sản khác</a>
+                <p><a href="/profile/property/<%=data.authorId%>">Xem thêm (<%=numOfDoc%>) bất động sản khác</a></p>
               <%}%>
               <div class="phone-contact-container">
                 <div class="inform">Đã sao chép</div>
@@ -130,9 +130,9 @@
               
                 <div type="hidden" id="phone-copy" data-phone="<%=data.phoneContact%>"></div>
               </div>
-              <div class="contact-require">Yêu cầu liên hệ lại</div>
+              <div class="contact-require" data-id="<%=data.authorId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
             </div>
-              <!-- Start Single properties sidebar -->
+              <!-- Start Single properties sidebar -->"
             <% if(authorProperty.length) {%>
               <div class="properties-single-sidebar">
                 <h3>Bất động sản của <%= data.nameContact %></h3>
@@ -150,12 +150,12 @@
                   <div class="media-body">
                     <h4 class="media-heading"><a title="<%=value.title%>"  href="/property/<%=value._id%>"><%=value.title%></a></h4>
                     <p><%=value.location.city%>, <%=value.location.district%></p>
-                    <span><strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</span>
+                    <span><strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong></span>
                   </div>
                 </div>
               <%})%>
               <div class="see-more-btn">
-                <a href="/profile/<%=data.authorId%>" >Xem thêm  <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                <a href="/profile/property/<%=data.authorId%>" >Xem thêm  <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
               </div>
             </div>
             <%}%>
@@ -214,16 +214,15 @@
                                         <%= value.title %>
                                     </a>
                                 </h3>
-                                <p><%= value.location.district %>, <%= value.location.city %></p>
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district %>, <%= value.location.city %></p>
                             </div>
                             <div class="properties-detial">
                                 <span class="price">
-                                        <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
+                                    <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
                                 </span>
                                 <a href="/property/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
                             </div>
                         </div>
-                    </article>
                   </div>
               <%})%>
             </div>

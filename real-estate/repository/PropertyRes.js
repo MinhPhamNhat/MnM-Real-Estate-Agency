@@ -1,10 +1,11 @@
 const Property = require('../models/PropertySchema')
-const City = require('./CityRes')
-const District = require('./DistrictRes')
+const CityRes = require('./CityRes')
+const DistrictRes = require('./DistrictRes')
+const Contact = require('../models/ContactSchema')
 
 const parseBaseProperty = async (property) => {
-    var city = await City.getCityById(property.location.cityId)
-    var district = await District.getDistrictById(property.location.districtId)
+    var city = await CityRes.getCityById(property.location.cityId)
+    var district = await DistrictRes.getDistrictById(property.location.districtId)
     return {
         location: {
             city: city?city.name:"",
@@ -24,7 +25,6 @@ const parseBaseProperty = async (property) => {
 
 module.exports = {
     createProperty: async(data, authorId) => {
-        console.log(data)
         if (data.price<=0){
             return { code: -1, message: "Failed" }
         }
@@ -124,6 +124,7 @@ module.exports = {
     deleteProperty: async(_id, authorId) => {
         var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
         if (oldProperty) {
+            await Contact.deleteMany({propertyId: oldProperty._id}).exec()
             return { code: 0, message: "Success"}
         } else {
             return { code: -1, message: "Failed" }
