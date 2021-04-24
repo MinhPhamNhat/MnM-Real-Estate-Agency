@@ -274,9 +274,9 @@ const alphaOnly = (event)=> {
     }
   };
 var swiper = new Swiper('.swiper-container', {
-    slidesPerView: 2,
+    slidesPerView: 3,
     spaceBetween:10,
-    slidesPerGroup: 2,
+    slidesPerGroup: 3,
     loop: true,
     loopFillGroupWithBlank: true,
     freeMode: true,
