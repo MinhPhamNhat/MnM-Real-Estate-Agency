@@ -1973,8 +1973,16 @@ input::-webkit-inner-spin-button {
     margin-right: 10px;
 }
 
-.properties-details .properties-info iframe {
-    margin-top: 15px;
+.properties-details .properties-info table td{
+    padding:15px;
+}
+
+.properties-details .properties-info table{
+    border-radius: 10px;
+    height:1px;
+    border-width:0;
+    color:black;
+    background-color:#f1f1f1;
 }
 
 .properties-details .nearby-properties {

@@ -92,6 +92,29 @@
                         <li><%=data.features.floors%> Tầng</li>
                     <%}%>
                 </ul>
+                <h4><b>Thông tin bất động sản</b></h4>
+                <table>
+                  <tr>
+                    <td><strong>Ngày đăng: </strong></td>
+                    <td colspan="3"><%= locals.formatDateTime(data.date) %></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Địa chỉ: </strong></td>
+                    <td colspan="3"><%= data.address %></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Tỉnh/Thành: </strong></td>
+                    <td><a href="/property/search?submit=form&city=<%= data.location.city.id %>"><%= data.location.city.name %></a></td>
+                    <td><strong>Quận/Huyện: </strong></td>
+                    <td><a href="/property/search?submit=form&city=<%= data.location.city.id %>&district=<%= data.location.district.id %>"><%= data.location.district.name %></a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Thể loại: </strong></td>
+                    <td><%= data.isSale?"Bán":"Cho thuê" %></td>
+                    <td><strong>Hình thức: </strong></td>
+                    <td><%= data.type==='personal-house'?'Nhà riêng':data.type==='street-house'?'Nhà mặt phố':data.type==='appartment'?'Căn hộ chung cư':data.type==='villa'?'Biệt thự':'' %></td>
+                  </tr>
+                </table>
                 <!-- <h4><b>Bản đồ bất động sản</b></h4> -->
                 <!-- <div id="map"></div> -->
               </div>

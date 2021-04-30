@@ -62,6 +62,17 @@ app.locals.formatPhone = (value) =>{
     return value.slice(0,4) + " " + value.slice(4,7) + " " + value.slice(7,11)
   }
 }
+app.locals.formatDateTime = (date) => {
+  var options = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' , 
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return date.toLocaleString("vi-VN", options)
+}
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -32,6 +32,11 @@ router.get('/edit-property/:id',authenticate.authen, async (req, res, next) => {
 // GET: /search/page => Search for properties
 router.get('/search', async (req, res, next) => {
     var page = Number(req.query.page)
+    // var defaultSearch = {
+    //     authorId: undefined,
+    //     isSale: undefined,
+    //     type:
+    // }
     page = page||1
     var data = req.query
     var query = {
@@ -75,14 +80,21 @@ router.get('/search', async (req, res, next) => {
     var skip = page&&data.noItem?(parseInt(data.noItem)*(parseInt(page)-1)):0
     var limit = data.noItem?parseInt(data.noItem):6
 
+    console.log(query,skip, limit ,sortBy)
     var properties = await Property.getBaseProperty(query,skip, limit ,sortBy)
+    console.log(properties)
 
     var getRange = await Statistic.getMinMaxRange()
 
     var numOfDoc = await Statistic.getNumberOfProperty(query)
 
     var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/limit))
+    data.priceFrom = data.priceFrom || getRange.minPrice
+    data.priceTo = data.priceTo || getRange.maxPrice
+    data.areaFrom = data.areaFrom || getRange.minArea
+    data.areaTo = data.areaTo || getRange.maxArea
 
+    
     if (data.submit === "form")
     res.render("properties", {data: properties.data, searchData: data, range: getRange, pageRange, page})
     else
@@ -95,7 +107,6 @@ router.get('/:id', async(req, res, next) => {
     if(id){
             var data = await Property.getPropertyById(id)
             if (data.code===0){
-                console.log(data)
                 var nearBy = await Property.getBaseProperty(
                     {_id:{$ne: id},
                     'location.cityId': data.data.location.city.id, 
