@@ -901,8 +901,10 @@ input::-webkit-inner-spin-button {
     color: #fff;
     padding: 6px 10px;
     position: absolute;
-    left: 15px;
-    top: -15px;
+    left: -5px;
+    top: 15px;
+    width: 90px;
+    text-align: center;
 }
 
 .properties-item .for-rent{

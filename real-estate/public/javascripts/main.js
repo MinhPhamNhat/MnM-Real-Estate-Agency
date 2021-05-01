@@ -397,7 +397,7 @@ var swiper = new Swiper('.swiper-container', {
             <div style="height:220px;width:360px" class=" placeholder-content"></div>
         </a>
         <div class="tag for-rent placeholder-content" style="border:1px white solid">
-          For Rent
+          Cho Thuê
         </div>
         <div class="properties-item-content">
           <div class="properties-info ">
@@ -459,7 +459,7 @@ var swiper = new Swiper('.swiper-container', {
                     </a>
                     ${tag||''}
                     <div class="tag for-${value.isSale ? "sale":"rent"}">
-                        ${ value.isSale?"For Sale":"For Rent" }
+                        ${ value.isSale?"Bán":"Cho Thuê" }
                     </div>
                     <div class="properties-item-content">
                         <div class="properties-info">
