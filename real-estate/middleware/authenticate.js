@@ -2,7 +2,7 @@ const Statistic = require('../repository/StatisticRes')
 module.exports = {
     signUser: async (req, res, next) => {
         if (req.user) {
-            res.locals.numOfNoti = await Statistic.getNumOfContact({propertyOwner: req.user.accountId, isRead: false})
+            res.locals.numOfNoti = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
             res.locals.logined = true
             res.locals.user = req.user
         }
@@ -13,6 +13,14 @@ module.exports = {
             next()
         } else {
             res.redirect("/")
+        }
+    },
+
+    adminAuthen: (req, res, next) =>{
+        if (req.user.role){
+            next()
+        }else{
+            res.render('404')
         }
     }
 }

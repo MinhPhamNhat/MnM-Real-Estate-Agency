@@ -2,19 +2,23 @@ var express = require('express');
 var router = express.Router();
 const Property = require('../repository/PropertyRes')
 const Statistic = require('../repository/StatisticRes')
-
+const Inform = require('../repository/InformRes')
 // GET: / => Get Home page
 router.get('/', async(req, res, next) => {
-    var properties = await Property.getBaseProperty({}, 0, 6, {date: -1})
+    var properties = await Property.getBaseProperty({status:true}, 0, 6, {date: -1})
     var getRange = await Statistic.getMinMaxRange()
     var propertiesByLocation = {
-        TP79: await Statistic.getNumberOfProperty({'location.cityId': 'TP79'}),
-        TP48: await Statistic.getNumberOfProperty({'location.cityId': 'TP48'}),
-        TP46: await Statistic.getNumberOfProperty({'location.cityId': 'TP46'}),
-        TP01: await Statistic.getNumberOfProperty({'location.cityId': 'TP01'}),
-        TP31: await Statistic.getNumberOfProperty({'location.cityId': 'TP31'})
+        TP79: await Statistic.getNumberOfProperty({'location.cityId': 'TP79', status:true}),
+        TP48: await Statistic.getNumberOfProperty({'location.cityId': 'TP48', status:true}),
+        TP46: await Statistic.getNumberOfProperty({'location.cityId': 'TP46', status:true}),
+        TP01: await Statistic.getNumberOfProperty({'location.cityId': 'TP01', status:true}),
+        TP31: await Statistic.getNumberOfProperty({'location.cityId': 'TP31', status:true})
     }
     res.render('index', { data: properties.data , range: getRange, propertiesByLocation});
 });
 
+router.get("/inform", async(req, res, next) =>{
+    var inform = await Inform.getInform({})
+    res.json(inform)
+})
 module.exports = router;

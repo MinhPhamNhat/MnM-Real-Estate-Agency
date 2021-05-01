@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partial/head', {title: "censorship"}) -%>
+
+    <body>
+        <!-- Pre Loader -->
+        <div id="preloader-area">
+            <div class="pulse"></div>
+        </div>
+        <!-- SCROLL TOP BUTTON -->
+        <a class="scrollToTop" href="#"><i class="fa fa-angle-double-up"></i></a>
+        <!-- END SCROLL TOP BUTTON -->
+        <%- include('partial/header', {active:"censor"}) -%>
+
+            <!-- Start Proerty header  -->
+            <section id="property-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="property-header-inner">
+                                <h2>Duyệt tin</h2>
+                                <ol class="breadcrumb">
+                                    <li><a href="#">DUYỆT TIN</a></li>
+                                    <li class="active">Tin chưa kiểm duyệt
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- End Proerty header  -->
+            <section id="property-censorship">
+              <div class="container">
+                <div class="row">
+                  <% if(data.length) {%>
+                    <% data.forEach(value =>{%>
+                        <div class="col-md-4">
+                            <article class="properties-item item-<%=value._id%>">
+                                <a href="/censor/<%=value._id%>" class="properties-item-img">
+                                    <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
+                                </a>
+                                <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
+                                    <%= value.isSale?"Bán":"Cho Thuê" %>
+                                </div>
+                                <div class="properties-item-content">
+                                    <div class="properties-info">
+                                        <% if (value.features.rooms) {%>
+                                            <span><%=value.features.rooms%> Phòng</span>
+                                        <%}%>
+                                        <% if (value.features.bathrooms) {%>
+                                            <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
+                                        <%}%>
+                                        <% if (value.features.bedrooms) {%>
+                                            <span><%=value.features.bedrooms%> Phòng ngủ</span>
+                                        <%}%>
+                                        <% if (value.features.floors) {%>
+                                            <span><%=value.features.floors%> Tầng</span>
+                                        <%}%>
+                                    </div>
+                                    <div class="properties-about">
+                                        <h3>
+                                            <a href="/censor/<%=value._id%>" title="<%= value.title %>">
+                                                <%= value.title %>
+                                            </a>
+                                        </h3>
+                                        <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district.name %>, <%= value.location.city.name %></p>
+                                    </div>
+                                    <div class="properties-detial">
+                                        <span class="price">
+                                                <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
+                                        </span>
+                                        <a href="/censor/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    <% })%>
+                  <%}else{%>
+                    <section id="error">
+                      <div class="container">
+                        <row>
+                          <div class="col-md-12">
+                            <div class="error-area">
+                              <p><span class="fa fa-bell"></span>Không có bất động sản nào cần kiểm duyệt</p>
+                              <a href="/">Back Home</a>
+                            </div>
+                          </div>
+                        </row>
+                      </div>
+                    </section>
+                  <% }%>
+                </div>
+              </div>
+            </section>
+        <%- include('partial/foot') -%>
+        <%- include('partial/footer') -%>
+    </body>
+</html>

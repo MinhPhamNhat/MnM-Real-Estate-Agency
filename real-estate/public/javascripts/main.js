@@ -180,7 +180,7 @@ $(document).ready(() => {
         var desc = $(".contact-require-modal .desc-input").val()
         var formData = {propertyOwner, propertyId, name, email, phone, desc}
         Object.keys(formData).forEach(key => formData[key] === undefined && delete formData[key])
-        fetch("/contact", 
+        fetch("/inform/contact", 
         {
             method: "POST",
             headers: {
@@ -216,16 +216,41 @@ $(document).ready(() => {
         }
     })
 
-    $(".contact-detail").click((e) => {
-        var {name, phone, id, email, desc} = e.target.dataset
-        $(".contact-modal .modal-name-contact").text(name||"Không rõ")
-        $(".contact-modal .modal-phone-contact").text(formatPhone(phone))
-        $(".contact-modal .modal-phone-contact").attr("data-phone",phone)
-        $(".contact-modal .modal-email-contact").text(email||"Không rõ")
-        $(".contact-modal .modal-desc-contact").text(desc||"Không rõ")
-        $(".contact-modal").modal("show")
+    $(".inform-detail").click((e) => {
+        var id = e.target.dataset.id
+        fetch(`/inform/${id}`).then(data=>data.json())
+        .then(data=>{
+            if (data.code===0){
+                var inform = data.data[data.data.type]
+                if (data.data.type==='contact'){
+                    $(".modal-name-contact").text(inform.name)
+                    $(".modal-phone-contact").text(inform.phone)
+                    $(".modal-email-contact").text(inform.email)
+                    $(".modal-desc-contact").text(inform.desc)
+                    $(".modal-date-contact").text(formatDateTime(new Date(inform.date)))
+                    $(".modal-title-contact a").text(inform.propertyId.title)
+                    $(".modal-title-contact a").attr("href", `/property/${inform.propertyId._id}`)
+                    $(".contact-modal").modal("show")
+                }else{
+                    $(".modal-name-censor").text(inform.name)
+                    $(".modal-status-censor").text(inform.isApproved?"Đã chấp nhận":"Từ chối kiểm duyệt")
+                    $(".modal-status-censor").css("background-color",inform.isApproved?"#98d9ff":"#ff7575")
+                    if (!inform.isApproved){
+                        $(".censor-reason").css("display","")
+                        $(".modal-reason-censor").text(inform.reason)
+                    }else{
+                        $(".censor-reason").css("display","none")
+                        $(".modal-reason-censor").text("")
+                    }
+                    $(".modal-date-censor").text(formatDateTime(new Date(inform.date)))
+                    $(".modal-title-censor a").text(inform.propertyId.title)
+                    $(".modal-title-censor a").attr("href", `/${inform.isApproved?'property':'censor'}/${inform.propertyId._id}`)
+                    $(".censor-modal").modal("show")
+                }
+                $(`.inform-${data.data._id}`).removeClass("new")
+            }
+        })
     })
-
     $(".modal-phone-contact").click((e) => {
         var text = e.target.dataset.phone
         copy(text)
@@ -234,18 +259,18 @@ $(document).ready(() => {
         setTimeout(()=>{$( ".modal-inform" ).fadeOut(1600)}, 1000)
     })
 
-    $(".contact-remove").click((e)=>{
+    $(".delete-inform").click((e)=>{
         var id = e.target.dataset.id
-        $(".confirm-contact-modal").modal("show")
-        $(".confirm-contact-modal .confirm-remove").attr("data-id", id)
+        $(".confirm-inform-modal").modal("show")
+        $(".confirm-inform-modal .confirm-remove").attr("data-id", id)
     })
 
-    $(".confirm-contact-modal .confirm-remove").click((e)=>{
+    $(".confirm-inform-modal .confirm-remove").click((e)=>{
         var id = e.target.dataset.id
-        fetch(`/contact/${id}`, {method: "DELETE"}).then(data=>data.json())
+        fetch(`/inform/${id}`, {method: "DELETE"}).then(data=>data.json())
         .then(data=>{
             if (data.code===0){
-                $(`.contact-id-${id}`).remove()
+                $(`.inform-${id}`).remove()
                 $(".inform").text("Đã xóa số liên lạc")
                 $(".inform").show()
                 setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
@@ -255,10 +280,87 @@ $(document).ready(() => {
                 setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
             }
         })
-        $(".confirm-contact-modal").modal("hide")
+        $(".confirm-inform-modal").modal("hide")
+    })
+
+    $(".properties-decline").click(()=>{
+        $(".decline-modal").modal("show")
+    })
+
+    $(".properties-approve").click((e)=>{
+        var propertyOwner = e.target.dataset.owner
+        var propertyId = e.target.dataset.id
+        var isApproved = true
+        var formData = {propertyOwner, propertyId, isApproved}
+        fetch("/inform/censor", 
+        {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(data=>data.json())
+        .then(data=>{
+            window.location.href = window.location.origin+"/censor"
+        })
+        if (reason)
+        $('.decline-modal').modal("hide")
+    })
+
+    $(".confirm-decline").click((e) => {
+        var propertyOwner = e.target.dataset.owner
+        var propertyId = e.target.dataset.id
+        var reason = $(".decline-reasone").val()
+        var isApproved = false
+        var formData = {propertyOwner, propertyId, reason, isApproved}
+        if (reason){
+            fetch("/inform/censor", 
+            {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(data=>data.json())
+            .then(data=>{
+                window.location.href = window.location.origin+"/censor"
+            })
+            $('.decline-modal').modal("hide")
+        }
+    })
+
+    $(".censor-require-btn").click((e)=>{
+        var id = e.target.dataset.id
+        var formData = {id}
+        fetch("/censor",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        body: JSON.stringify(formData)})
+        .then(data=>data.json())
+        .then(data=>{
+            if (data.code===0){
+                $(".censor-require-btn").remove()
+            }
+        })
     })
 
 })
+
+const formatDateTime = (date) => {
+    var options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' , 
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return date.toLocaleString("vi-VN", options)
+  }
 const copy = (copyText) =>{
     const el = document.createElement('textarea');
     el.value = copyText;

@@ -21,6 +21,8 @@ const propertySchema = mongoose.Schema({
     thumbnail: Array,
     date: Date,
     authorId: String,
+    status: Boolean,
+    authen: Boolean,
 })
 
 module.exports = mongoose.model("properties", propertySchema)

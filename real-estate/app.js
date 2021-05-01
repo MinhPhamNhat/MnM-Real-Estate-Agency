@@ -14,7 +14,8 @@ const indexRouter = require('./controllers/index');
 const propertyRouter = require('./controllers/property');
 const locationRouter = require('./controllers/location');
 const profileRouter = require('./controllers/profile');
-const contactRouter = require('./controllers/contact')
+const informRouter = require('./controllers/inform')
+const censorRouter = require('./controllers/censor')
 const authenticate = require('./middleware/authenticate');
 const app = express();
 
@@ -50,7 +51,8 @@ app.use('/',authenticate.signUser, indexRouter);
 app.use('/property',authenticate.signUser, propertyRouter);
 app.use('/location',authenticate.signUser, locationRouter);
 app.use('/profile',authenticate.signUser, profileRouter);
-app.use('/contact', contactRouter)
+app.use('/inform',authenticate.signUser, informRouter);
+app.use('/censor',authenticate.signUser , censorRouter)
 
 app.locals.getFlooredFixed = (v, d) => {
   return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
@@ -73,20 +75,31 @@ app.locals.formatDateTime = (date) => {
   };
   return date.toLocaleString("vi-VN", options)
 }
+
+app.locals.shorterFormatForDateTime = (date) => {
+  var day = date.getDate()/10>=1?date.getDate():"0"+date.getDate()
+  var month = (date.getMonth()+1)/10>=1?(date.getMonth()+1):"0"+(date.getMonth()+1)
+  var year = date.getFullYear()
+  var minute = date.getMinutes()
+  var hour = date.getHours()
+
+  return `${day}-${month}-${year} ${hour}:${minute}`
+}
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('404');
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('404');
+// });
 
 
 app.listen(PORT, ()=>console.log("http://"+HOST+":"+PORT))

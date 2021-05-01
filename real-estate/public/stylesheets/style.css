@@ -3070,6 +3070,7 @@ input::-webkit-inner-spin-button {
 ====================*/
 
 #footer {
+    margin-top: 50px;
     background-color: #444;
     display: inline;
     float: left;
@@ -3961,27 +3962,33 @@ input::-webkit-inner-spin-button {
 }
 
 .delete-property-btn,
-.edit-property-btn{
-    padding: 5px;
+.edit-property-btn,
+.censor-require-btn{
+    padding: 10px;
     margin: 5px;
     border-radius: 5px;
     cursor: pointer;
-    color: white;
+    color: black;
 }
 .option-btn{
     display: none;
 }
 .edit-property-btn{
-    background-color: olivedrab;
+    background-color: rgb(115, 255, 126);
     transition: 0.3s;
 }
 .delete-property-btn{
-    background-color: firebrick;
+    background-color: rgb(250, 161, 161);
+    transition: 0.3s;
+}
+.censor-require-btn{
+    background-color: rgb(152, 152, 255);
     transition: 0.3s;
 }
 .edit-property-btn:hover,
-.delete-property-btn:hover{
-    background-color: #333333;
+.delete-property-btn:hover,
+.censor-require-btn:hover{
+    background-color: #ccc;
     transition: 0.3s;
 }
 .properties-content-head-left{
@@ -4031,7 +4038,15 @@ input::-webkit-inner-spin-button {
     border-radius: 5px;
     margin-right: 5px;;
 }
-
+.modal-status-censor{
+    color: black;
+    margin-top: 5px;;
+    cursor: pointer;
+    padding: 10px;
+    width: fit-content;
+    border-radius: 5px;
+    margin-right: 5px;;
+}
 .inform{
     position: absolute;
     padding: 5px;
@@ -4118,26 +4133,56 @@ input::-webkit-inner-spin-button {
     -webkit-box-orient: vertical;
 
 }
+.contact-list th{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.8);
+}
+.contact-list td{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
 
 .profile-modal td, .contact-require-modal td{
     padding: 5px;
     padding-right: 10px;
 }
 .contact-list td, .contact-list th {
-    border: 1px solid #888;
     text-align: left;
-    padding: 8px;
-  }
-  
-.contact-list tr:nth-child(even) td {
-    background-color: #dddddd;
+    padding: 15px;
 }
 
+
+/* .contact-list tr:nth-child(even) td {
+    background-color: #f2f2f2;
+} */
+.contact-list table {
+    width: 100%;;
+}
+.contact-list tr:first-child:hover {
+    background-color: white;
+    cursor: default;
+    box-shadow: none;
+}
+.contact-list tr:hover{
+    cursor: pointer;
+    box-shadow: 1px 1px 1px 1px #000000;
+}
 .contact-phone{
     width: 150px;;
     cursor: pointer;
 }
-
+.delete-inform{
+    padding:10px;
+    border-radius: 5px;
+    background-color: rgb(255, 189, 189);
+}
+.delete-inform:hover{
+    background-color: rgb(255, 143, 143);
+}
+.inform-title{
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .contact-detail,
 .contact-remove,
 .contact-property{
@@ -4156,6 +4201,9 @@ input::-webkit-inner-spin-button {
 
 .contact-modal td{
     padding: 10px;
+}
+.censor-modal td{
+    padding: 10px
 }
 
 .nO-new-contact{
@@ -4265,4 +4313,37 @@ input::-webkit-inner-spin-button {
     right: 0;
     bottom: 0;
     background:rgba(0,0,0,0.3);
+}
+
+.properties-button{
+    display: inline;
+    padding-top: 50px;
+}
+
+.properties-approve,
+.properties-decline{
+    padding: 15px 25px 15px 25px;
+    margin: 10px;
+    cursor: pointer;
+    border: none;
+    font-size: 18px;
+    border-radius: 5px ;
+}
+
+.properties-approve{
+    background-color: #98d9ff;
+}
+
+
+.properties-decline{
+    background-color: #ff7575;
+}
+
+.warning{
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(255, 249, 220);
+    border: 1px solid rgb(255, 253, 109);
+    border-radius: 5px;
+    margin-bottom: 10px;
 }

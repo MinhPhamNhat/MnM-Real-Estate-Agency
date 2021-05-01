@@ -21,7 +21,7 @@ router.get('/add-property',authenticate.authen,(req, res, next) => {
 // GET: /edit-property => Edit property
 router.get('/edit-property/:id',authenticate.authen, async (req, res, next) => {
     const id = req.params.id
-    var property = await Property.getPropertyById(id)
+    var property = await Property.getPropertyById({_id:id})
     if (property.code===0){
         res.render('add-property', {data: property.data, type: true})
     }else{
@@ -32,11 +32,6 @@ router.get('/edit-property/:id',authenticate.authen, async (req, res, next) => {
 // GET: /search/page => Search for properties
 router.get('/search', async (req, res, next) => {
     var page = Number(req.query.page)
-    // var defaultSearch = {
-    //     authorId: undefined,
-    //     isSale: undefined,
-    //     type:
-    // }
     page = page||1
     var data = req.query
     var query = {
@@ -56,7 +51,8 @@ router.get('/search', async (req, res, next) => {
         'features.rooms': data.rooms === "any"||!data.rooms?undefined:data.rooms === "more"?{$gte: 5}:data.rooms,
         'features.floors': data.floors === "any"||!data.floors?undefined:data.floors === "more"?{$gte: 5}:data.floors,
         'features.bathrooms': data.bathrooms === "any"||!data.bathrooms?undefined:data.bathrooms === "more"?{$gte: 5}:data.bathrooms,
-        'features.bedrooms': data.bedrooms === "any"||!data.bedrooms?undefined:data.bedrooms === "more"?{$gte: 5}:data.bedrooms
+        'features.bedrooms': data.bedrooms === "any"||!data.bedrooms?undefined:data.bedrooms === "more"?{$gte: 5}:data.bedrooms,
+        status: true
     }
     var sortBy = {}
     if(data.sortPrice === "asc-price"){
@@ -80,9 +76,7 @@ router.get('/search', async (req, res, next) => {
     var skip = page&&data.noItem?(parseInt(data.noItem)*(parseInt(page)-1)):0
     var limit = data.noItem?parseInt(data.noItem):6
 
-    console.log(query,skip, limit ,sortBy)
     var properties = await Property.getBaseProperty(query,skip, limit ,sortBy)
-    console.log(properties)
 
     var getRange = await Statistic.getMinMaxRange()
 
@@ -105,17 +99,18 @@ router.get('/search', async (req, res, next) => {
 router.get('/:id', async(req, res, next) => {
     var id = req.params.id
     if(id){
-            var data = await Property.getPropertyById(id)
+            var data = await Property.getPropertyById({_id:id, status: true})
             if (data.code===0){
                 var nearBy = await Property.getBaseProperty(
                     {_id:{$ne: id},
                     'location.cityId': data.data.location.city.id, 
-                    'location.districtId': data.data.location.district.id
+                    'location.districtId': data.data.location.district.id,
+                    status: true
                 }, 0,undefined
                 ,{date: -1})
                 var author = await User.findUserById(data.data.authorId)
-                var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId},0,3,{date: -1})
-                var numOfDoc = await Statistic.getNumberOfProperty({authorId: data.data.authorId})
+                var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId, status: true},0,3,{date: -1})
+                var numOfDoc = await Statistic.getNumberOfProperty({authorId: data.data.authorId, status: true})
                 res.render('detail', {
                     data: data.data, 
                     nearBy: nearBy.data, 
@@ -163,7 +158,7 @@ router.post('/',authenticate.authen, upload.array('files', 15), async(req, res, 
 
     if (newProperty.code === 0) {
         await new Promise(r => setTimeout(r, 2000));
-        res.redirect(`/property/${newProperty.data._id}`)
+        res.redirect(`/censor/${newProperty.data._id}`)
     } else {
         res.render("404")
     }
@@ -202,7 +197,7 @@ router.post('/edit-property/:id',authenticate.authen ,upload.array('files', 15),
 
     if (newProperty.code===0) {
         await new Promise(r => setTimeout(r, 2000));
-        res.redirect(`/property/${newProperty.data._id}`)
+        res.redirect(`/censor/${newProperty.data._id}`)
     } else {
         res.render("404")
     }

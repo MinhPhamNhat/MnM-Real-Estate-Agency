@@ -32,6 +32,8 @@ const parseBaseProperty = async (property) => {
         thumbnail: property.thumbnail,
         date: property.date,
         authorId: property.authorId,
+        status: property.status,
+        authen: property.authen,
         author
     }
     return tempProperty
@@ -40,6 +42,9 @@ const parseBaseProperty = async (property) => {
 module.exports = {
     createProperty: async(data, authorId) => {
         if (data.price<=0){
+            return { code: -1, message: "Failed" }
+        }
+        if (data.area<=0){
             return { code: -1, message: "Failed" }
         }
         var newProperty = await new Property({
@@ -61,10 +66,9 @@ module.exports = {
                 floors: data.floors,
             },
             thumbnail: data.thumbnail,
-            phoneContact: data.phone,
-            nameContact: data.name,
-            emailContact: data.email,
             date: new Date(),
+            status: false,
+            authen: false,
             authorId,
         }).save()
         if (newProperty) {
@@ -74,8 +78,8 @@ module.exports = {
         }
     },
 
-    getPropertyById: async(_id) => {
-        var property = await Property.findOne({ _id }).exec()
+    getPropertyById: async(query) => {
+        var property = await Property.findOne(query).exec()
         if (property) {
             return { code: 0, message: "Success", data: await parseBaseProperty(property) }
         } else {
@@ -123,10 +127,8 @@ module.exports = {
                 floors: data.floors,
             },
             thumbnail: data.thumbnail,
-            phoneContact: data.phone,
-            nameContact: data.name,
-            emailContact: data.email,
-            date: new Date(),
+            authen: false,
+            status: false,
         }
         Object.keys(saveProperty).forEach(key => saveProperty[key] === undefined && delete saveProperty[key])
         var newProperty = await Property.findOneAndUpdate({_id, authorId}, saveProperty, {new: true}).exec()
@@ -145,5 +147,27 @@ module.exports = {
         } else {
             return { code: -1, message: "Failed" }
         }
+    },
+    
+    approveProperty: async(_id) => {
+        var oldProperty = await Property.findOne({_id}).exec()
+        if (oldProperty) {
+            oldProperty.status = true
+            oldProperty.authen = true
+            oldProperty.save()
+            return { code: 0, message: "Success"}
+        } else {
+            return { code: -1, message: "Failed" }
+        }
+    },
+    
+    requireCensor: async(query)=>{
+        var property = await Property.findOne(query).exec()
+        if (property){
+            property.authen = false
+            await property.save()
+            return true
+        }
+        return false
     }
 }

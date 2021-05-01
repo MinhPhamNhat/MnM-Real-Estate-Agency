@@ -1,19 +1,13 @@
-const { query } = require('express-validator')
+
 const Contact = require('../models/ContactSchema')
 const Property = require('../models/PropertySchema')
-
+const mongoose = require("mongoose")
 module.exports = {
     saveContact: async (data) => {
         data.date = new Date()
-        data.isRead = false
-        var property = await Property.findOne({ _id: data.propertyId, authorId: data.propertyOwner}).exec()
-        if (property){
-            var contact = await new Contact(data).save()
-            if (contact){
-                return true
-            }
-        }
-        return false
+        data._id = mongoose.Types.ObjectId()
+        var contact = await new Contact(data).save()
+        return contact._id
     },
     getContact: async(query, skip, limit)=>{
         var contacts = await Contact.find(query).sort({date: -1}).skip(skip).limit(limit).exec()

@@ -24,14 +24,20 @@
         <a href="/profile/property/<%=profile.accountId%>" class="user-property-info">
             <i class="fa fa-angle-double-right" aria-hidden="true"></i> Tin đăng (<%=numOfDoc%>) 
         </a>
-    </br>
+    <br>
         <% if (locals.user){%>
             <% if (locals.user.accountId === profile.accountId){%>
-                <% if (numOfContact){%>
-                    <a href="/profile/contact" class="user-contact-info">
-                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Liên hệ (<%=numOfContact%>) <%- numOfNoti?`<div class="noti-contact">${numOfNoti}</div>`:''-%>
+                <% if (numOfInform){%>
+                    <a href="/profile/inform" class="user-contact-info">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Thông báo (<%=numOfInform%>) <%- numOfUnreadInform?`<div class="noti-contact">${numOfNoti}</div>`:''-%>
                     </a>  
-                <%}%>  
+                <%}%> 
+                <br>
+                <% if (numOfUncensorDoc){%>
+                    <a href="/profile/censor" class="user-property-censor">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Tin chờ kiểm duyệt (<%=numOfUncensorDoc%>)
+                    </a> 
+                <%}%> 
             <%}%>
         <%}%>
     </div>

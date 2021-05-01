@@ -25,7 +25,7 @@
                       </div>
                     <%}else{%>
                       <div class="header-right">
-                        <button type="button" class="btn btn-secondary contact-noti" onclick="window.location.href = window.location.origin+'/profile/contact'" data-toggle="tooltip" data-placement="bottom" title="Bạn có <%=locals.numOfNoti%> yêu cầu liên hệ mới">
+                        <button type="button" class="btn btn-secondary contact-noti" onclick="window.location.href = window.location.origin+'/profile/inform'" data-toggle="tooltip" data-placement="bottom" title="Bạn có <%=locals.numOfNoti%> yêu cầu liên hệ mới">
                           <i class="fa fa-address-book-o" aria-hidden="true"></i>
                           <% if (locals.numOfNoti){ %>
                             <span class="nO-new-contact"><%=locals.numOfNoti%> </span>
@@ -56,7 +56,7 @@
               </button>
               <!-- LOGO -->                                               
               <!-- Text based logo -->
-              <a class="navbar-brand logo <%= active==="home"?"active":"" %>" href="/"> Bán <span>Nhà</span></a>
+              <a class="navbar-brand logo <%= active==="home"?"active":"" %>" href="/"> Bất Động Sản <span>21</span></a>
               <!-- Image based logo -->
               <!-- <a class="navbar-brand logo-img" href="/"><img src="/images/logo.png" alt="logo"></a> -->                     
             </div>
@@ -65,6 +65,9 @@
                 <li <%= active==="home"?"class=active":"" %>><a href="/">TRANG CHỦ</a></li>
                 <% if(locals.logined) {%>
                 <li <%= active==="add"?"class=active":"" %>><a href="/property/add-property">ĐĂNG TIN</a></li>    
+                <%}%>
+                <% if(locals.logined && locals.user.role) {%>
+                <li <%= active==="censor"?"class=active":"" %>><a href="/censor">KIỂM DUYỆT</a></li>    
                 <%}%>
               </ul>                          
             </div>     

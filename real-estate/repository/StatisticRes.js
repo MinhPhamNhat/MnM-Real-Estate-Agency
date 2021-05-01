@@ -2,7 +2,8 @@ const { query } = require("express-validator");
 const City = require("../models/CitySchema")
 const District = require("../models/DistrictSchema")
 const Property = require("../models/PropertySchema")
-const Contact = require("../models/ContactSchema")
+const Contact = require("../models/ContactSchema");
+const Inform = require("../models/InformationSchema");
 
 module.exports = {
     getMinMaxRange: async () => {
@@ -26,7 +27,11 @@ module.exports = {
     getNumOfContact: async (query) => {
         Object.keys(query).forEach(key => query[key] === undefined && delete query[key])
         return await Contact.countDocuments(query).exec()
-    }
+    },
 
+    getNumOfInform: async (query) => {
+        Object.keys(query).forEach(key => query[key] === undefined && delete query[key])
+        return await Inform.countDocuments(query).exec()
+    }
 
 }

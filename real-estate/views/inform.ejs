@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partial/head', {title: "Profile"}) -%>
+
+    <body>
+        <!-- Pre Loader -->
+        <div id="preloader-area">
+            <div class="pulse"></div>
+        </div>
+        <!-- SCROLL TOP BUTTON -->
+        <a class="scrollToTop" href="#"><i class="fa fa-angle-double-up"></i></a>
+        <!-- END SCROLL TOP BUTTON -->
+        <%- include('partial/header', {active:""}) -%>
+
+            <!-- Start Proerty header  -->
+            <section id="property-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="property-header-inner">
+                                <h2>Profile</h2>
+                                <ol class="breadcrumb">
+                                    <li><a href="#">PROFILE</a></li>
+                                    <li class="active"><%= profile.name %>
+                                    </li>
+                                    <li class="active">Liên hệ</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- End Proerty header  -->
+            <!-- Profile -->
+            <section id="properties">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="contact-list">
+                                <table>
+                                    <tr>
+                                        <th>
+                                            Tình trạng
+                                        </th>
+                                        <th>
+                                            Thời gian
+                                        </th>
+                                        <th>
+                                            Loại
+                                        </th>
+                                        <th>
+                                            Tin
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    <%inform.forEach(value=>{%>
+                                        <tr class="inform-detail inform-<%=value._id%> <%= value.isRead?'':'new'%>" data-id=<%=value._id%>>
+                                            <td data-id=<%=value._id%>><%= value.isRead?'Đã xem':'Chưa xem' %></td>
+                                            <td data-id=<%=value._id%>><%= locals.shorterFormatForDateTime(value.date) %></td>
+                                            <td data-id=<%=value._id%>><%= value.type==='censor'?"Tin kiểm duyệt":"Yêu cầu liên hệ" %></td>
+                                            <td data-id=<%=value._id%> title="<%= value[value.type].propertyId.title %>" class="inform-title"><%= value[value.type].propertyId.title %></td>
+                                            <td><a data-id=<%=value._id%> class="delete-inform"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                                        </tr>
+                                    <%})%>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <%- include('partial/right-profile') -%>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- \ Profile -->
+        <%- include('partial/foot') -%>
+        <%- include('partial/footer') -%>
+    </body>
+</html>

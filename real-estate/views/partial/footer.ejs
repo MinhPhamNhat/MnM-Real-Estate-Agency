@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="modal fade confirm-contact-modal" tabindex="-1" role="dialog">
+  <div class="modal fade confirm-inform-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -156,7 +156,7 @@
               </tr>
               <tr>
                 <td>Yêu cầu</td>
-                <td><textarea type="text" name="description" class="desc-input"></textarea></td>
+                <td><textarea type="text" name="description" class="desc-input">Liên hệ với tôi nhé</textarea></td>
               </tr>
             </table>
           </div>
@@ -180,7 +180,7 @@
           <div class="modal-inform">Đã sao chép</div>
             <table>
               <tr>
-                <td>Họ và tên</td>
+                <td style="width: 150px;">Họ và tên</td>
                 <td><span class="modal-name-contact"></span></td>
               </tr>
               <tr>
@@ -195,12 +195,55 @@
                 <td>Yêu cầu</td>
                 <td><span class="modal-desc-contact"></span></td>
               </tr>
+              <tr>
+                <td>Ngày gửi</td>
+                <td><span class="modal-date-contact"></span></td>
+              </tr>
+              <tr>
+                <td>Tin</td>
+                <td><span class="modal-title-contact"><a></a></span></td>
+              </tr>
             </table>
           </div>
       </div>
     </div>
   </div>
-  
+  <div class="modal fade censor-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><h3>Thông tin duyệt tin</h3></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute;top: 20px;right: 20px">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table>
+              <tr>
+                <td style="width: 150px;">Từ</td>
+                <td><span class="modal-name-censor">ADMIN</span></td>
+              </tr>
+              <tr>
+                <td>Tin</td>
+                <td><span class="modal-title-censor"><a></a></span></td>
+              </tr>
+              <tr>
+                <td>Tình trạng</td>
+                <td><span class="modal-status-censor"></span></td>
+              </tr>
+              <tr class="censor-reason">
+                <td>Lý do</td>
+                <td><span class="modal-reason-censor"></span></td>
+              </tr>
+              <tr>
+                <td>Ngày gửi</td>
+                <td><span class="modal-date-censor"></span></td>
+              </tr>
+            </table>
+          </div>
+      </div>
+    </div>
+  </div>
   <!-- Footer -->
   <footer id="footer">
         <div class="container">

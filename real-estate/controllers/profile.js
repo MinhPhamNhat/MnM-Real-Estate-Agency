@@ -5,7 +5,7 @@ const Property = require('../repository/PropertyRes')
 const Statistic = require('../repository/StatisticRes')
 const func = require("../function/function")
 const authenticate = require('../middleware/authenticate');
-const Contact = require("../repository/ContactRes")
+const Inform = require("../repository/InformRes")
 
 // GET: /id => Get user profile
 router.get('/property/:id', async function(req, res, next) {
@@ -13,16 +13,17 @@ router.get('/property/:id', async function(req, res, next) {
   if (id){
     var user = await User.findUserById(id)
     if (user.code===0){
-      var data = await Property.getBaseProperty({authorId: id},0,6,{})
+      var data = await Property.getBaseProperty({authorId: id, status:true},0,6,{})
       if (data.code===0){
         if (req.user){
-          var numOfContact = await Statistic.getNumOfContact({propertyOwner: req.user.accountId})
-          var numOfNoti = await Statistic.getNumOfContact({propertyOwner: req.user.accountId, isRead: false})
+          var numOfInform = await Statistic.getNumOfInform({ownerId: req.user.accountId})
+          var numOfUnreadInform = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
+          var numOfUncensorDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status: false})
         }
-        var numOfDoc = await Statistic.getNumberOfProperty({authorId: id})
+        var numOfDoc = await Statistic.getNumberOfProperty({authorId: id, status:true})
         var page = 1
         var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/6))
-        res.render('profile', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfContact, numOfNoti});
+        res.render('profile', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
       }
       else
       res.render("404")
@@ -44,13 +45,27 @@ router.post("/",authenticate.authen, async(req, res, next)=>{
     }
 })
 
-router.get('/contact',authenticate.authen ,async (req, res, next)=>{
+router.get('/inform',authenticate.authen ,async (req, res, next)=>{
   var user = await User.findUserById(req.user.accountId)
-  var contact = await Contact.getContact({propertyOwner: req.user.accountId},0,10)
-  var numOfContact = await Statistic.getNumOfContact({propertyOwner: req.user.accountId})
-  var numOfDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId})
-  var numOfNoti = await Statistic.getNumOfContact({propertyOwner: req.user.accountId, isRead: false})
-  res.render('contact', {profile: user.data,contact,  numOfDoc, numOfContact, numOfNoti});
+  var inform = await Inform.getInform({ownerId: req.user.accountId})
+  var numOfDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status:true})
+  var numOfUncensorDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status: false})
+  var numOfInform = await Statistic.getNumOfInform({ownerId: req.user.accountId})
+  var numOfUnreadInform = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
+  res.render('inform', {profile: user.data, inform: inform.data,  numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
 })
 
+router.get('/censor',authenticate.authen ,async (req, res, next)=>{
+  var user = await User.findUserById(req.user.accountId)
+  var inform = await Inform.getInform({ownerId: req.user.accountId})
+  var numOfDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status:true})
+  var numOfUncensorDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status: false})
+  var numOfInform = await Statistic.getNumOfInform({ownerId: req.user.accountId})
+  var numOfUnreadInform = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
+
+  var data = await Property.getBaseProperty({authorId: req.user.accountId, status:false},0,6,{})
+  var page = 1
+  var pageRange = func.createPageRange(page, Math.ceil(numOfUncensorDoc/6))
+  res.render('censor', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
+})
 module.exports = router;

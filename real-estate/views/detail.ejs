@@ -33,6 +33,11 @@
   <!-- Start Properties  -->
   <section id="properties">
     <div class="container">
+      <% if(!data.status){ %>
+      <div class="warning">
+        <i class="fa fa-exclamation-triangle"></i> <span>Tin này chưa được kiểm duyệt. Vui lòng đợi tin được kiểm duyệt</span>
+      </div>
+      <%}%>
       <div class="row">
         <div class="col-md-8">
           <div class="properties-content">            
@@ -55,10 +60,14 @@
                     <%= data.title %>
                 </h2>
                 <p><%= data.address %></p>
+                <br>
                 <% if (locals.user) {%>
                     <% if (data.author.accountId===locals.user.accountId){%>
                     <span class="delete-property-btn" data-id="<%=data._id%>">Xoá tin</span>
                     <span class="edit-property-btn" data-id="<%=data._id%>">Thay đổi tin</span>
+                      <% if (data.authen && !data.status){ %>
+                        <span class="censor-require-btn" data-id="<%=data._id%>">Yêu cầu kiểm duyệt lại</span>
+                      <%}%>
                     <%}%>
                 <%}%>
                 <hr style="height:1px;border-width:0;color:#f1f1f1;background-color: #D4D4D4">
@@ -128,6 +137,17 @@
                       <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
                   </ul>
               </div>
+              
+            <% if(locals.logined && locals.user.role && !data.status) {%>  
+              <div class="properties-button">
+                <button class="properties-approve" data-id="<%=data._id%>" data-owner="<%=data.authorId%>">
+                  Duyệt <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+                <button class="properties-decline">
+                  Từ chối <i class="fa fa-ban" aria-hidden="true"></i>
+                </button>
+              </div>  
+              <%}%>
             </div>
           </div>
         </div>
@@ -153,7 +173,10 @@
               
                 <div type="hidden" id="phone-copy" data-phone="<%=data.author.phone%>"></div>
               </div>
-              <div class="contact-require" data-id="<%=data.author.accountId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
+              
+                <% if(data.status){ %>
+                  <div class="contact-require" data-id="<%=data.author.accountId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
+                <% } %>
             </div>
               <!-- Start Single properties sidebar -->
             <% if(authorProperty.length) {%>
@@ -185,79 +208,117 @@
             </aside>
           </div>
         </div>
-            
         <br>
-        <!-- Nearby properties -->
-        <div class="nearby-properties">
-          <div class="title">
-            <h2>Bất động sản gần đây</h2>
-            <span></span>
-          </div>
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
-              <% nearBy.forEach(value=>{%>
-                  <div class="swiper-slide">
-                    <article class="properties-item item-<%=value._id%>">
-                        <a href="/property/<%=value._id%>" class="properties-item-img">
-                            <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
-                        </a>
-                        <% if (locals.user){%>
-                            <% if(locals.user.accountId===value.accountId){%>
-                                <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
-                                    <img src="/images/option.png">
-                                    <div class="option-btn">
-                                        <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
-                                        <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
-                                    </div>
-                                </div>
-                            <%}%>
-                        <%}%>
-                        
-                        <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
-                            <%= value.isSale?"Bán":"Cho Thuê" %>
-                        </div>
-                        <div class="properties-item-content">
-                            <div class="properties-info">
-                                <% if (value.features.rooms) {%>
-                                    <span><%=value.features.rooms%> Phòng</span>
-                                <%}%>
-                                <% if (value.features.bathrooms) {%>
-                                    <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
-                                <%}%>
-                                <% if (value.features.bedrooms) {%>
-                                    <span><%=value.features.bedrooms%> Phòng ngủ</span>
-                                <%}%>
-                                <% if (value.features.floors) {%>
-                                    <span><%=value.features.floors%> Tầng</span>
-                                <%}%>
-                            </div>
-                            <div class="properties-about">
-                                <h3>
-                                    <a href="/property/<%=value._id%>" title="<%= value.title %>">
-                                        <%= value.title %>
-                                    </a>
-                                </h3>
-                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district.name %>, <%= value.location.city.name %></p>
-                            </div>
-                            <div class="properties-detial">
-                                <span class="price">
-                                    <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
-                                </span>
-                                <a href="/property/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
-                  </div>
-              <%})%>
+        <% if(data.status) {%>
+          <!-- Nearby properties -->
+          <div class="nearby-properties">
+            <div class="title">
+              <h2>Bất động sản gần đây</h2>
+              <span></span>
             </div>
-                <!-- Add Arrows -->
-              <div class="swiper-button-next"><img src="https://staticfile.batdongsan.com.vn/images/icons/slide-next.png"></div>
-              <div class="swiper-button-prev"><img src="https://staticfile.batdongsan.com.vn/images/icons/slide-prev.png"></div>
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                <% nearBy.forEach(value=>{%>
+                    <div class="swiper-slide">
+                      <article class="properties-item item-<%=value._id%>">
+                          <a href="/property/<%=value._id%>" class="properties-item-img">
+                              <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
+                          </a>
+                          <% if (locals.user){%>
+                              <% if(locals.user.accountId===value.accountId){%>
+                                  <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
+                                      <img src="/images/option.png">
+                                      <div class="option-btn">
+                                          <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
+                                          <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
+                                      </div>
+                                  </div>
+                              <%}%>
+                          <%}%>
+                          
+                          <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
+                              <%= value.isSale?"Bán":"Cho Thuê" %>
+                          </div>
+                          <div class="properties-item-content">
+                              <div class="properties-info">
+                                  <% if (value.features.rooms) {%>
+                                      <span><%=value.features.rooms%> Phòng</span>
+                                  <%}%>
+                                  <% if (value.features.bathrooms) {%>
+                                      <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
+                                  <%}%>
+                                  <% if (value.features.bedrooms) {%>
+                                      <span><%=value.features.bedrooms%> Phòng ngủ</span>
+                                  <%}%>
+                                  <% if (value.features.floors) {%>
+                                      <span><%=value.features.floors%> Tầng</span>
+                                  <%}%>
+                              </div>
+                              <div class="properties-about">
+                                  <h3>
+                                      <a href="/property/<%=value._id%>" title="<%= value.title %>">
+                                          <%= value.title %>
+                                      </a>
+                                  </h3>
+                                  <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district.name %>, <%= value.location.city.name %></p>
+                              </div>
+                              <div class="properties-detial">
+                                  <span class="price">
+                                      <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
+                                  </span>
+                                  <a href="/property/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                              </div>
+                          </div>
+                    </div>
+                <%})%>
+              </div>
+                  <!-- Add Arrows -->
+                <div class="swiper-button-next"><img src="https://staticfile.batdongsan.com.vn/images/icons/slide-next.png"></div>
+                <div class="swiper-button-prev"><img src="https://staticfile.batdongsan.com.vn/images/icons/slide-prev.png"></div>
+            </div>
           </div>
-        </div>
+
+        <%}%>
       </div>
     </section>
     <!-- / Properties  -->
 
+    <div class="modal fade decline-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><h3>Từ chối bất động sản</h3></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute;top: 20px;right: 20px">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <form>
+          </div>
+          <div class="modal-body">
+              <table>
+                <tr>
+                  <td colspan="2">
+                    <strong>Vui lòng nhập lý do bạn từ chối duyệt bất động sản này</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <p> </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Lý do: <span class="required">(*)</span></td>
+                  <td><textarea name="decline-reasone" class="decline-reasone" required></textarea></td>
+                </tr>
+              </table>
+            </div>
+          <div class="modal-footer">
+            <button type="submit" data-id="<%=data._id%>" data-owner="<%=data.authorId%>" class="btn btn-success confirm-decline">Chấp nhận</button>
+            <button type="button" class="btn btn-secondary confirm-no" data-dismiss="modal">Huỷ</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
   <%- include('partial/foot') -%>
   <%- include('partial/footer') -%>
   </body>
