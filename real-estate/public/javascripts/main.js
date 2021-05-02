@@ -191,11 +191,11 @@ $(document).ready(() => {
         .then(data=>data.json())
         .then(data=>{
             if (data.code===0){
-                $(".inform").text("Đã yêu cầu liên lạc")
+                $(".inform").text("Đã yêu cầu liên hệ")
                 $(".inform").show()
                 setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
             }else{
-                $(".inform").text("Yêu cầu liên lạc thất bại")
+                $(".inform").text("Yêu cầu liên hệ thất bại")
                 $(".inform").show()
                 setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
             }
@@ -271,11 +271,11 @@ $(document).ready(() => {
         .then(data=>{
             if (data.code===0){
                 $(`.inform-${id}`).remove()
-                $(".inform").text("Đã xóa số liên lạc")
+                $(".inform").text("Đã xóa thông báo")
                 $(".inform").show()
                 setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
             }else{
-                $(".inform").text("Xóa số liên lạc thất bại")
+                $(".inform").text("Xóa thông báo thất bại")
                 $(".inform").show()
                 setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
             }

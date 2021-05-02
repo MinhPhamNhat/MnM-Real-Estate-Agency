@@ -2950,6 +2950,7 @@ input::-webkit-inner-spin-button {
     padding: 50px;
     float: left;
     width: 100%;
+    border-radius: 10px;
 }
 
 #login .login-area .login-form .login-form-title {
@@ -4346,4 +4347,8 @@ input::-webkit-inner-spin-button {
     border: 1px solid rgb(255, 253, 109);
     border-radius: 5px;
     margin-bottom: 10px;
+}
+
+#login{
+    background-image: url("/images/bg-01.jpg")
 }

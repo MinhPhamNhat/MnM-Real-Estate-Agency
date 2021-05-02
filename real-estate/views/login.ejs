@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <%- include('partial/head', {title: "Login"}) -%>
-  <body>
+  <body class="login-body">
   <section id="login">
     <div class="container">
       <div class="row">
@@ -9,29 +9,24 @@
           <div class="login-area">
             <div class="login-form">
               <div class="login-form-title">
-                <a class="property-home" href="/">Bán Nhà</a>
-                <h4>Sign in to your account</h4>
+                <a class="property-home" href="/">Bất động sản 21</a>
+                <h4>Đăng nhập vào tài khoản của bạn</h4>
               </div>
               <form class="contactform" action="/login" method="POST">                                                 
                 <div class="single-field">
-                  <label for="username">Username <span class="required">(*)</span></label>
+                  <label for="username">Tên tài khoản <span class="required">(*)</span></label>
                   <input type="text" required="required" aria-required="true" value="" name="username">
                 </div>
                 <div class="single-field">
-                  <label for="password">Password <span class="required">(*)</span></label>
+                  <label for="password">Mật khẩu <span class="required">(*)</span></label>
                   <input type="password" name="password"> 
                 </div>
                 <% if(locals.message) {%>
                   <p style="color:darkred"><%=message%></p>
                 <%}%>
-                <div class="single-field">
-                <label>
-                  <input type="checkbox"> Remember me
-                </label>                                                          
-                </div> 
                 <div class="single-submit">
-                  <input type="submit" value="Send Message" class="browse-btn" name="submit">  
-                  <p>Don't Have A Account Yet? <a href="register">CREATE NOW!</a></p>
+                  <input type="submit" value="Đăng nhập" class="browse-btn" name="submit">  
+                  <p>Bạn chưa có tài khoản? <a href="register">TẠO TÀI KHOẢN</a></p>
                 </div>
               </form>
             </div>

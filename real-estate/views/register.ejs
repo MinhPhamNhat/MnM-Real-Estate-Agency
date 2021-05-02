@@ -9,12 +9,12 @@
           <div class="login-area">
             <div class="login-form">
               <div class="login-form-title">
-                <a class="property-home" href="/">Property Home</a>
-                <h4>Create your account and Stay with us</h4>
+                <a class="property-home" href="/">Bất động sản 21</a>
+                <h4>Tạo tài khoản của bạn để găn kết với chúng tôi</h4>
               </div>
               <form action="register" class="contactform" method="POST">                                                 
                 <div class="single-field">
-                  <label for="name">Name <span class="required">(*)</span></label>
+                  <label for="name">Họ và tên <span class="required">(*)</span></label>
                   <input type="text" required="required" aria-required="true" value="<%= data['name'] %>" name="name">
                   <% if (err.param === 'name'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
@@ -28,28 +28,28 @@
                   <%}%>
                 </div>
                 <div class="single-field">
-                  <label for="username">Username <span class="required">(*)</span></label>
+                  <label for="username">Tên tài khoản <span class="required">(*)</span></label>
                   <input type="text" required="required" aria-required="true" value="<%= data['username'] %>" name="username">
                   <% if (err.param === 'username'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
                   <%}%>
                 </div>
                 <div class="single-field">
-                  <label for="password">Password <span class="required">(*)</span></label>
+                  <label for="password">Mật khẩu <span class="required">(*)</span></label>
                   <input type="password" name="password"> 
                   <% if (err.param === 'password'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
                   <%}%>
                 </div>
                 <div class="single-field">
-                  <label for="confirm-password">Confirm Password <span class="required">(*)</span></label>
+                  <label for="confirm-password">Nhập lại mật khẩu <span class="required">(*)</span></label>
                   <input type="password" name="confirm-password"> 
                   <% if (err.param === 'confirm-password'){ %>
                     <p style="color:firebrick"><%= err.msg %></p>
                   <%}%>
                 </div>
                 <div class="single-submit">
-                  <input type="submit" value="Create Account" name="submit">        
+                  <input type="submit" value="Tạo tài khoản" name="submit">        
                               
                 </div>
               </form>
