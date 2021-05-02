@@ -532,6 +532,7 @@ var swiper = new Swiper('.swiper-container', {
         container.find("li").remove()
         var data = result.data
         var userId = result.userId
+        var isAdmin = result.isAdmin
         $("li[class*=pagination-]").remove()
         var pageRange = result.pageRange 
         var page = result.page 
@@ -548,6 +549,14 @@ var swiper = new Swiper('.swiper-container', {
                                 <div class="option-btn">
                                     <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
                                     <div class="edit-property-btn" data-id="${value._id}">Thay đổi tin</div>
+                                </div>
+                            </div>
+                            `
+                }else if (isAdmin){
+                    tag = `<div class="property-btn option-${value._id}" data-id="${value._id}">
+                                <img src="/images/option.png">
+                                <div class="option-btn">
+                                    <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
                                 </div>
                             </div>
                             `

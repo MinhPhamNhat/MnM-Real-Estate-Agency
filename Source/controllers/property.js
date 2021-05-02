@@ -99,7 +99,7 @@ router.get('/search', async (req, res, next) => {
     if (data.submit === "form")
     res.render("properties", {data: properties.data, searchData: data, range: getRange, pageRange, page})
     else
-    res.json({data: properties.data, userId: req.user?req.user.accountId:'', pageRange, page })
+    res.json({data: properties.data, userId: req.user?req.user.accountId:'', pageRange, page, isAdmin: req.user?req.user.role:false })
 })
 
 // GET: /id => Get detail property by id
@@ -213,7 +213,7 @@ router.post('/edit-property/:id',authenticate.authen ,upload.array('files', 15),
 // DELETE: /id => Delete propety
 router.delete("/:id",authenticate.authen ,async (req, res, next) =>{
     var id = req.params.id
-    var result = await Property.deleteProperty(id, req.user.accountId)
+    var result = await Property.deleteProperty(id, req.user.accountId, req.user.role)
     res.json(result)
 })
 

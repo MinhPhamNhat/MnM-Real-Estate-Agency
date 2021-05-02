@@ -139,8 +139,11 @@ module.exports = {
         }
     },
 
-    deleteProperty: async(_id, authorId) => {
-        var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
+    deleteProperty: async(_id, authorId, isAdmin) => {
+        if (isAdmin)
+            var oldProperty = await Property.findOneAndDelete({_id}).exec()
+        else
+            var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
         if (oldProperty) {
             await Contact.deleteMany({propertyId: oldProperty._id}).exec()
             return { code: 0, message: "Success"}

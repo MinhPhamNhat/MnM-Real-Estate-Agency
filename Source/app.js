@@ -73,7 +73,7 @@ app.locals.formatDateTime = (date) => {
     hour: "2-digit",
     minute: "2-digit",
   };
-  return date.toLocaleString("vi-VN", options)
+  return date.toLocaleDateString("vi-VN", options)
 }
 
 app.locals.shorterFormatForDateTime = (date) => {
