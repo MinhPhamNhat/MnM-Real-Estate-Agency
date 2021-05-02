@@ -34,7 +34,6 @@ module.exports = {
                         property.status = true
                         property.save()
                     }
-                    console.log(property)
                     var newInform = await new Inform({
                         _id: mongoose.Types.ObjectId(),
                         ownerId: data.propertyOwner,

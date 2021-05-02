@@ -2,7 +2,7 @@
 <html lang="en">
 <%- include('partial/head', {title: "Add Property"}) -%>
 
-    <body class="price-range" onload="loadCity('<%= locals.data?data.location.cityId:'' %>'); loadDistrict('<%= locals.data?data.location.cityId:'' %>', '<%= locals.data?data.location.districtId:'' %>')">
+    <body class="price-range" onload="loadCity('<%= locals.data?data.location.city.id:'' %>'); loadDistrict('<%= locals.data?data.location.city.id:'' %>', '<%= locals.data?data.location.district.id:'' %>')">
         <!-- Pre Loader -->
         <div id="preloader-area">
             <div class="pulse"></div>
@@ -267,7 +267,6 @@
                 </div>
             </section>
             <!-- End add property section -->
-
             <%- include('partial/foot') -%>
                 <%- include('partial/footer') -%>
 

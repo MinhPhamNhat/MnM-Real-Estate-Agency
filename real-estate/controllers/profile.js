@@ -23,7 +23,8 @@ router.get('/property/:id', async function(req, res, next) {
         var numOfDoc = await Statistic.getNumberOfProperty({authorId: id, status:true})
         var page = 1
         var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/6))
-        res.render('profile', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
+        var requireInformation = req.flash('requireInformation')[0]
+        res.render('profile', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc, requireInformation});
       }
       else
       res.render("404")

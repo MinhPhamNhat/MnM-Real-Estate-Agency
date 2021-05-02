@@ -7,6 +7,7 @@ const upload = require('../middleware/file')
 const path = require('path')
 const firebase = require('firebase-admin')
 const fs = require('fs')
+
 const { v4: uuidv4 } = require('uuid');
 const uuid = uuidv4()
 const func = require('../function/function');
@@ -14,14 +15,20 @@ const User = require('../repository/UserRes');
 
 
 // GET: /add-property => Get add-property page
-router.get('/add-property',authenticate.authen,(req, res, next) => {
-    res.render('add-property', {type: false})
+router.get('/add-property',authenticate.authen,async (req, res, next) => {
+    var user = await User.findUserById(req.user.accountId)
+    if (user.data.phone)
+        res.render('add-property', {type: false})
+    else{
+        req.flash('requireInformation',true)
+        res.redirect(`/profile/property/${user.data.accountId}`)
+    }
 })
 
 // GET: /edit-property => Edit property
 router.get('/edit-property/:id',authenticate.authen, async (req, res, next) => {
     const id = req.params.id
-    var property = await Property.getPropertyById({_id:id})
+    var property = await Property.getPropertyById({_id:id, authorId: req.user.accountId})
     if (property.code===0){
         res.render('add-property', {data: property.data, type: true})
     }else{
