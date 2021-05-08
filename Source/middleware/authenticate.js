@@ -12,7 +12,7 @@ module.exports = {
         if (req.user) {
             next()
         } else {
-            res.redirect("/")
+            res.status(404).redirect("404")
         }
     },
 
@@ -20,7 +20,7 @@ module.exports = {
         if (req.user.role){
             next()
         }else{
-            res.render('404')
+            res.status(404).render('404')
         }
     }
 }

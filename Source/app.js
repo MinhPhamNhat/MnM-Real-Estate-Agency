@@ -7,15 +7,15 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const cors = require('cors')
 
-const registerRouter = require('./controllers/register');
-const loginRouter = require('./controllers/login');
-const logoutRouter = require('./controllers/logout');
-const indexRouter = require('./controllers/index');
-const propertyRouter = require('./controllers/property');
-const locationRouter = require('./controllers/location');
-const profileRouter = require('./controllers/profile');
-const informRouter = require('./controllers/inform')
-const censorRouter = require('./controllers/censor')
+const registerRouter = require('./controllers/Register');
+const loginRouter = require('./controllers/Login');
+const logoutRouter = require('./controllers/Logout');
+const indexRouter = require('./controllers/Index');
+const propertyRouter = require('./controllers/Property');
+const locationRouter = require('./controllers/Location');
+const profileRouter = require('./controllers/Profile');
+const informRouter = require('./controllers/Inform')
+const censorRouter = require('./controllers/Cencor')
 const authenticate = require('./middleware/authenticate');
 const app = express();
 
@@ -97,8 +97,8 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('404');
+  // res.status(err.status || 500);
+  res.status(404).render('404');
 });
 
 

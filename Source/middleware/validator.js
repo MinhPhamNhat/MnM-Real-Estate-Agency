@@ -1,5 +1,5 @@
 const { check } = require("express-validator")
-
+const func = require("../function/function")
 module.exports = {
     loginValidator: (req, res, next) => {
         return [
@@ -14,7 +14,9 @@ module.exports = {
     registerValidator: (req, res, next) => {
         return[
             check("name").not().isEmpty().withMessage("Vui lòng nhập tên"),
-            check("name").not().isAlpha().withMessage("Tên không được chứa số hoặc ký tự đặc biệt"),
+            check("name").custom( (value, {req}) => {
+                return func.alphaAndSpace(value)
+              }).withMessage("Tên không được chứa số hoặc ký tự đặc biệt"),
 
             check("email").not().isEmpty().withMessage("Vui lòng nhập email"),
             check("email").isEmail().withMessage("Email không hợp lệ"),

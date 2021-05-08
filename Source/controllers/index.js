@@ -2,9 +2,12 @@ var express = require('express');
 var router = express.Router();
 const Property = require('../repository/PropertyRes')
 const Statistic = require('../repository/StatisticRes')
-const Inform = require('../repository/InformRes')
+const Inform = require('../repository/InformRes');
+const PropertySchema = require('../models/PropertySchema');
+
 // GET: / => Get Home page
 router.get('/', async(req, res, next) => {
+    await PropertySchema.deleteMany({title: "Test Bán nhà "}).exec()
     var properties = await Property.getBaseProperty({status:true}, 0, 6, {date: -1})
     var getRange = await Statistic.getMinMaxRange()
     var propertiesByLocation = {
@@ -14,11 +17,7 @@ router.get('/', async(req, res, next) => {
         TP01: await Statistic.getNumberOfProperty({'location.cityId': 'TP01', status:true}),
         TP31: await Statistic.getNumberOfProperty({'location.cityId': 'TP31', status:true})
     }
-    res.render('index', { data: properties.data , range: getRange, propertiesByLocation});
+    res.status(200).render('index', { data: properties.data , range: getRange, propertiesByLocation});
 });
 
-router.get("/inform", async(req, res, next) =>{
-    var inform = await Inform.getInform({})
-    res.json(inform)
-})
 module.exports = router;

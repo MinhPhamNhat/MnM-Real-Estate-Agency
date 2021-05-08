@@ -2,10 +2,19 @@ const mongoose = require('mongoose')
 
 const censorSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    reason: String,
+    reason:  {
+        type: String, 
+        require: true
+    },
     date: Date,
-    propertyOwner: String,
-    propertyId: {type: mongoose.Schema.Types.ObjectId, ref:'properties'},
+    propertyOwner:  {
+        type: String, 
+        require: true
+    },
+    propertyId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref:'properties'
+    },
     isApproved: Boolean
 })
 

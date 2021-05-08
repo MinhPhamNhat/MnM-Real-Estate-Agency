@@ -5,50 +5,57 @@ const Property = require("../models/PropertySchema")
 const mongoose = require("mongoose")
 module.exports = {
     saveNewInform: async (type, data) =>{
-        var property = await Property.findOne({ _id: data.propertyId, authorId: data.propertyOwner}).exec()
-        if (property){
-            if (type === "contact"){
-                var contact = await Contact.saveContact(data)
-                if (contact){
-                    var newInform = await new Inform({
-                        _id: mongoose.Types.ObjectId(),
-                        ownerId: data.propertyOwner,
-                        type,
-                        contact,
-                        date: new Date(),
-                        isRead: false,
-                    }).save()
-                    if (newInform){
-                        return true
+        try{
+            var property = await Property.findOne({ _id: data.propertyId, authorId: data.propertyOwner}).exec()
+            if (property){
+                if (type === "contact"){
+                    var contact = await Contact.saveContact(data)
+                    if (contact){
+                        var newInform = await new Inform({
+                            _id: mongoose.Types.ObjectId(),
+                            ownerId: data.propertyOwner,
+                            type,
+                            propertyId: data.propertyId,
+                            contact,
+                            date: new Date(),
+                            isRead: false,
+                        }).save()
+                        if (newInform){
+                            return true
+                        }
                     }
-                }
-            }else if(type === "censor"){
-                var censor = await Censor.saveCensor(data)
-                if (censor){
-                    if (!data.isApproved){
-                        property.authen = true
-                        property.status = false
-                        property.save()
-                    }else{
-                        property.authen = true
-                        property.status = true
-                        property.save()
-                    }
-                    var newInform = await new Inform({
-                        _id: mongoose.Types.ObjectId(),
-                        ownerId: data.propertyOwner,
-                        type,
-                        censor,
-                        date: new Date(),
-                        isRead: false,
-                    }).save()
-                    if (newInform){
-                        return true
+                }else if(type === "censor"){
+                    var censor = await Censor.saveCensor(data)
+                    if (censor){
+                        if (!data.isApproved){
+                            property.authen = true
+                            property.status = false
+                            property.save()
+                        }else{
+                            property.authen = true
+                            property.status = true
+                            property.save()
+                        }
+                        var newInform = await new Inform({
+                            _id: mongoose.Types.ObjectId(),
+                            ownerId: data.propertyOwner,
+                            type,
+                            censor,
+                            propertyId: data.propertyId,
+                            date: new Date(),
+                            isRead: false,
+                        }).save()
+                        if (newInform){
+                            return true
+                        }
                     }
                 }
             }
+            return false
+        }catch{
+            return false
         }
-        return false
+        
     },
 
     removeInform: async (query) =>{

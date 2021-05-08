@@ -1,26 +1,70 @@
 const mongoose = require('mongoose')
 
 const propertySchema = mongoose.Schema({
-    title: String,
-    isSale: Boolean,
-    type: String,
-    location: {
-        cityId: String,
-        districtId: String,
+    title: {
+        type: String, 
+        require: true
     },
-    address: String,
-    price: Number,
-    area: Number,
-    description: String,
+    isSale: {
+        type: Boolean, 
+        require: true
+    },
+    type: {
+        type: String, 
+        require: true, 
+        enum : ['personal-house', 'villa', 'street-house', 'appartment']
+    },
+    location: {
+        cityId: {
+            type: String, 
+            require: true},
+        districtId: {
+            type: String, 
+            require: true
+        },
+    },
+    address: {
+        type: String, 
+        require: true
+    },
+    price: {
+        type: Number,
+        require: true, 
+        min: 0
+    },
+    area: {
+        type: Number, 
+        require: true, 
+        min: 1
+    },
+    description: {
+        type: String, 
+        require: true
+    },
     features: {
-        rooms: Number,
-        bedrooms: Number,
-        bathrooms: Number,
-        floors: Number,
+        rooms: {
+            type: Number, 
+            min: 0
+        },
+        bedrooms: {
+            type: Number, 
+            min: 0
+        },
+        bathrooms: {
+            type: Number, 
+            min: 0
+        },
+        floors: {
+            type: Number, 
+            min: 0
+        },
+    },
+    authorId:  {
+        type: String, 
+        require: true
     },
     thumbnail: Array,
     date: Date,
-    authorId: String,
     status: Boolean,
     authen: Boolean,
 })

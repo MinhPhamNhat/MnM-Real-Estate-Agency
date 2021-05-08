@@ -24,15 +24,23 @@ router.get('/property/:id', async function(req, res, next) {
         var page = 1
         var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/6))
         var requireInformation = req.flash('requireInformation')[0]
-        res.render('profile', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc, requireInformation});
+        res.status(200).render('profile', {
+          profile: user.data, 
+          data: data.data,page, 
+          pageRange, 
+          numOfDoc, 
+          numOfInform, 
+          numOfUnreadInform, 
+          numOfUncensorDoc, 
+          requireInformation});
       }
       else
-      res.render("404")
+      res.status(404).render("404")
     }else{
-      res.render("404")
+      res.status(404).render("404")
     }
   }else{
-    res.render("404")
+    res.status(404).render("404")
   }
 });
 
@@ -42,7 +50,7 @@ router.post("/",authenticate.authen, async(req, res, next)=>{
     if (user.code===0){
         res.redirect(`/profile/property/${user.data.accountId}`);
     }else{
-      res.render("404")
+      res.status(404).render("404")
     }
 })
 
@@ -53,20 +61,18 @@ router.get('/inform',authenticate.authen ,async (req, res, next)=>{
   var numOfUncensorDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status: false})
   var numOfInform = await Statistic.getNumOfInform({ownerId: req.user.accountId})
   var numOfUnreadInform = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
-  res.render('inform', {profile: user.data, inform: inform.data,  numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
+  res.status(200).render('inform', {profile: user.data, inform: inform.data,  numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
 })
 
 router.get('/censor',authenticate.authen ,async (req, res, next)=>{
   var user = await User.findUserById(req.user.accountId)
-  var inform = await Inform.getInform({ownerId: req.user.accountId})
   var numOfDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status:true})
   var numOfUncensorDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status: false})
   var numOfInform = await Statistic.getNumOfInform({ownerId: req.user.accountId})
   var numOfUnreadInform = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
-
   var data = await Property.getBaseProperty({authorId: req.user.accountId, status:false},0,6,{})
   var page = 1
   var pageRange = func.createPageRange(page, Math.ceil(numOfUncensorDoc/6))
-  res.render('censor', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
+  res.status(200).render('censor', {profile: user.data, data: data.data,page, pageRange, numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
 })
 module.exports = router;

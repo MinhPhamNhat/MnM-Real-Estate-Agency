@@ -3,6 +3,9 @@ const CityRes = require('./CityRes')
 const DistrictRes = require('./DistrictRes')
 const Contact = require('../models/ContactSchema')
 const User = require('../models/UserSchema')
+const func = require('../function/function');
+const Inform = require('../models/InformationSchema')
+const Censor = require('../models/CensorSchema')
 
 const parseBaseProperty = async (property) => {
     var city = await CityRes.getCityById(property.location.cityId)
@@ -41,44 +44,46 @@ const parseBaseProperty = async (property) => {
 
 module.exports = {
     createProperty: async(data, authorId) => {
-        if (data.price<=0){
-            return { code: -1, message: "Failed" }
+        if (authorId){
+            return await new Property({
+                title: data.title,
+                isSale: data.isSale === "True" ? true : false,
+                type: data.type,
+                location: {
+                    cityId: data.city,
+                    districtId: data.district,
+                },
+                address: data.address,
+                price: data.unit==="n"?0:(Number(data.price) * (data.unit==="hm"?100:data.unit==="b"?1000:data.unit==="hb"?100000:1)),
+                area: data.area,
+                description: data.description,
+                features: {
+                    rooms: data.rooms,
+                    bedrooms: data.bedrooms,
+                    bathrooms: data.bathrooms,
+                    floors: data.floors,
+                },
+                thumbnail: data.thumbnail,
+                date: new Date(),
+                status: false,
+                authen: false,
+                authorId,
+            }).save().then(newProperty=>{
+                if (newProperty) {
+                    return { code: 0, message: "Thành công", data: newProperty }
+                } else {
+                    return { code: -1, message: "Tạo thất bại" }
+                }
+            }).catch(err => {
+                return { code: -2, message: "Thông tin không hợp lệ" }
+            })
+        }else{
+            return { code: -2, message: "Thông tin không hợp lệ" }
         }
-        if (data.area<=0){
-            return { code: -1, message: "Failed" }
-        }
-        var newProperty = await new Property({
-            title: data.title,
-            isSale: data.isSale === "True" ? true : false,
-            type: data.type,
-            location: {
-                cityId: data.city,
-                districtId: data.district,
-            },
-            address: data.address,
-            price: data.unit==="n"?0:(Number(data.price) * (data.unit==="hm"?100:data.unit==="b"?1000:data.unit==="hb"?100000:1)),
-            area: data.area,
-            description: data.description,
-            features: {
-                rooms: data.rooms,
-                bedrooms: data.bedrooms,
-                bathrooms: data.bathrooms,
-                floors: data.floors,
-            },
-            thumbnail: data.thumbnail,
-            date: new Date(),
-            status: false,
-            authen: false,
-            authorId,
-        }).save()
-        if (newProperty) {
-            return { code: 0, message: "Success", data: newProperty }
-        } else {
-            return { code: -1, message: "Failed" }
-        }
+        
     },
 
-    getPropertyById: async(query) => {
+    getProperty: async(query) => {
         var property = await Property.findOne(query).exec()
         if (property) {
             return { code: 0, message: "Success", data: await parseBaseProperty(property) }
@@ -89,66 +94,81 @@ module.exports = {
 
     getBaseProperty: async(query, skip, limit, sortBy) => {
         Object.keys(query).forEach(key => query[key] === undefined && delete query[key])
-        var properties = await Property.find(query)
+        return await Property.find(query)
         .select('authorId title features location price area thumbnail type isSale')
         .sort(sortBy).skip(skip).limit(limit).exec()
-        if (properties) {
-            var data = properties.map(value=> {
-                value.thumbnail = value.thumbnail[0]
-                return parseBaseProperty(value)
-            })
-            
-            return { code: 0, message: "success", data: await Promise.all(data) }
-        } else {
-            return { code: -1, message: "failed" }
-        }
+        .then(async properties=>{
+            if (properties) {
+                var data = properties.map(value=> {
+                    value.thumbnail = value.thumbnail[0]
+                    return parseBaseProperty(value)
+                })
+                return { code: 0, message: "success", data: await Promise.all(data) }
+            } else {
+                return { code: -1, message: "failed" }
+            }
+        })
+        .catch(err => {
+            return { code: -2, message: "failed" }
+        })
     },
     
     editProperty: async(_id, data, authorId) => {
-        if (data.price<=0){
-            return { code: -1, message: "Failed" }
-        }
-        var saveProperty ={
-            title: data.title,
-            isSale: data.isSale === "True" ? true : false,
-            type: data.type,
-            location: {
-                cityId: data.city,
-                districtId: data.district,
-            },
-            address: data.address,
-            price: data.unit==="n"?0:(Number(data.price) * (data.unit==="hm"?100:data.unit==="b"?1000:data.unit==="hb"?100000:1)),
-            area: data.area,
-            description: data.description,
-            features: {
-                rooms: data.rooms,
-                bedrooms: data.bedrooms,
-                bathrooms: data.bathrooms,
-                floors: data.floors,
-            },
-            thumbnail: data.thumbnail,
-            authen: false,
-            status: false,
-        }
-        Object.keys(saveProperty).forEach(key => saveProperty[key] === undefined && delete saveProperty[key])
-        var newProperty = await Property.findOneAndUpdate({_id, authorId}, saveProperty, {new: true}).exec()
-        if (newProperty) {
-            return { code: 0, message: "Success", data: newProperty }
-        } else {
-            return { code: -1, message: "Failed" }
+        try{
+            var saveProperty ={
+                title: data.title,
+                isSale: data.isSale === "True" ? true : false,
+                type: data.type,
+                location: {
+                    cityId: data.city,
+                    districtId: data.district,
+                },
+                address: data.address,
+                price: data.unit==="n"?0:(Number(data.price) * (data.unit==="hm"?100:data.unit==="b"?1000:data.unit==="hb"?100000:1)),
+                area: data.area,
+                description: data.description,
+                features: {
+                    rooms: data.rooms,
+                    bedrooms: data.bedrooms,
+                    bathrooms: data.bathrooms,
+                    floors: data.floors,
+                },
+                thumbnail: data.thumbnail,
+                authen: false,
+                status: false,
+            }
+            Object.keys(saveProperty).forEach(key => saveProperty[key] === undefined && delete saveProperty[key])
+            return await Property.findOneAndUpdate({_id, authorId}, saveProperty, {new: true}).exec()
+            .then(newProperty=>{
+                if (newProperty) {
+                    return { code: 0, message: "Thành công", data: newProperty }
+                } else {
+                    return { code: -1, message: "Không tồn tại" }
+                }
+            }).catch(err=>{
+                return { code: -2, message: "Thông tin không hợp lệ" }
+            })
+        }catch{
+            return { code: -2, message: "Thông tin không hợp lệ" }
         }
     },
 
     deleteProperty: async(_id, authorId, isAdmin) => {
-        if (isAdmin)
-            var oldProperty = await Property.findOneAndDelete({_id}).exec()
-        else
-            var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
-        if (oldProperty) {
-            await Contact.deleteMany({propertyId: oldProperty._id}).exec()
-            return { code: 0, message: "Success"}
-        } else {
-            return { code: -1, message: "Failed" }
+        try{
+            if (isAdmin)
+                var oldProperty = await Property.findOneAndDelete({_id}).exec()
+            else
+                var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
+            if (oldProperty) {
+                await Contact.deleteMany({propertyId: oldProperty._id}).exec()
+                await Censor.deleteMany({propertyId: oldProperty._id}).exec()
+                await Inform.deleteMany({propertyId: oldProperty._id}).exec()
+                return { code: 0, message: "Thành công"}
+            } else {
+                return { code: -1, message: "Không tồn tại" }
+            }
+        }catch{
+            return { code: -2, message: "Thông tin không hợp lệ" }
         }
     },
     

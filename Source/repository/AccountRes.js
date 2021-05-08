@@ -5,9 +5,9 @@ module.exports = {
     checkAccount: async (username, password) => {
         var accHandler = await Account.findOne({ username: username, password:password }).exec()
         if (accHandler) {
-            return JSON.stringify({ code: 0, message: "Success", data: accHandler._id })
+            return { code: 0, message: "Success", data: accHandler._id }
         } else {
-            return JSON.stringify({ code: -1, message: "Tên tài khoản hoặc mật khẩu không đúng." })
+            return { code: -1, message: "Tên tài khoản hoặc mật khẩu không đúng." }
         }
     },
 
@@ -16,9 +16,9 @@ module.exports = {
         if (check.length) {
             for (err of check){
                 if (err.email === payload.email)
-                return JSON.stringify({code: -1, err:{msg: "Email đã tồn tại", param:"email"}})
+                return {code: -1, err:{msg: "Email đã tồn tại", param:"email"}}
                 else if (err.username === payload.username)
-                return JSON.stringify({code: -1, err:{msg: "Username đã tồn tại", param:"username"}})
+                return {code: -1, err:{msg: "Username đã tồn tại", param:"username"}}
             }
         }else{
             var newAccount = await new Account({
@@ -32,11 +32,11 @@ module.exports = {
                     name: payload.name,
                     email: payload.email,
                     phone: '',
-                    role: 0,
+                    role: false,
                 }).save()
-                return JSON.stringify({code: 0, message:"Tạo tài khoản thành công", data:newUser})
+                return {code: 0, message:"Tạo tài khoản thành công", data:newUser}
             }else{
-                return JSON.stringify({code: -1, message:"Đã xảy ra lỗi khi tạo tài khoản"})
+                return {code: -1, message:"Đã xảy ra lỗi khi tạo tài khoản"}
             }
         }
 

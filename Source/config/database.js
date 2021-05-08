@@ -3,5 +3,6 @@ require('dotenv').config()
 
 mongoose.connect(process.env.MONGODB_CONFIG, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 })

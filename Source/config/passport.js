@@ -16,15 +16,13 @@ passport.use('local-login',new LocalStrategy({
     passwordField: "password",
     passReqToCallback: true
 },async(req, username, password, done) => {
-    
     if (username && password) {
         var check = await Account.checkAccount(username, password)
-        var data = JSON.parse(check)
-        if (data.code === 0) {
-            var profile = await User.findUserById(data.data)
+        if (check.code === 0) {
+            var profile = await User.findUserById(check.data)
             done(null, profile.data)
         } else {
-            done(null, false, { message: data.message })
+            done(null, false, { message: check.message })
         }
     } else {
         done(null, false, { message: "Vui lòng nhập username và password" })
