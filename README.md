@@ -24,7 +24,15 @@ Trang web được up lên host <a href="https://batdongsan21.herokuapp.com/">t�
 ```
 >> npm test
 ```
+## Tài khoản admin
 
+Tài khoản admin cho phép kiểm duyệt và xoá bài đăng không hợp lệnh
+
+```
+## Tài khoản với mục đích test chức năng. Vui lòng các bạn khác không lợi dụng để xoá hết bài đăng
+username: admin
+password: admin
+```
 ## Sinh viên thực hiện
 
 *  51800903 - Phạm Nhật Minh
