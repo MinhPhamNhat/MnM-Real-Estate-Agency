@@ -9,7 +9,7 @@ const { response } = require('../app')
 router.get('/', (req, res, next) => {
     var err = req.flash("err")
     var data = req.flash("data")
-    res.status(status).render('register', {err: err.length? err[0]:'', data: data.length? data[0]:''})
+    res.render('register', {err: err.length? err[0]:'', data: data.length? data[0]:''})
 })
 
 // POST: / => Recieve register data, validate
