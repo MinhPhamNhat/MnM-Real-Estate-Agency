@@ -256,15 +256,21 @@ img {
 
 #menu-area .main-navbar .navbar-header .navbar-brand {
     padding: 0;
+    margin-right: 10px;
 }
 
 #menu-area .main-navbar .navbar-header .logo {
     border: 2px solid #fff;
     color: #fff;
     font-family: "Poppins", sans-serif;
-    font-size: 30px;
+    font-size: 18px;
     padding: 15px;
     line-height: 13px;
+}
+
+#menu-area .main-navbar .navbar-header .logo-image{
+    /* position: absolute;
+    top: -20px; */
 }
 
 #menu-area .main-navbar .navbar-header .logo-img {
