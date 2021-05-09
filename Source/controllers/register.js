@@ -7,9 +7,7 @@ const { response } = require('../app')
 
 // GET: / => Get register page
 router.get('/', (req, res, next) => {
-    var err = req.flash("err")
-    var data = req.flash("data")
-    res.render('register', {err: err.length? err[0]:'', data: data.length? data[0]:''})
+    res.status(200).render('register')
 })
 
 // POST: / => Recieve register data, validate
@@ -20,7 +18,7 @@ router.post('/', validator.registerValidator(), (req, res, next) => {
         for (field in errors ){
             req.flash('err', errors[field])
             req.flash('data', req.body)
-            return res.redirect(422, "/register")
+            return res.status(422).render("register", {err: errors[field], data: req.body})
         }
     } else {
         return Account.createAccount(req.body)
@@ -30,10 +28,10 @@ router.post('/', validator.registerValidator(), (req, res, next) => {
             }else if (newAccount.code === -1){
                 req.flash('err', newAccount.err)
                 req.flash('data', req.body)
-                return res.redirect(409,"/register")
+                return res.status(409).render("register", {err: newAccount.err, data: req.body})
             }
         }).catch(err=> {
-                return res.redirect(500,"/register")
+                return res.status(404).render("404")
         })
         
     }

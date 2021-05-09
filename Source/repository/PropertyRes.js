@@ -160,7 +160,6 @@ module.exports = {
             else
                 var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
             if (oldProperty) {
-                console.log(oldProperty)
                 await Contact.deleteMany({propertyId: oldProperty._id}).exec()
                 await Censor.deleteMany({propertyId: oldProperty._id}).exec()
                 await Inform.deleteMany({propertyId: oldProperty._id}).exec()
