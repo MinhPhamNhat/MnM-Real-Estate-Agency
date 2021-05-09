@@ -7,7 +7,7 @@ const { response } = require('../app')
 
 // GET: / => Get register page
 router.get('/', (req, res, next) => {
-    res.status(200).render('register')
+    res.status(200).render('register', {err: '', data: ''})
 })
 
 // POST: / => Recieve register data, validate
