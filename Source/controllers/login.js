@@ -31,9 +31,5 @@ router.post('/',(req, res, next) => {
       });
     })(req, res, next);
   })
-        // successReturnToOrRedirect: '/', 
-        // failureRedirect: '/login', 
-        // failureFlash: true,
-        // badRequestMessage: "Vui lòng nhập tài khoản và mật khẩu" 
 
 module.exports = router

@@ -33,9 +33,7 @@ router.post('/', validator.registerValidator(), (req, res, next) => {
         }).catch(err=> {
                 return res.status(404).render("404")
         })
-        
     }
-    
 })
 
 module.exports = router

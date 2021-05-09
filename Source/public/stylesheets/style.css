@@ -254,6 +254,12 @@ img {
     border-radius: 0;
 }
 
+#menu-area .main-navbar .navbar-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 #menu-area .main-navbar .navbar-header .navbar-brand {
     padding: 0;
     margin-right: 10px;
@@ -263,14 +269,19 @@ img {
     border: 2px solid #fff;
     color: #fff;
     font-family: "Poppins", sans-serif;
-    font-size: 18px;
+    font-size: 30px;
     padding: 15px;
     line-height: 13px;
 }
 
 #menu-area .main-navbar .navbar-header .logo-image{
-    /* position: absolute;
-    top: -20px; */
+    padding-right: 20px;
+}
+
+#menu-area .main-navbar .navbar-header .logo-image img{
+    border-radius: 5px;
+    height: 60px;
+    width: 60px;
 }
 
 #menu-area .main-navbar .navbar-header .logo-img {
@@ -4356,5 +4367,5 @@ input::-webkit-inner-spin-button {
 }
 
 #login{
-    background-image: url("/images/shortcut.png")
+    background-image: url("/images/bg-01.jpg")
 }

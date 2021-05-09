@@ -44,6 +44,7 @@ router.get('/property/:id', async function(req, res, next) {
   }
 });
 
+// POST: => update user profile
 router.post("/",authenticate.authen, async(req, res, next)=>{
   var data = req.body
   var user = await User.updateUser(req.user.accountId, data)
@@ -54,6 +55,7 @@ router.post("/",authenticate.authen, async(req, res, next)=>{
     }
 })
 
+// GET: /inform => get user inform page
 router.get('/inform',authenticate.authen ,async (req, res, next)=>{
   var user = await User.findUserById(req.user.accountId)
   var inform = await Inform.getInform({ownerId: req.user.accountId})
@@ -64,6 +66,7 @@ router.get('/inform',authenticate.authen ,async (req, res, next)=>{
   res.status(200).render('inform', {profile: user.data, inform: inform.data,  numOfDoc, numOfInform, numOfUnreadInform, numOfUncensorDoc});
 })
 
+// GET: /censor => get user uncensor property
 router.get('/censor',authenticate.authen ,async (req, res, next)=>{
   var user = await User.findUserById(req.user.accountId)
   var numOfDoc = await Statistic.getNumberOfProperty({authorId: req.user.accountId, status:true})

@@ -16,12 +16,6 @@ module.exports = {
             return pageRange.slice(start, end+1)
         }
     },
-    removeTo: (value, target) => {
-        while (target.indexOf(value)!=-1){
-            target.splice(0,1)
-        }
-        return target
-    },
 
     parseQuery: (data) => {
         return {
