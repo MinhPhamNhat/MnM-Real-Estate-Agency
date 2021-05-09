@@ -539,7 +539,8 @@ var swiper = new Swiper('.swiper-container', {
         pageRange.forEach(value=>{
             $(`<li class="pagination-${value} ${page===value?'active':'' }"><a onclick=searchData(${value})>${value}</a></li>`).insertBefore( ".next-page" )
         })
-
+        $(".pagination .previous-page a").attr("onclick", `searchData(${pageRange[0]})`)
+        $(".pagination .next-page a").attr("onclick", `searchData(${pageRange[pageRange.length - 1]})`)
         data.forEach(value=> {
             var tag;
             if (userId){

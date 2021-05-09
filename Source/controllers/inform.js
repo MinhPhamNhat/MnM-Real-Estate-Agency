@@ -6,7 +6,7 @@ const authenticate = require('../middleware/authenticate')
 // POST: / => Save contact inform
 router.post('/contact', async(req, res, next) => {
     var data = req.body
-    if (!data.propertyId&&!data.propertyOwner){
+    if (!data.propertyId||!data.propertyOwner||!data.phone){
         return res.status(404).json({code: -1})
     }
     var contact = await Inform.saveNewInform("contact",data)

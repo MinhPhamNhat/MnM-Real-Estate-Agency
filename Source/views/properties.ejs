@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('partial/head', {title: "Properties"}) -%>
+    <%- include('partial/head', {title: "Tìm bất động sản"}) -%>
   <body class="price-range" onload="setNoUiSliderOption(<%= range.minPrice %>,<%= range.maxPrice %>,<%= range.minArea %>,<%= range.maxArea %>); setSlider([<%= searchData.areaFrom %>,<%= searchData.areaTo %>], [<%= searchData.priceFrom %>,<%= searchData.priceTo %>]); loadCity('<%=searchData.city%>'); loadDistrict('<%=searchData.city%>', '<%=searchData.district%>')">  
   <!-- Pre Loader -->
   <div id="preloader-area" >
@@ -19,7 +19,7 @@
           <div class="property-header-inner">
             <h2>Trang bất động sản</h2>
             <ol class="breadcrumb">
-            <li><a href="#">Trang chủ</a></li>            
+            <li><a href="/">Trang chủ</a></li>            
             <li class="active">Bất động sản</li>
           </ol>
           </div>
@@ -124,15 +124,17 @@
               <nav>
                 <ul class="pagination">
                   <li class="previous-page" >
-                    <a href="#" aria-label="Previous">
+                    <a onclick=searchData(<%=pageRange[0]%>) aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                     </a>
                   </li>
                     <% pageRange.forEach(value=>{%>
-                      <li class="pagination-<%=value%> <%= page===value?'active':'' %>"><a onclick=searchData(<%=value%>)><%=value%></a></li>
+                      <li class="pagination-<%=value%> <%= page===value?'active':'' %>">
+                        <a onclick=searchData(<%=value%>)><%=value%></a>
+                      </li>
                     <%})%>
                   <li class="next-page">
-                    <a href="#" aria-label="Next">
+                    <a onclick=searchData(<%=pageRange[pageRange.length-1]%>) aria-label="Next">
                       <span aria-hidden="true">&raquo;</span>
                     </a>
                   </li>
