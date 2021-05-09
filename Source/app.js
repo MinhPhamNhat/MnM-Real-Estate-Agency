@@ -25,7 +25,7 @@ require("./config/database")
 require("./config/firebase")
 
 const HOST = process.env.HOST
-const PORT = 8080||process.env.PORT
+const PORT = 8888||process.env.PORT
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
