@@ -67,8 +67,9 @@
                 <% if(locals.logined) {%>
                 <li <%= active==="add"?"class=active":"" %>><a href="/property/add-property">ĐĂNG TIN</a></li>    
                 <%}%>
-                <% if(locals.logined && locals.user.role) {%>
-                <li <%= active==="censor"?"class=active":"" %>><a href="/censor">KIỂM DUYỆT</a></li>    
+                <% if(locals.logined && locals.user.role.admin) {%>
+                <li <%= active==="censor"?"class=active":"" %>><a href="/censor">KIỂM DUYỆT</a></li> 
+                <li <%= active==="dashboard"?"class=active":"" %>><a href="/dashboard">DASHBOARD</a></li>       
                 <%}%>
               </ul>                          
             </div>     

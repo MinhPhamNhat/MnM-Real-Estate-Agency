@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const User = require('../models/UserSchema')
 
 module.exports = {
+    findAllUserWith: async (query) => {
+        return await User.find(query).exec()
+    },
+
     findUserById: async (userId) => {
         var userHandler = await User.findOne({accountId: userId}).exec()
         if (userHandler){

@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const accountSchema = mongoose.Schema({
     username:  {
         type: String, 
-        require: true
+        require: true,
+        unique: true,
     },
     password:  {
         type: String, 

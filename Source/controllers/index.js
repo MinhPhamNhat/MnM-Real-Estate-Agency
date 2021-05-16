@@ -2,12 +2,9 @@ var express = require('express');
 var router = express.Router();
 const Property = require('../repository/PropertyRes')
 const Statistic = require('../repository/StatisticRes')
-const Inform = require('../repository/InformRes');
-const PropertySchema = require('../models/PropertySchema');
 
 // GET: / => Get Home page
 router.get('/', async(req, res, next) => {
-    await PropertySchema.deleteMany({title: "Test Bán nhà "}).exec()
     var properties = await Property.getBaseProperty({status:true}, 0, 6, {date: -1})
     var getRange = await Statistic.getMinMaxRange()
     var propertiesByLocation = {

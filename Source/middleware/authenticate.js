@@ -8,6 +8,7 @@ module.exports = {
         }
         next()
     },
+    
     authen: (req, res, next) => {
         if (req.user) {
             next()
@@ -17,7 +18,7 @@ module.exports = {
     },
 
     adminAuthen: (req, res, next) =>{
-        if (req.user.role){
+        if (req.user.role.admin){
             next()
         }else{
             res.status(404).render('404')

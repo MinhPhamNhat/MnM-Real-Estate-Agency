@@ -1,0 +1,45 @@
+
+  <!-- sidebar-wrapper  -->
+<main class="page-content">
+    <div class="container-fluid">
+        <h2>Bất động sản</h2>
+        <hr>
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Người đăng</th>
+                <th>Kiểm duyệt</th>
+                <th>Thời gian</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% properties.forEach(p => {%>
+            <tr>
+            <td>
+                <a href="/<%=p.status?"property":"censor"%>/<%=p._id%>"><%=p.title%></a>
+            </td>
+            <td>
+                <a href="/profile/property/<%=p.author.accountId%>"><%=p.author.name%></a>
+            </td>
+            <td>
+                <%=p.status&&p.authen?"Đã kiểm duyệt":p.authen?"Từ chối":"Chưa kiểm duyệt"%>
+            </td>
+            <td>
+                <%=locals.shorterFormatForDateTime(p.date)%>
+            </td>
+            </tr>
+            <%})%>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Title</th>
+                <th>Người đăng</th>
+                <th>Kiểm duyệt</th>
+                <th>Thời gian</th>
+            </tr>
+        </tfoot>
+        </table>
+    </div>
+</main>
+<!-- page-content" -->

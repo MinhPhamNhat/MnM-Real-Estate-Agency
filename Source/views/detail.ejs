@@ -68,7 +68,7 @@
                       <% if (data.authen && !data.status){ %>
                         <span class="censor-require-btn" data-id="<%=data._id%>">Yêu cầu kiểm duyệt lại</span>
                       <%}%>
-                    <%}else if(user.role) {%>
+                    <%}else if(user.role.admin) {%>
                       <span class="delete-property-btn" data-id="<%=data._id%>">Xoá tin</span>
                     <%}%>
                 <%}%>
@@ -140,7 +140,7 @@
                   </ul>
               </div>
               
-            <% if(locals.logined && locals.user.role && !data.status) {%>  
+            <% if(locals.logined && locals.user.role.admin && !data.status) {%>  
               <div class="properties-button">
                 <button class="properties-approve" data-id="<%=data._id%>" data-owner="<%=data.authorId%>">
                   Duyệt <i class="fa fa-check" aria-hidden="true"></i>
@@ -235,7 +235,7 @@
                                           <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
                                       </div>
                                   </div>
-                                  <%}else if(user.role) {%>
+                                  <%}else if(user.role.admin) {%>
                                       <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
                                           <img src="/images/option.png">
                                           <div class="option-btn">

@@ -1,4 +1,8 @@
 $(document).ready(() => {
+    
+    if ($('#example')[0])
+    $('#example').DataTable();
+
     $(".image-upload-holder").click(() => {
         $(".image-upload").trigger("click")
     })
@@ -347,7 +351,6 @@ $(document).ready(() => {
             }
         })
     })
-
 })
 
 const formatDateTime = (date) => {
@@ -375,6 +378,7 @@ const alphaOnly = (event)=> {
         event.preventDefault() 
     }
   };
+
 var swiper = new Swiper('.swiper-container', {
     slidesPerView: 3,
     spaceBetween:10,
@@ -600,3 +604,116 @@ var swiper = new Swiper('.swiper-container', {
         })
     })
   }
+
+const getUserInfo = (e) => {
+    var userId = e.dataset.id
+    console.log(userId)
+
+    fetch(`/dashboard/account/${userId}`)
+    .then(data=>data.json())
+    .then(data=>{
+        console.log(data)
+        if (data.code === 0){
+            $(".user-container").html(profileInfoTag(data))
+        }else if (data.code === -1){
+            showToast("Lấy thông tin người dùng", "Người dùng không tồn tại", "warning")
+        }else{
+            showToast("Lấy thông tin người dùng", "Lỗi khi tìm người dùng", "error")
+        }
+    })
+}
+
+const profileInfoTag = (u) => `
+    <div class="card">
+        <div class="card-body">
+            <center class="m-t-30"> <img src="${u.data.picture||`/images/userprofile.png`}" class="img-circle" width="150">
+                <h4 class="card-title m-t-10">${u.data.name}</h4>
+                <div class="row text-center justify-content-md-center">
+                    <div class="col-1">
+                        <a href="/profile/property/${u.data.accountId}" class="link">
+                            <i class="fa fa-home" aria-hidden="true"></i><font class="font-medium">${u.numOfProperty}</font>
+                        </a>
+                    </div>
+                </div>
+            </center>
+        </div>
+        <div>
+        <hr> </div>
+        <div class="card-body"> 
+            <small class="text-muted">Email</small>
+            <h6>${u.data.email}</h6> 
+            <small class="text-muted p-t-30 db">Số điện thoại</small>
+            ${u.data.phone?`<h6 data-phone="${u.data.phone}">${formatPhone(u.data.phone)}</h6> `:`<h6>Chưa cập nhật</h6>`}
+            <small class="text-muted p-t-30 db">Số CMND/CCCD</small>
+            ${u.data.identification?`<h6>${u.data.identification}</h6> `:`<h6>Chưa cập nhật</h6>`}
+            <small class="text-muted p-t-30 db">Số lượng bất động sản</small>
+            <h6>${u.numOfProperty}</h6>
+            <br>
+            <button class="remove-user-btn" onclick=removeUserModal(this) data-id="${u.data.accountId}" data-name="${u.data.name}">Xoá người dùng</button>
+            <button class="warn-user-btn">Cảnh báo người dùng</button>
+        </div>
+    </div>
+`
+
+const removeUserModal = (e) => {
+    var userId = e.dataset.id
+    var name = e.dataset.name
+    $(".remove-user-modal").modal("show")
+    $(".remove-user-name").text(name)
+    $(".remove-user-confirm code").text(userId)
+    $(".remove-user-modal .confirm").attr("data-id", userId)
+    
+}
+
+const confirmRemoveUser = (e) => {
+    var accountId = e.dataset.id
+    var userIdConfirm = $("#confirm-user-id").val()
+    if (accountId !== userIdConfirm){
+        showToast("Xoá tài khoản", "Mã xác nhận không chính xác", "warning")
+    }else{
+        fetch(`/dashboard/account/${accountId}`,
+        {
+            method: "DELETE",
+        })
+        .then(data=> data.json())
+        .then(data=>{
+            if (data.code === 0){
+                console.log(data)
+                $(`.user-${accountId}`).remove()
+                showToast("Xoá tài khoản",data.message, "success")
+            }else {
+                showToast("Xoá tài khoản",data.message, "error")
+            }
+        })
+    }
+    $(".remove-user-modal").modal("hide")
+}
+
+var showToast = (title, mess, type = "noti", x = 20, y = 20) => {
+    var toastNum = $(".toast").length
+    var typeVal = {
+        "warning": `<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>`,
+        "error": `<i class="fa fa-exclamation" aria-hidden="true"></i>`,
+        "noti": `<i class="fa fa-bell" aria-hidden="true"></i>`,
+        "success": `<i class="fa fa-check" aria-hidden="true"></i>`
+    }
+    var tag =
+        `<div class="toastt toastt-${toastNum + 1}"  id="myToast" style="position: fixed; bottom: ${y}px; left: ${x}px;">
+                <div class="toast-header">
+                    <div style="margin-right: 20px">${typeVal[type]}</div><strong class="mr-auto">${title}</strong>
+
+                </div>
+                <div class="toast-body" style="margin: 10px;">
+                    <div>${mess}</div>
+                </div>
+            </div>`
+
+    $("body").append(tag)
+    $(`.toastt-${toastNum + 1}`).show(3000);
+    setTimeout(() => {
+        $(`.toastt-${toastNum + 1}`).hide(300)
+        setTimeout(()=>{
+            $(`.toastt-${toastNum + 1}`).remove()
+        }, 300)
+    }, 4000)
+}

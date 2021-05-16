@@ -67,7 +67,7 @@ router.get('/search', async (req, res, next) => {
                     data: properties.data, 
                     userId: req.user?req.user.accountId:'', 
                     pageRange, page, 
-                    isAdmin: req.user?req.user.role:false 
+                    isAdmin: req.user?req.user.role.admin:false 
                 })
         }).catch(err=>{
             res.status(404).render('404')
@@ -183,7 +183,7 @@ router.post('/edit-property/:id',authenticate.authen ,upload.array('files', 15),
 // DELETE: /id => Delete propety
 router.delete("/:id",authenticate.authen ,async (req, res, next) =>{
     var id = req.params.id
-    var result = await Property.deleteProperty(id, req.user.accountId, req.user.role)
+    var result = await Property.deleteProperty(id, req.user.accountId, req.user.role.admin)
     res.status(200).json(result)
 })
 

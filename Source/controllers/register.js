@@ -24,7 +24,7 @@ router.post('/', validator.registerValidator(), (req, res, next) => {
         return Account.createAccount(req.body)
         .then(newAccount=>{
             if (newAccount.code === 0){
-                return res.redirect(200,"/login")
+                return res.redirect("/login")
             }else if (newAccount.code === -1){
                 req.flash('err', newAccount.err)
                 req.flash('data', req.body)

@@ -16,6 +16,8 @@ const locationRouter = require('./controllers/Location');
 const profileRouter = require('./controllers/Profile');
 const informRouter = require('./controllers/Inform')
 const censorRouter = require('./controllers/Cencor')
+const dashboardRouter = require('./controllers/Dashboard')
+
 const authenticate = require('./middleware/authenticate');
 const app = express();
 
@@ -53,6 +55,7 @@ app.use('/location',authenticate.signUser, locationRouter);
 app.use('/profile',authenticate.signUser, profileRouter);
 app.use('/inform',authenticate.signUser, informRouter);
 app.use('/censor',authenticate.signUser , censorRouter)
+app.use('/dashboard', authenticate.signUser, dashboardRouter)
 
 app.locals.getFlooredFixed = (v, d) => {
   return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
@@ -80,8 +83,8 @@ app.locals.shorterFormatForDateTime = (date) => {
   var day = date.getDate()/10>=1?date.getDate():"0"+date.getDate()
   var month = (date.getMonth()+1)/10>=1?(date.getMonth()+1):"0"+(date.getMonth()+1)
   var year = date.getFullYear()
-  var minute = date.getMinutes()
-  var hour = date.getHours()
+  var minute = date.getMinutes()/10>=1?(date.getMinutes()+1):"0"+(date.getMinutes()+1)
+  var hour = date.getHours()/10>=1?(date.getHours()+1):"0"+(date.getHours()+1)
 
   return `${day}-${month}-${year} ${hour}:${minute}`
 }

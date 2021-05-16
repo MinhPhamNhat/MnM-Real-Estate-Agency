@@ -4,15 +4,16 @@ const informationSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     ownerId:  {
         type: String,
-        require: true
+        require: true,
     },
     type:  {
         type: String, 
-        require: true
+        require: true,
+        enum: ["contact", "censor"],
     },
     propertyId:{
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'properties'
+        ref: 'properties',
     },
     contact: { 
         type: mongoose.Schema.Types.ObjectId, 

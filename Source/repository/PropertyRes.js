@@ -91,7 +91,17 @@ module.exports = {
             return { code: -1, message: "Failed" }
         }
     },
-
+    getAllProperty: async(query) =>{
+        return await Property.find(query)
+        .sort({date: -1}).exec()
+        .then(async properties=>{
+            var data = properties.map(value=> {
+                return parseBaseProperty(value)
+            })
+            return await Promise.all(data)
+        })
+    },
+    
     getBaseProperty: async(query, skip, limit, sortBy) => {
         Object.keys(query).forEach(key => query[key] === undefined && delete query[key])
         return await Property.find(query)
@@ -192,5 +202,6 @@ module.exports = {
             return true
         }
         return false
-    }
+    },
+
 }

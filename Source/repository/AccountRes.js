@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Account = require('../models/AccoutnSchema')
 const User = require('../models/UserSchema')
+const Property = require('../models/PropertySchema')
 module.exports = {
     checkAccount: async (username, password) => {
         var accHandler = await Account.findOne({ username: username, password:password }).exec()
@@ -32,14 +33,31 @@ module.exports = {
                     name: payload.name,
                     email: payload.email,
                     phone: '',
-                    role: false,
+                    role: {
+                        user: true
+                    },
                 }).save()
                 return {code: 0, message:"Tạo tài khoản thành công", data:newUser}
             }else{
                 return {code: -1, message:"Đã xảy ra lỗi khi tạo tài khoản"}
             }
         }
-
     },
+
+    removeAccount: async(accountId) =>{
+        return User.findOneAndDelete({accountId}).exec()
+        .then(async userRes => {
+            if (userRes){
+                await Property.deleteMany({authorId: accountId})
+                await Account.findOneAndDelete({_id: accountId})
+                return {code: 0, message:"Xoá tài khoản thành công", data:userRes}
+            }else{
+                return {code: -1, message:"Xoá tài khoản thất bại"}
+            }
+        })
+        .catch(err=>{
+            return {code: -3, message: "Lỗi khi xoá tài khoản"}
+        })
+    }
 
 }

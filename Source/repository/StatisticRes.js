@@ -32,6 +32,6 @@ module.exports = {
     getNumOfInform: async (query) => {
         Object.keys(query).forEach(key => query[key] === undefined && delete query[key])
         return await Inform.countDocuments(query).exec()
-    }
+    },
 
 }
