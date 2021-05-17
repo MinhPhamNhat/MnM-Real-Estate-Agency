@@ -3981,7 +3981,8 @@ input::-webkit-inner-spin-button {
 
 .delete-property-btn,
 .edit-property-btn,
-.censor-require-btn{
+.censor-require-btn,
+.warn-property-btn{
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
@@ -4003,9 +4004,14 @@ input::-webkit-inner-spin-button {
     background-color: rgb(152, 152, 255);
     transition: 0.3s;
 }
+.warn-property-btn{
+    background-color: rgb(226, 225, 138);
+    transition: 0.3s;
+}
 .edit-property-btn:hover,
 .delete-property-btn:hover,
-.censor-require-btn:hover{
+.censor-require-btn:hover,
+.warn-property-btn:hover{
     background-color: #ccc;
     transition: 0.3s;
 }
@@ -4217,11 +4223,10 @@ input::-webkit-inner-spin-button {
     color:rgb(0, 105, 211)
 }
 
-.contact-modal td{
+.contact-modal td,
+.censor-modal td,
+.warn-modal td{
     padding: 10px;
-}
-.censor-modal td{
-    padding: 10px
 }
 
 .nO-new-contact{
@@ -4895,10 +4900,192 @@ input::-webkit-inner-spin-button {
     border-radius: 5px;
 }
 
-  code {
+code {
     font-family: Consolas,"courier new";
     color: crimson;
     background-color: #f1f1f1;
     padding: 2px;
     font-size: 105%;
-  }
+}
+
+.invalid{
+    color: crimson;
+}
+
+.gutters{
+    margin-top: 50px;
+}
+.right-border::after{
+    content: "";
+    top: 0px;
+    right: 0px;
+    padding-right: 1px;
+    margin-left: -1px;
+    position: absolute;
+    background-color: #001d35;
+    height: 100%;;
+}
+.left-border::before{
+    content: "";
+    top: 0px;
+    left: 0px;
+    padding-left: 1px;
+    margin-right: -1px;
+    position: absolute;
+    background-color: #001d35;
+    height: 100%;;
+}
+.gutters li{
+    margin-bottom: 10px;
+
+}
+.gutters .active{
+    background-color: #d2ebff;
+}
+
+.gutters .active::after{
+    content: "";
+    top: 0px;
+    right: 0px;
+    padding-right: 5px;
+    margin-left: -5px;
+    height: 100%;;
+    position: absolute;
+    background-color: #0059a1;
+
+}
+
+.profile .img-profile{
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+.profile .user-info{
+    text-align: center;
+}
+.profile .side-bar{
+    border: 1px #0059a1 solid;
+    border-radius: 5px;
+    padding: 10px;
+    
+}
+.profile .account-settings .user-profile {
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+.profile .account-settings .user-profile .user-avatar {
+    margin: 0 0 1rem 0;
+}
+.profile .account-settings .user-profile .user-avatar img {
+    width: 90px;
+    height: 90px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+}
+.profile .account-settings .user-profile h5.user-name {
+    margin: 0 0 0.5rem 0;
+}
+.profile .account-settings .user-profile h6.user-email {
+    margin: 0;
+    font-weight: 400;
+    color: #9fa8b9;
+}
+.profile .account-settings .about {
+    margin: 2rem 0 0 0;
+    text-align: center;
+}
+.profile .account-settings .about h5 {
+    margin: 0 0 15px 0;
+    color: #007ae1;
+}
+.profile .form-control {
+    border: 1px solid #cfd1d8;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background: #ffffff;
+    color: #2e323c;
+}
+
+.profile .card {
+    background: #ffffff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 0;
+    margin-bottom: 1rem;
+}
+  
+
+.modal-content-warn{
+    background-color: #fcffd0;
+    padding: 10px;
+    border-radius: 5px;
+    color: #45490d;
+    border: 1px #b3b967 solid;
+}
+
+.inform-number{
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #980303;
+}
+
+.profile-infor div{
+    margin-top: 10px;
+}
+
+.edit-picture{
+    display: none;
+}
+
+.img-circle{
+    height: 100px;
+    width: 100px;
+}
+
+.toastt{
+    opacity: 0.9;
+}
+
+.staff{
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #aedbff;
+}
+
+.admin{
+    padding: 4px;
+    border-radius: 5px;
+    background-color: #fff1a2;
+}
+
+e-password{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 30px;;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0px 1px 20px 0px rgba(85, 85, 85, 0.25);    
+}
+.change-password .change-password-body{
+    align-self: center;
+    width: 500px;
+}
+.change-password .change-password-body h3{
+    text-align: center;
+}
+
+.change-password form{
+    padding: 10px;
+}
+
+.change-password .save-change-btn{
+    padding: 10px;
+    background-color: #b551f8;
+    color: white;
+    border-radius: 15px;;
+}

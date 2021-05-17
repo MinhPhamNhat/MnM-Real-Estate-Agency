@@ -20,10 +20,10 @@
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" id="bootstrap-css">
     <link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" rel="stylesheet" id="bootstrap-css">
-    <%- include('partial/head', {title: "Trang chủ"}) -%> 
     
+    <link href="/stylesheets/style.css" rel="stylesheet">    
 </head>
-
+<input type="hidden" class="user-id" value="<%=user._id%>">
 <body class="dashborad-page">
 <div class="page-wrapper chiller-theme toggled">
   <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
@@ -32,26 +32,23 @@
   <nav id="sidebar" class="sidebar-wrapper">
     <div class="sidebar-content">
       <div class="sidebar-brand">
-        <a href="#">pro sidebar</a>
+        <a href="/"><img style="border-radius: 5px; margin-right: 10px;" height="30" width="30" src="/images/shortcut.png">Bất động sản 21</a>
       </div>
       <div class="sidebar-header">
         <div class="user-pic">
-          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+          <img class="img-responsive img-rounded" src="<%=locals.user.picture||"/images/userprofile.png"%>"
             alt="User picture">
         </div>
         <div class="user-info">
-          <span class="user-name">Jhon
-            <strong>Smith</strong>
+          <span class="user-name">
+            <strong><%=locals.user.name%></strong>
           </span>
-          <span class="user-role">Administrator</span>
-          <span class="user-status">
-            <i class="fa fa-circle"></i>
-            <span>Online</span>
-          </span>
+          <span class="user-role <%=locals.user.role.admin?"admin":"staff"%>"><%=locals.user.role.admin?"Admin":"Kiểm duyệt viên"%></span>
         </div>
       </div>
       <div class="sidebar-menu">
         <ul>
+          <%if (locals.user.role.admin) {%>
           <li class="header-menu">
             <span>Tài khoản</span>
           </li>
@@ -59,7 +56,6 @@
             <a href="/dashboard/user-management">
                 <i class="fa fa-users" aria-hidden="true"></i>
               <span>Người dùng</span>
-              <span class="badge badge-pill badge-warning">New</span>
             </a>
           </li>
           <li class="sidebar-dropdown">
@@ -68,6 +64,7 @@
               <span>Nhân viên kiểm duyệt</span>
             </a>
           </li>
+          <%}%>
           <li class="header-menu">
             <span>Quản lý Bất động sản</span>
           </li>
@@ -91,54 +88,64 @@
     <!-- sidebar-content  -->
     <div class="sidebar-footer">
       <a href="#">
-        <i class="fa fa-bell"></i>
-        <span class="badge badge-pill badge-warning notification">3</span>
-      </a>
-      <a href="#">
-        <i class="fa fa-envelope"></i>
-        <span class="badge badge-pill badge-success notification">7</span>
-      </a>
-      <a href="#">
-        <i class="fa fa-cog"></i>
-        <span class="badge-sonar"></span>
-      </a>
-      <a href="#">
         <i class="fa fa-power-off"></i>
       </a>
     </div>
   </nav>
   <% if (route === "user-management"){%>
-  <%- include('partial/user-management') -%>
+  <%- include('dashboard/user-management') -%>
   <%}else if (route === "staff-management"){%>
-    <%- include('partial/staff-management') -%>
+    <%- include('dashboard/staff-management') -%>
   <%}else if (route === "property-management"){%>
-    <%- include('partial/property-management') -%>
+    <%- include('dashboard/property-management') -%>
   <%}else if (route === "uncensor-property"){%>
-    <%- include('partial/uncensor-property') -%>
+    <%- include('dashboard/uncensor-property') -%>
   <%}%>
 </div>
 
 <div class="modal fade remove-user-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Xoá tài khoản</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Bạn muốn xoá tài khoản <strong class="remove-user-name"></strong></p>
-          <p class="remove-user-confirm">Vui lòng nhập mã <code></code> để xác nhận xoá tài khoản này</p>
-          <input type="text" id="confirm-user-id">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
-          <button type="button" class="btn btn-danger confirm" onclick=confirmRemoveUser(this)>Xác nhận</button>
-        </div>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Xoá tài khoản</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn muốn xoá tài khoản <strong class="remove-user-name"></strong></p>
+        <p class="remove-user-confirm">Vui lòng nhập mã <code></code> để xác nhận xoá tài khoản này</p>
+        <input type="text" id="confirm-user-id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+        <button type="button" class="btn btn-danger confirm" onclick=confirmRemoveUser(this)>Xác nhận</button>
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade warn-user-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Cảnh báo tài khoản</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn muốn cảnh báo tài khoản <strong class="warn-user-name"></strong></p>
+        <p>Vui lòng nhập nội dung cảnh báo</p>
+        <textarea class="warn-user-content" required></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+        <button type="button" class="btn btn-danger confirm" onclick=confirmWarnUser(this)>Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- page-wrapper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"

@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 
 const censorSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
+    author: {
+        type: String,
+        ref: 'users'
+    },
     reason:  {
         type: String, 
         require: true

@@ -149,22 +149,8 @@ $(document).ready(() => {
         setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
     })
 
-    $(".property-btn").hover((e)=>{
-        var id = e.target.dataset.id
-        if ($(`.option-${id} .option-btn`).css("display") === 'none'){
-            $(`.option-${id} img`).css("transform","rotate(90deg)")
-            $(`.option-${id} img`).css("box-shadow","0 0px 15px rgba(0, 0, 0, 1)")
-            $(`.option-${id} .option-btn div`).css("box-shadow","0 0px 15px rgba(0, 0, 0, 1)")
-            $(`.option-${id} .option-btn`).fadeIn(300)
-        }
-    }, (e)=> {
-        var id = e.target.dataset.id
-        if ($(`.option-${id} .option-btn`).css("display") === 'block'){
-            $(`.option-${id} img`).css("transform","rotate(0deg)")
-            $(`.option-${id} img`).css("box-shadow","none")
-            $(`.option-${id} .option-btn div`).css("box-shadow","none")
-            $(`.option-${id} .option-btn`).fadeOut(300)
-        }
+    $(".property-btn").on('click',(e)=>{
+        
     })
 
     $(".profile-name span").on('click', (e) => {
@@ -184,27 +170,28 @@ $(document).ready(() => {
         var desc = $(".contact-require-modal .desc-input").val()
         var formData = {propertyOwner, propertyId, name, email, phone, desc}
         Object.keys(formData).forEach(key => formData[key] === undefined && delete formData[key])
-        fetch("/inform/contact", 
-        {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(data=>data.json())
-        .then(data=>{
-            if (data.code===0){
-                $(".inform").text("Đã yêu cầu liên hệ")
-                $(".inform").show()
-                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
-            }else{
-                $(".inform").text("Yêu cầu liên hệ thất bại")
-                $(".inform").show()
-                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
-            }
-        })
-        $('.contact-require-modal').modal("hide")
+        
+        if (phone){
+            fetch("/inform/contact", 
+            {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(data=>data.json())
+            .then(data=>{
+                if (data.code===0){
+                    showToast("Yêu cầu liên hệ", "Đã yêu cầu liên hệ", "success")
+                }else{
+                    showToast("Yêu cầu liên hệ", "Yêu cầu liên hệ thất bại", "error")
+                }
+            })
+            $('.contact-require-modal').modal("hide")
+        }else{
+            showToast("Yêu cầu liên hệ", "Vui lòng nhập số điện thoại", "warning")
+        }
     })
 
     $(".contact-phone").click((e)=>{
@@ -235,8 +222,12 @@ $(document).ready(() => {
                     $(".modal-title-contact a").text(inform.propertyId.title)
                     $(".modal-title-contact a").attr("href", `/property/${inform.propertyId._id}`)
                     $(".contact-modal").modal("show")
-                }else{
-                    $(".modal-name-censor").text(inform.name)
+                }else if (data.data.type==='censor'){
+                    $(".modal-name-censor").text(inform.author.name)
+                    $(".modal-role-censor").removeClass("admin")
+                    $(".modal-role-censor").removeClass("staff")
+                    $(".modal-role-censor").text(inform.author.role.staff?"Kiểm duyệt viên":"Admin")
+                    $(".modal-role-censor").addClass(inform.author.role.staff?"staff":"admin")
                     $(".modal-status-censor").text(inform.isApproved?"Đã chấp nhận":"Từ chối kiểm duyệt")
                     $(".modal-status-censor").css("background-color",inform.isApproved?"#98d9ff":"#ff7575")
                     if (!inform.isApproved){
@@ -250,6 +241,24 @@ $(document).ready(() => {
                     $(".modal-title-censor a").text(inform.propertyId.title)
                     $(".modal-title-censor a").attr("href", `/${inform.isApproved?'property':'censor'}/${inform.propertyId._id}`)
                     $(".censor-modal").modal("show")
+                } else{
+                    $(".modal-name-warn").text(inform.author.name)
+                    $(".modal-role-warn").removeClass("admin")
+                    $(".modal-role-warn").removeClass("staff")
+                    $(".modal-role-warn").text(inform.author.role.staff?"Kiểm duyệt viên":"Admin")
+                    $(".modal-role-warn").addClass(inform.author.role.staff?"staff":"admin")
+                    $(".modal-content-warn").text(inform.content)
+                    $(".modal-date-warn").text(formatDateTime(new Date(inform.date)))
+                    if (inform.propertyId){
+                        $(".asdasdasd").show()
+                        $(".modal-title-warn a").text(inform.propertyId.title)
+                        $(".modal-title-warn a").attr("href", `/${inform.isApproved?'property':'censor'}/${inform.propertyId._id}`)
+                    }else{
+                        $(".asdasdasd").hide()
+                        $(".modal-title-warn a").text('')
+                        $(".modal-title-warn a").removeAttr("href")
+                    }
+                    $(".warn-modal").modal("show")
                 }
                 $(`.inform-${data.data._id}`).removeClass("new")
             }
@@ -263,7 +272,8 @@ $(document).ready(() => {
         setTimeout(()=>{$( ".modal-inform" ).fadeOut(1600)}, 1000)
     })
 
-    $(".delete-inform").click((e)=>{
+    $(".delete-inform-btn").click((e)=>{
+        e.preventDefault()
         var id = e.target.dataset.id
         $(".confirm-inform-modal").modal("show")
         $(".confirm-inform-modal .confirm-remove").attr("data-id", id)
@@ -274,14 +284,9 @@ $(document).ready(() => {
         fetch(`/inform/${id}`, {method: "DELETE"}).then(data=>data.json())
         .then(data=>{
             if (data.code===0){
-                $(`.inform-${id}`).remove()
-                $(".inform").text("Đã xóa thông báo")
-                $(".inform").show()
-                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
+                showToast("Xoá thông báo", "Đã xoá thông báo", "success")
             }else{
-                $(".inform").text("Xóa thông báo thất bại")
-                $(".inform").show()
-                setTimeout(()=>{$( ".inform" ).fadeOut(1600)}, 1000)
+                showToast("Xoá thông báo", "Xoá thông báo thất bại", "error")
             }
         })
         $(".confirm-inform-modal").modal("hide")
@@ -306,10 +311,8 @@ $(document).ready(() => {
         })
         .then(data=>data.json())
         .then(data=>{
-            window.location.href = window.location.origin+"/censor"
+            window.location.href = "/dashboard/uncensor-property"
         })
-        if (reason)
-        $('.decline-modal').modal("hide")
     })
 
     $(".confirm-decline").click((e) => {
@@ -329,7 +332,7 @@ $(document).ready(() => {
             })
             .then(data=>data.json())
             .then(data=>{
-                window.location.href = window.location.origin+"/censor"
+                window.location.href = "/dashboard/uncensor-property"
             })
             $('.decline-modal').modal("hide")
         }
@@ -347,12 +350,251 @@ $(document).ready(() => {
         .then(data=>data.json())
         .then(data=>{
             if (data.code===0){
+                showToast("Yêu cầu kiểm duyệt lại", "Đã yêu cầu", "success")
                 $(".censor-require-btn").remove()
+            }else{
+                showToast("Yêu cầu kiểm duyệt lại", "Yêu cầu kiểm duyệt thất bại", "error")
+            }
+        })
+    })
+
+    $(".submit-create-staff").click((e) => {
+        var name = $(".staff-name input").val()
+        var email = $(".staff-email input").val()
+        var position = $(".staff-position option:selected").val()
+        var username = $(".staff-username input").val()
+        var password = $(".staff-password input").val()
+        var confirmPassword = $(".staff-confirm-password input").val()
+
+        var formData = {
+            name,
+            email,
+            position,
+            username,
+            password,
+            'confirm-password': confirmPassword
+        }
+
+        fetch('/dashboard/account/staff', {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+        .then(data=>data.json())
+        .then(data=> {
+            if (data.code === -3){
+                $(".create-staff small").remove()
+                $(`.create-staff .staff-${data.err.param}`).append(`<small class="invalid">${data.err.msg}</small>`)
+            }else if (data.code === 0){
+                var staff = data.data
+                $(".create-staff small").remove()
+                $(".staff-name input").val('')
+                $(".staff-email input").val('')
+                $(".staff-username input").val('')
+                $(".staff-password input").val('')
+                $(".staff-confirm-password input").val('')
+                $(".staff-list tbody").prepend(`
+                <tr class="user-row user-${staff.accountId}" onclick=getUserInfo(this) data-id="${staff.accountId}">
+                    <td>
+                        ${staff.name}
+                    </td>
+                    <td>
+                        ${staff.username}
+                    </td>
+                    <td>
+                        ${staff.email}
+                    </td>
+                    <td>
+                        ${staff.position==="censor"?"Kiểm duyệt viên":""}
+                    </td>
+                </tr>
+                `)
+                showToast("Tạo nhân viên", "Tạo thành công", "success")
+            }else{
+                $(".create-staff small").remove()
+                showToast("Tạo nhân viên", "Tạo thất bại", "error")
+            }
+        })
+    })
+
+    $(".remove-user-modal").on('hidden.bs.modal', function(){
+        $(".remove-user-modal input").val('')
+    });
+
+    $(".warn-user-modal").on('hidden.bs.modal', function(){
+        $(".warn-user-content").val('')
+    });
+
+    $(".warn-property-modal").on('hidden.bs.modal', function(){
+        $(".warn-property-content").val('')
+    });
+
+    $('.edit-profile-image').click(() => {
+        $('.profile-infor-preview').trigger('click')
+    })
+
+    $('.profile-infor-preview').change((e) => {
+        var file = e.target.files[0]
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('profile-image-preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+        $('#profile-image-standard').hide()
+        $('#profile-image-preview').show()
+    })
+
+    $('.remove-image-preview').click(() => {
+        $('#profile-image-standard').show()
+        $('#profile-image-preview').hide()
+        $('.profile-infor-preview').val(null)
+    })
+
+    $('.profile-button').click(() => {
+        $('.profile-infor-name').removeAttr('disabled')
+        $('.profile-infor-email').removeAttr('disabled')
+        $('.profile-infor-phone').removeAttr('disabled')
+        $(".asd").hide()
+        $(".dsa").show()
+        $('.edit-picture').show()
+    })
+
+    $('.profile-button-cancel').click(()=>{
+        $('.profile-infor-name').attr("disabled", true)
+        $('.profile-infor-email').attr("disabled", true)
+        $('.profile-infor-phone').attr("disabled", true)
+        $(".asd").show()
+        $(".dsa").hide()
+        $('.edit-picture').hide()
+    })
+
+    $('.profile-button-update').click(()=>{
+        var name = $('.profile-infor-name').val()
+        var email = $('.profile-infor-email').val()
+        var phone = $('.profile-infor-phone').val()
+        var picture = $('.profile-infor-preview')[0].files[0]
+        var formData = new FormData()
+        formData.append('picture', picture)
+        formData.append('name', name)
+        formData.append('email', email)
+        formData.append('phone', phone)
+        var userId = window.location.pathname.replace('/profile/','')
+        if (!name || !email || !phone){
+            showToast("Cập nhật thông tin","Vui lòng nhập thông tin hợp lệ", "warning")
+        }else{
+            if (alphaOnly(name)){
+                showToast("Cập nhật thông tin","Tên không được chưa ký tự đặc biệt", "warning")
+            }else if (isNaN(phone)){
+                showToast("Cập nhật thông tin","Số điện thoại không hợp lệ", "warning")
+            }else if (!validateEmail(email))
+                showToast("Cập nhật thông tin","Email không hợp lệ", "warning")
+            else{
+                fetch('/profile/',
+                {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(data=> data.json())
+                .then(data=>{
+                    if (data.code === 0){
+                        showToast("Cập nhật thông tin","Cập nhật thành công", "success")
+                        setTimeout(()=>{
+                            window.location.href = `/profile/${userId}`
+                        }, 300)
+                    }else{
+                        showToast("Cập nhật thông tin","Cập nhật thất bại", "error")
+                    }
+                })
+            }
+        }
+    })
+
+    $(".show-no-item").change(()=>{
+        searchData(1)
+    })
+
+    $(".sort-modal").on('hidden.bs.modal', function(){
+        searchData(1)
+    });
+
+    
+    // CHANGE PASSWORD
+    $(".save-change-btn").click(()=>{
+        var oldPassword = $(".change-password #old-password").val()
+        var newPassword = $(".change-password #new-password").val()
+        var reNewPassword = $(".change-password #re-new-password").val()
+
+        var formData = {oldPassword, newPassword, reNewPassword}
+        fetch('/profile/change-password', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        }).then(data=>data.json()).then(data=>{
+            if (data.code===0){
+                var fields = ["oldPassword", "newPassword", "reNewPassword"]
+                fields.forEach(value => {
+                    var inputField = $(`.change-password .${value}`)
+                    inputField.find("small").remove()
+                    inputField.find("label").removeClass("text-danger")
+                    inputField.find("input").removeClass("is-invalid")
+                    inputField.find("label").addClass("text-success")
+                    inputField.find("input").addClass("is-valid")
+                })
+                showToast("Thay đổi mật khẩu", "Thành công ", "success")
+                setTimeout(()=>{
+                    window.location.href = "/logout"
+                },300)
+            }else if (data.code === -3){
+                var fields = ["oldPassword", "newPassword", "reNewPassword"]
+                fields.forEach(value => {
+                    var inputField = $(`.change-password .${value}`)
+                    if (data.errors[value]) {
+                        inputField.find("small").remove()
+                        inputField.find("label").removeClass("text-success")
+                        inputField.find("input").removeClass("is-valid")
+                        inputField.find("label").addClass("text-danger")
+                        inputField.find("input").addClass("is-invalid")
+                        inputField.append(`<small class='text-danger'>${data.errors[value].msg}</>`)
+                    } else {
+                        inputField.find("small").remove()
+                        inputField.find("label").removeClass("text-danger")
+                        inputField.find("input").removeClass("is-invalid")
+                        inputField.find("label").addClass("text-success")
+                        inputField.find("input").addClass("is-valid")
+                    }
+                })
+            }else if (data.code === -1){
+                showToast("Thay đổi mật khẩu", "Đã xảy ra lỗi ", "error")
             }
         })
     })
 })
 
+const toggleOption = (e) => {
+    var id = e.dataset.id
+    if ($(`.option-${id} .option-btn`).css("display") === 'none'){
+        $(`.option-${id} img`).css("transform","rotate(90deg)")
+        $(`.option-${id} img`).css("box-shadow","0 0px 15px rgba(0, 0, 0, 1)")
+        $(`.option-${id} .option-btn div`).css("box-shadow","0 0px 15px rgba(0, 0, 0, 1)")
+        $(`.option-${id} .option-btn`).fadeIn(300)
+    }
+    else {
+        $(`.option-${id} img`).css("transform","rotate(0deg)")
+        $(`.option-${id} img`).css("box-shadow","none")
+        $(`.option-${id} .option-btn div`).css("box-shadow","none")
+        $(`.option-${id} .option-btn`).fadeOut(300)
+    } 
+}
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 const formatDateTime = (date) => {
     var options = { 
       weekday: 'long', 
@@ -375,8 +617,9 @@ const copy = (copyText) =>{
 const alphaOnly = (event)=> {
     var key = event.keyCode;
     if ((key >= 33 && key <= 64) || (key >= 91 && key <= 96) || (key >= 123 && key <= 126)){
-        event.preventDefault() 
+        return true
     }
+    return false
   };
 
 var swiper = new Swiper('.swiper-container', {
@@ -467,11 +710,6 @@ var swiper = new Swiper('.swiper-container', {
 
   const searchData = (page) =>{
     currentPage = page
-    if (window.location.pathname.includes("/profile/property/")){
-        var path = window.location.href
-        var userId = path.replace((window.location.origin+"/profile/property/"),"")
-    }
-
     var noItem = $(".show-no-item option:selected").val()
     var sortPrice = $(".sort-modal .radio-sort input:checked")[0].value
     var sortArea = $(".sort-modal .radio-sort input:checked")[1].value
@@ -489,8 +727,12 @@ var swiper = new Swiper('.swiper-container', {
     var type = $("#properties #type").val()
     var city = $("#properties #city").val()
     var district = $("#properties #district").val()
-    
-    var formData = {page, noItem, sortPrice, sortArea, sortDate, keyword, type, city, district, isSale, areaFrom, areaTo, priceFrom, priceTo, bedrooms, rooms, floors, bathrooms, userId}
+
+    if ($(".hidden-user-id")[0])
+        var userId = $(".hidden-user-id").val()
+    if (window.location.pathname.includes("/profile/censor"))
+        var status = false
+    var formData = {page, noItem, sortPrice, sortArea, sortDate, keyword, type, city, district, isSale, areaFrom, areaTo, priceFrom, priceTo, bedrooms, rooms, floors, bathrooms, userId, status}
     Object.keys(formData).forEach(key => formData[key] === undefined && delete formData[key])
     
     var container = $(".properties-nav")
@@ -549,7 +791,7 @@ var swiper = new Swiper('.swiper-container', {
             var tag;
             if (userId){
                 if (userId === value.author.accountId){
-                    tag = `<div class="property-btn option-${value._id}" data-id="${value._id}">
+                    tag = `<div class="property-btn option-${value._id}" onclick=toggleOption(this) data-id="${value._id}">
                                 <img src="/images/option.png">
                                 <div class="option-btn">
                                     <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
@@ -558,7 +800,7 @@ var swiper = new Swiper('.swiper-container', {
                             </div>
                             `
                 }else if (isAdmin){
-                    tag = `<div class="property-btn option-${value._id}" data-id="${value._id}">
+                    tag = `<div class="property-btn option-${value._id}" onclick=toggleOption(this) data-id="${value._id}">
                                 <img src="/images/option.png">
                                 <div class="option-btn">
                                     <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
@@ -607,14 +849,11 @@ var swiper = new Swiper('.swiper-container', {
 
 const getUserInfo = (e) => {
     var userId = e.dataset.id
-    console.log(userId)
-
-    fetch(`/dashboard/account/${userId}`)
+    fetch(`/dashboard/account/user/${userId}`)
     .then(data=>data.json())
     .then(data=>{
-        console.log(data)
         if (data.code === 0){
-            $(".user-container").html(profileInfoTag(data))
+            $(".user-container").html(profileUserInfoTag(data))
         }else if (data.code === -1){
             showToast("Lấy thông tin người dùng", "Người dùng không tồn tại", "warning")
         }else{
@@ -623,15 +862,58 @@ const getUserInfo = (e) => {
     })
 }
 
-const profileInfoTag = (u) => `
+const getStaffInfo = (e) => {
+    var userId = e.dataset.id
+    fetch(`/dashboard/account/staff/${userId}`)
+    .then(data=>data.json())
+    .then(data=>{
+        if (data.code === 0){
+            $(".user-container").html(profileStaffInfoTag(data))
+        }else if (data.code === -1){
+            showToast("Lấy thông tin nhân viên", "Nhân viên không tồn tại", "warning")
+        }else{
+            showToast("Lấy thông tin nhân viên", "Lỗi khi tìm nhân viên", "error")
+        }
+    })
+}
+
+const profileStaffInfoTag = (u) => `
+<div class="card">
+    <div class="card-body">
+        <center class="m-t-30"> <img src="${u.data.picture||`/images/userprofile.png`}" class="img-circle" width="150">
+            <h4 class="card-title m-t-10"><a href="/profile/${u.data.accountId}">${u.data.name}</a></h4>
+            <div class="row text-center justify-content-md-center">
+                <div class="col-12">
+                    <span class="staff">Nhân viên kiểm duyệt</span>
+                </div>
+            </div>
+        </center>
+    </div>
+    <div>
+    <hr> </div>
+    <div class="card-body"> 
+        <small class="text-muted">Email</small>
+        <h6>${u.data.email}</h6> 
+        <small class="text-muted p-t-30 db">Số điện thoại</small>
+        ${u.data.phone?`<h6 data-phone="${u.data.phone}">${formatPhone(u.data.phone)}</h6> `:`<h6>Chưa cập nhật</h6>`}
+        <small class="text-muted p-t-30 db">Số lượng bất động sản đã kiểm duyệt</small>
+        <h6>${u.numOfCensor}</h6>
+        <br>
+        <button class="remove-user-btn" onclick=removeUserModal(this) data-id="${u.data.accountId}" data-name="${u.data.name}">Xoá nhân viên</button>
+        <button class="warn-user-btn" onclick=warnUserModal(this) data-id="${u.data.accountId}" data-name="${u.data.name}">Cảnh báo nhân viên</button>
+    </div>
+</div>
+`
+
+const profileUserInfoTag = (u) => `
     <div class="card">
         <div class="card-body">
             <center class="m-t-30"> <img src="${u.data.picture||`/images/userprofile.png`}" class="img-circle" width="150">
-                <h4 class="card-title m-t-10">${u.data.name}</h4>
+                <h4 class="card-title m-t-10"><a href="/profile/${u.data.accountId}">${u.data.name}</a></h4>
                 <div class="row text-center justify-content-md-center">
-                    <div class="col-1">
+                    <div class="col-12">
                         <a href="/profile/property/${u.data.accountId}" class="link">
-                            <i class="fa fa-home" aria-hidden="true"></i><font class="font-medium">${u.numOfProperty}</font>
+                            <i class="fa fa-home" aria-hidden="true"></i> <font class="font-medium">${u.numOfProperty}</font>
                         </a>
                     </div>
                 </div>
@@ -644,13 +926,11 @@ const profileInfoTag = (u) => `
             <h6>${u.data.email}</h6> 
             <small class="text-muted p-t-30 db">Số điện thoại</small>
             ${u.data.phone?`<h6 data-phone="${u.data.phone}">${formatPhone(u.data.phone)}</h6> `:`<h6>Chưa cập nhật</h6>`}
-            <small class="text-muted p-t-30 db">Số CMND/CCCD</small>
-            ${u.data.identification?`<h6>${u.data.identification}</h6> `:`<h6>Chưa cập nhật</h6>`}
             <small class="text-muted p-t-30 db">Số lượng bất động sản</small>
             <h6>${u.numOfProperty}</h6>
             <br>
             <button class="remove-user-btn" onclick=removeUserModal(this) data-id="${u.data.accountId}" data-name="${u.data.name}">Xoá người dùng</button>
-            <button class="warn-user-btn">Cảnh báo người dùng</button>
+            <button class="warn-user-btn" onclick=warnUserModal(this) data-id="${u.data.accountId}" data-name="${u.data.name}">Cảnh báo người dùng</button>
         </div>
     </div>
 `
@@ -662,7 +942,6 @@ const removeUserModal = (e) => {
     $(".remove-user-name").text(name)
     $(".remove-user-confirm code").text(userId)
     $(".remove-user-modal .confirm").attr("data-id", userId)
-    
 }
 
 const confirmRemoveUser = (e) => {
@@ -678,7 +957,6 @@ const confirmRemoveUser = (e) => {
         .then(data=> data.json())
         .then(data=>{
             if (data.code === 0){
-                console.log(data)
                 $(`.user-${accountId}`).remove()
                 showToast("Xoá tài khoản",data.message, "success")
             }else {
@@ -689,7 +967,76 @@ const confirmRemoveUser = (e) => {
     $(".remove-user-modal").modal("hide")
 }
 
-var showToast = (title, mess, type = "noti", x = 20, y = 20) => {
+const warnUserModal = (e)=> {
+    var userId = e.dataset.id
+    var name = e.dataset.name
+    $(".warn-user-modal").modal("show")
+    $(".warn-user-name").text(name)
+    $(".warn-user-modal .confirm").attr("data-id", userId)
+}
+
+const warnPropertyModal = (e) => {
+    var propertyId = e.dataset.id
+    $(".warn-property-modal .confirm").attr("data-id", propertyId)
+    $(".warn-property-modal").modal("show")
+}
+
+const confirmWarnProperty = (e) => {
+    var propertyId = e.dataset.id
+    var propertyOwner = e.dataset.owner
+    var content = $(".warn-property-modal textarea").val()
+    var formData = {propertyId, content, propertyOwner}
+    if (!content){
+        showToast("Cảnh báo tài khoản", "Vui lòng nhập nội dung cảnh báo", "warning")
+    }else{
+        fetch(`/inform/warn`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(data=> data.json())
+        .then(data=>{
+            if (data.code === 0){
+                showToast("Cảnh báo tài khoản","Đã cảnh báo", "success")
+            }else {
+                showToast("Cảnh báo tài khoản","Cảnh báo thất bại", "error")
+            }
+        })
+    }
+    $(".warn-property-modal").modal("hide")
+}
+
+const confirmWarnUser = (e) => {
+    var propertyOwner = e.dataset.id
+    var content = $(".warn-user-modal textarea").val()
+    var formData = {propertyOwner, content}
+    if (!content){
+        showToast("Cảnh báo tài khoản", "Vui lòng nhập nội dung cảnh báo", "warning")
+    }else{
+        fetch(`/inform/warn`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(data=> data.json())
+        .then(data=>{
+            if (data.code === 0){
+                showToast("Cảnh báo tài khoản","Đã cảnh báo", "success")
+            }else {
+                showToast("Cảnh báo tài khoản","Cảnh báo thất bại", "error")
+            }
+        })
+    }
+    $(".warn-user-modal").modal("hide")
+}
+
+var showToast = (title, mess, type = "success", x = 20, y = 20) => {
     var toastNum = $(".toast").length
     var typeVal = {
         "warning": `<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>`,
@@ -697,8 +1044,13 @@ var showToast = (title, mess, type = "noti", x = 20, y = 20) => {
         "noti": `<i class="fa fa-bell" aria-hidden="true"></i>`,
         "success": `<i class="fa fa-check" aria-hidden="true"></i>`
     }
+    var color = {
+        "warning": `rgb(254, 255, 193)`,
+        "error": `rgb(255, 193, 193)`,
+        "success": `rgb(200, 255, 193)`
+    }
     var tag =
-        `<div class="toastt toastt-${toastNum + 1}"  id="myToast" style="position: fixed; bottom: ${y}px; left: ${x}px;">
+        `<div class="toastt toastt-${toastNum + 1}"  id="myToast" style="background-color: ${color[type]}; position: fixed; bottom: ${y}px; left: ${x}px;">
                 <div class="toast-header">
                     <div style="margin-right: 20px">${typeVal[type]}</div><strong class="mr-auto">${title}</strong>
 

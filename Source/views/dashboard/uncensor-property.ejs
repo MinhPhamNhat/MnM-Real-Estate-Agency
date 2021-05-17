@@ -21,7 +21,7 @@
                   <a href="/<%=p.status?"property":"censor"%>/<%=p._id%>"><%=p.title%></a>
               </td>
               <td>
-                  <a href="/profile/property/<%=p.author.accountId%>"><%=p.author.name%></a>
+                  <a href="/profile/<%=p.author.accountId%>"><%=p.author.name%></a>
               </td>
               <td>
                   <%=p.status&&p.authen?"Đã kiểm duyệt":p.authen?"Từ chối":"Chưa kiểm duyệt"%>

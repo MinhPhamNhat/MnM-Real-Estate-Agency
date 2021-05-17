@@ -1,0 +1,35 @@
+<div class="profile-infor card py-4">
+    <h1>Thông tin cá nhân</h1>
+    <hr>
+    <div class="mt-3"> 
+        <label class="labels">Ảnh đại diện</label>
+        <div class="d-flex justify-content-between p-2 outline"> 
+            <img src="<%=profile.picture||'/images/userprofile.png'%>" class="rounded" id="profile-image-standard" height="100" width="100">
+            <img style="display:none" class="rounded" id="profile-image-preview" height="100" width="100">
+            <div class="d-flex flex-column mr-1 edit-picture">
+                <div class="d-flex flex-row"> <button class="btn btn-primary btn-sm buttons edit-profile-image">Chính sửa ảnh đại diện</button> <button class="btn btn-outline-danger buttons btn-sm ml-3 remove-image-preview">Xoá</button> </div>
+                <input style="display:none" class="profile-infor-preview" type="file" accept="image/*"> 
+            </div>
+        </div>
+    </div>
+    <div class="mt-3">
+        <div class="p-3 py-5">
+            <div class="row mt-2">
+                <div class="col-md-12"><label class="labels">Tên</label><input type="text" class="form-control profile-infor-name" disabled placeholder="first name" value="<%=profile.name%>"></div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6"><label class="labels">Số điện thoại</label><input type="text" class="form-control profile-infor-phone" disabled pattern="" placeholder="enter phone number" value="<%=profile.phone||'Chưa cập nhật'%>""></div>
+                <div class="col-md-6"><label class="labels">Email</label><input type="text" class="form-control profile-infor-email" disabled placeholder="enter email id" value="<%=profile.email%>""></div>
+            </div>
+
+            <% if (locals.user){%>
+                <% if (locals.user.accountId === profile.accountId){%>
+                    <div class="mt-5 text-center asd"><button class="btn btn-primary profile-button" type="button">Cập nhật thông tin</button></div>
+                    <div class="mt-5 text-center dsa" style="display: none">
+                        <button class="btn btn-primary profile-button-update" type="button">Cập nhật</button>
+                        <button class="btn btn-primary profile-button-cancel" type="button">Huỷ</button>
+                    </div>
+            <%}}%>
+        </div>
+    </div>
+</div>

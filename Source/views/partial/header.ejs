@@ -1,81 +1,86 @@
 
-  <!-- Start header section -->
-  <header id="header">  
-        <div class="container">
+<!-- Start header section -->
+<header id="header">  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="header-area">
           <div class="row">
-            <div class="col-md-12">
-              <div class="header-area">
-                <div class="row">
-                  <div class="col-md-6 col-sm-6 col-xs-6">
-                    <div class="header-left">
-                      <div class="telephone-no">
-                        <span class="fa fa-phone"></span>
-                        0909 999 999
-                      </div>
-                      <div class="email hidden-xs">
-                        <span class="fa fa-envelope-o"></span> lienhequangcao@gmail.com
-                      </div>
-                    </div>              
-                  </div>
-                  <div class="col-md-6 col-sm-6 col-xs-6">
-                    <% if(!locals.logined) {%>
-                      <div class="header-right">
-                        <a href="/register" class="register">Đăng ký</a>
-                        <a href="/login" class="login">Đăng nhập</a>
-                      </div>
-                    <%}else{%>
-                      <div class="header-right">
-                        <button type="button" class="btn btn-secondary contact-noti" onclick="window.location.href = window.location.origin+'/profile/inform'" data-toggle="tooltip" data-placement="bottom" title="Bạn có <%=locals.numOfNoti%> yêu cầu liên hệ mới">
-                          <i class="fa fa-address-book-o" aria-hidden="true"></i>
-                          <% if (locals.numOfNoti){ %>
-                            <span class="nO-new-contact"><%=locals.numOfNoti%> </span>
-                          <%}%>
-                        </button> <a href="/profile/property/<%= locals.user.accountId %>" class="register"><%=locals.user.name%></a>
-                          <a href="/logout" class="login">Đăng xuất</a>
-                      </div>
-                    <%}%>
-                  </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <div class="header-left">
+                <div class="telephone-no">
+                  <span class="fa fa-phone"></span>
+                  0909 999 999
                 </div>
-              </div>
+                <div class="email hidden-xs">
+                  <span class="fa fa-envelope-o"></span> lienhequangcao@gmail.com
+                </div>
+              </div>              
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <% if(!locals.logined) {%>
+                <div class="header-right">
+                  <a href="/register" class="register">Đăng ký</a>
+                  <a href="/login" class="login">Đăng nhập</a>
+                </div>
+              <%}else{%>
+                <div class="header-right">
+                  <%if (!locals.user.role.admin){ %>
+                  <button type="button" class="btn btn-secondary contact-noti" onclick="window.location.href = window.location.origin+'/profile/inform'" data-toggle="tooltip" data-placement="bottom" title="Bạn có <%=locals.numOfNoti%> yêu cầu liên hệ mới">
+                    <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                    <% if (locals.numOfNoti){ %>
+                      <span class="nO-new-contact"><%=locals.numOfNoti%> </span>
+                    <%}%>
+                  </button> 
+                  <%}%>
+                  <a href="/profile/<%= locals.user.accountId %>" class="register"><%=locals.user.name%></a>
+                    <a href="/logout" class="login">Đăng xuất</a>
+                </div>
+              <%}%>
             </div>
           </div>
         </div>
-      </header>
-      <!-- End header section -->
-      <!-- Start menu section -->
-      <section id="menu-area">
-        <nav class="navbar navbar-default main-navbar" role="navigation">  
-          <div class="container">
-            <div class="navbar-header">
-              <!-- FOR MOBILE VIEW COLLAPSED BUTTON -->
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <!-- LOGO -->
-              <span class="logo-image"><img src="/images/shortcut.png"></span>                                         
-              <!-- Text based logo -->
-              <a class="navbar-brand logo <%= active==="home"?"active":"" %>" href="/"> Bất Động Sản <span>21</span></a>
-              <!-- Image based logo -->
-              <!-- <a class="navbar-brand logo-img" href="/"><img src="/images/logo.png" alt="logo"></a> -->                     
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-              <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
-                <li <%= active==="home"?"class=active":"" %>><a href="/">TRANG CHỦ</a></li>
-                <% if(locals.logined) {%>
-                <li <%= active==="add"?"class=active":"" %>><a href="/property/add-property">ĐĂNG TIN</a></li>    
-                <%}%>
-                <% if(locals.logined && locals.user.role.admin) {%>
-                <li <%= active==="censor"?"class=active":"" %>><a href="/censor">KIỂM DUYỆT</a></li> 
-                <li <%= active==="dashboard"?"class=active":"" %>><a href="/dashboard">DASHBOARD</a></li>       
-                <%}%>
-              </ul>                          
-            </div>     
-          </div>          
-        </nav> 
-      </section>
-      <!-- End menu section -->
-    
+      </div>
+    </div>
+  </div>
+</header>
+<!-- End header section -->
+<!-- Start menu section -->
+<section id="menu-area">
+  <nav class="navbar navbar-default main-navbar" role="navigation">  
+    <div class="container">
+      <div class="navbar-header">
+        <!-- FOR MOBILE VIEW COLLAPSED BUTTON -->
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <!-- LOGO -->
+        <span class="logo-image"><img src="/images/shortcut.png"></span>                                         
+        <!-- Text based logo -->
+        <a class="navbar-brand logo <%= active==="home"?"active":"" %>" href="/"> Bất Động Sản <span>21</span></a>
+        <!-- Image based logo -->
+        <!-- <a class="navbar-brand logo-img" href="/"><img src="/images/logo.png" alt="logo"></a> -->                     
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
+          <li <%= active==="home"?"class=active":"" %>><a href="/">TRANG CHỦ</a></li>
+          <% if(locals.logined) {%>
+          <%if (!(locals.user.role.admin||locals.user.role.staff)){%>
+          <li <%= active==="add"?"class=active":"" %>><a href="/property/add-property">ĐĂNG TIN</a></li> 
+          <%}%>
+          <li <%= active==="profile"?"class=active":"" %>><a href="/profile/<%=locals.user.accountId%>">TRANG CÁ NHÂN</a></li>  
+          <%}%>
+          <% if(locals.logined && (locals.user.role.admin||locals.user.role.staff)) {%>
+          <li <%= active==="dashboard"?"class=active":"" %>><a href="/dashboard">DASHBOARD</a></li>       
+          <%}%>
+        </ul>                          
+      </div>     
+    </div>          
+  </nav> 
+</section>
+<!-- End menu section -->
+  
       

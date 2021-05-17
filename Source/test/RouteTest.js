@@ -31,7 +31,7 @@ describe('* TEST ROLE ', () => {
 
         it("Nếu người dùng chưa đăng nhập người dùng có thể vào trang cá nhân của người khác", (done) => {
             chai.request(server)
-            .get('/profile/property/606e9e93c029084ad09e7bf5')
+            .get('/profile/606e9e93c029084ad09e7bf5')
             .end((err, res) => {
                 chai.expect(res.statusCode).equal(200)
                 done()

@@ -21,7 +21,7 @@ router.get('/add-property',authenticate.authen,async (req, res, next) => {
         res.status(200).render('add-property', {type: false})
     else{
         req.flash('requireInformation',true)
-        res.redirect(`/profile/property/${user.data.accountId}`)
+        res.redirect(`/profile/${user.data.accountId}`)
     }
 })
 
@@ -44,7 +44,8 @@ router.get('/search', async (req, res, next) => {
     var page =  parseInt(data.page)||1
     var skip = (parseInt(data.noItem)*(page-1))||0
     var limit = parseInt(data.noItem)||6
-    await Property.getBaseProperty(query,skip, limit ,sortBy).then(async properties => {
+    await Property.getBaseProperty(query,skip, limit ,sortBy)
+    .then(async properties => {
         var getRange = await Statistic.getMinMaxRange()
         var numOfDoc = await Statistic.getNumberOfProperty(query)
         var pageRange = func.createPageRange(page, Math.ceil(numOfDoc/limit))
@@ -183,7 +184,7 @@ router.post('/edit-property/:id',authenticate.authen ,upload.array('files', 15),
 // DELETE: /id => Delete propety
 router.delete("/:id",authenticate.authen ,async (req, res, next) =>{
     var id = req.params.id
-    var result = await Property.deleteProperty(id, req.user.accountId, req.user.role.admin)
+    var result = await Property.deleteProperty(id, req.user.accountId, req.user.role.admin||req.user.role.staff)
     res.status(200).json(result)
 })
 

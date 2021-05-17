@@ -68,8 +68,9 @@
                       <% if (data.authen && !data.status){ %>
                         <span class="censor-require-btn" data-id="<%=data._id%>">Yêu cầu kiểm duyệt lại</span>
                       <%}%>
-                    <%}else if(user.role.admin) {%>
-                      <span class="delete-property-btn" data-id="<%=data._id%>">Xoá tin</span>
+                    <%}else if(user.role.admin||user.role.staff) {%>
+                      <span class="delete-property-btn" data-id="<%=data._id%>"><i class="fa fa-ban" aria-hidden="true"></i> Xoá tin</span>
+                      <span class="warn-property-btn" data-id="<%=data._id%>" onclick=warnPropertyModal(this)><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Cảnh báo tin này</span>
                     <%}%>
                 <%}%>
                 <hr style="height:1px;border-width:0;color:#f1f1f1;background-color: #D4D4D4">
@@ -120,17 +121,18 @@
                     <td><a href="/property/search?submit=form&city=<%= data.location.city.id %>&district=<%= data.location.district.id %>"><%= data.location.district.name %></a></td>
                   </tr>
                   <tr>
-                    <td><strong>Thể loại: </strong></td>
-                    <td><%= data.isSale?"Bán":"Cho thuê" %></td>
                     <td><strong>Hình thức: </strong></td>
+                    <td><%= data.isSale?"Bán":"Cho thuê" %></td>
+                    <td><strong>Loại hình: </strong></td>
                     <td><%= data.type==='personal-house'?'Nhà riêng':data.type==='street-house'?'Nhà mặt phố':data.type==='appartment'?'Căn hộ chung cư':data.type==='villa'?'Biệt thự':'' %></td>
                   </tr>
                 </table>
                 <!-- <h4><b>Bản đồ bất động sản</b></h4> -->
                 <!-- <div id="map"></div> -->
+              <hr style="height:1px;border-width:0;color:#f1f1f1;background-color: #D4D4D4">
               </div>
               <!-- Properties social share -->
-              <div class="properties-social">
+              <!-- <div class="properties-social">
                   <ul>
                       <li>Share</li>
                       <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -138,9 +140,9 @@
                       <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                       <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
                   </ul>
-              </div>
+              </div> -->
               
-            <% if(locals.logined && locals.user.role.admin && !data.status) {%>  
+            <% if(locals.logined && (locals.user.role.admin||locals.user.role.staff) && !data.status) {%>  
               <div class="properties-button">
                 <button class="properties-approve" data-id="<%=data._id%>" data-owner="<%=data.authorId%>">
                   Duyệt <i class="fa fa-check" aria-hidden="true"></i>
@@ -159,7 +161,7 @@
             <!-- Start Single properties sidebar -->
             <div class="properties-single-sidebar">
               <h3>Người <%= data.isSale?"bán":"cho thuê" %></h3>
-              <a class="profile-name" href="/profile/property/<%=data.author.accountId%>">
+              <a class="profile-name" href="/profile/<%=data.author.accountId%>">
                 <i class="fa fa-user" aria-hidden="true" style="margin-right: 10px;"></i><%= data.author.name %>
               </a>
               <p class="email-contact"><i class="fa fa-envelope" aria-hidden="true"></i><%=data.author.email%></p>
@@ -228,15 +230,15 @@
                           </a>
                           <% if (locals.user){%>
                               <% if(locals.user.accountId===value.accountId){%>
-                                  <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
+                                  <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
                                       <img src="/images/option.png">
                                       <div class="option-btn">
                                           <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
                                           <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
                                       </div>
                                   </div>
-                                  <%}else if(user.role.admin) {%>
-                                      <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
+                                  <%}else if(user.role.admin||user.role.staff) {%>
+                                      <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
                                           <img src="/images/option.png">
                                           <div class="option-btn">
                                               <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
@@ -244,7 +246,6 @@
                                       </div>
                                   <%}%>
                           <%}%>
-                          
                           <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
                               <%= value.isSale?"Bán":"Cho Thuê" %>
                           </div>
@@ -292,6 +293,27 @@
     </section>
     <!-- / Properties  -->
 
+    <div class="modal fade warn-property-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Cảnh báo tin bất động sản</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Bạn muốn cảnh báo tài khoản <strong class="warn-property-name">tin này</strong></p>
+              <p>Vui lòng nhập nội dung cảnh báo</p>
+              <textarea class="warn-property-content" required></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+              <button type="button" class="btn btn-danger confirm" onclick=confirmWarnProperty(this) data-id="<%=data._id%>" data-owner="<%=data.author.accountId%>">Xác nhận</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <div class="modal fade decline-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -303,23 +325,23 @@
             <form>
           </div>
           <div class="modal-body">
-              <table>
-                <tr>
-                  <td colspan="2">
-                    <strong>Vui lòng nhập lý do bạn từ chối duyệt bất động sản này</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <p> </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Lý do: <span class="required">(*)</span></td>
-                  <td><textarea name="decline-reasone" class="decline-reasone" required></textarea></td>
-                </tr>
-              </table>
-            </div>
+            <table>
+              <tr>
+                <td colspan="2">
+                  <strong>Vui lòng nhập lý do bạn từ chối duyệt bất động sản này</strong>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <p> </p>
+                </td>
+              </tr>
+              <tr>
+                <td>Lý do: <span class="required">(*)</span></td>
+                <td><textarea name="decline-reasone" class="decline-reasone" required></textarea></td>
+              </tr>
+            </table>
+          </div>
           <div class="modal-footer">
             <button type="submit" data-id="<%=data._id%>" data-owner="<%=data.authorId%>" class="btn btn-success confirm-decline">Chấp nhận</button>
             <button type="button" class="btn btn-secondary confirm-no" data-dismiss="modal">Huỷ</button>

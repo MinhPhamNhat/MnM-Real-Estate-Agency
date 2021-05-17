@@ -23,5 +23,13 @@ module.exports = {
         }else{
             res.status(404).render('404')
         }
+    },
+
+    adminAndStaffAuthen: (req, res, next) =>{
+        if (req.user.role.admin||req.user.role.staff){
+            next()
+        }else{
+            res.status(404).render('404')
+        }
     }
 }

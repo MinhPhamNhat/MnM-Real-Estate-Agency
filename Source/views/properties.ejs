@@ -62,15 +62,15 @@
                         </a>
                         <% if (locals.user){%>
                             <% if(locals.user.accountId===value.authorId){%>
-                                <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
+                                <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
                                     <img src="/images/option.png">
                                     <div class="option-btn">
                                         <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
                                         <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
                                     </div>
                                 </div>
-                                <%}else if(user.role.admin) {%>
-                                    <div class="property-btn option-<%=value._id%>" data-id="<%=value._id%>">
+                                <%}else if(user.role.admin||user.role.staff) {%>
+                                    <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
                                         <img src="/images/option.png">
                                         <div class="option-btn">
                                             <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>

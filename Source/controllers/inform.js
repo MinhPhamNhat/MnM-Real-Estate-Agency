@@ -18,13 +18,26 @@ router.post('/contact', async(req, res, next) => {
 });
 
 // POST: / => Save censor inform
-router.post('/censor',authenticate.adminAuthen , async(req, res, next) => {
+router.post('/censor',authenticate.adminAndStaffAuthen , async(req, res, next) => {
     var data = req.body
     if (!data.propertyId&&!data.propertyOwner){
         return res.status(404).json({code: -1})
     }
+    data.author = req.user._id
     var censor = await Inform.saveNewInform("censor",data)
     if (censor){
+        res.status(200).json({code: 0})
+    }else
+        res.status(404).json({code: -1})
+    
+});
+
+// POST: / => Save warn inform
+router.post('/warn',authenticate.adminAndStaffAuthen , async(req, res, next) => {
+    var data = req.body
+    data.author = req.user._id
+    var warn = await Inform.saveNewInform("warn",data)
+    if (warn){
         res.status(200).json({code: 0})
     }else
         res.status(404).json({code: -1})

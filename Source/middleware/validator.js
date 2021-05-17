@@ -39,4 +39,21 @@ module.exports = {
         ]
     },
 
+    updatePassword: () => {
+        return [
+            check("oldPassword").not().isEmpty().withMessage("Vui lòng nhập mật khẩu cũ"),
+            check("oldPassword").isLength({min: 6}).withMessage("Mật khẩu phải lớn hơn 6 ký tự"),
+            check("oldPassword").not().matches("[^A-Za-z0-9]").withMessage("Mật khẩu không được chứa ký tự đặc biệt"),
+            
+            check("newPassword").not().isEmpty().withMessage("Vui lòng nhập mật khẩu mới"),
+            check("newPassword").isLength({min: 6}).withMessage("Mật khẩu phải lớn hơn 6 ký tự"),
+            check("newPassword").not().matches("[^A-Za-z0-9]").withMessage("Mật khẩu không được chứa ký tự đặc biệt"),
+            
+            check("reNewPassword").not().isEmpty().withMessage("Vui lòng nhập lại mật khẩu"),
+            check("reNewPassword").custom((value, {req}) => {
+                return value===req.body.newPassword
+              }).withMessage("Mật khẩu nhập lại không khớp"),
+        ]
+    }
+
 }

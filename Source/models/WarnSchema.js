@@ -6,6 +6,10 @@ const warnSchema = mongoose.Schema({
         type: String, 
         require: true
     },
+    author: {
+        type: String, 
+        ref:'users'
+    },
     content: String,
     propertyId: {
         type: mongoose.Schema.Types.ObjectId, 

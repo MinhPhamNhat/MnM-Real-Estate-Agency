@@ -5,34 +5,39 @@ const Account = require('../repository/AccountRes')
 const Statistic = require('../repository/StatisticRes')
 const Property = require('../repository/PropertyRes')
 const authenticate = require('../middleware/authenticate')
-
+const validator = require('../middleware/validator')
+const {validationResult} = require('express-validator')
+const Censor = require('../models/CensorSchema')
 // GET: / => Get censor page
-router.get('/',authenticate.adminAuthen , async(req, res, next) => {
-    var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
-    res.render('dashboard', {route: '', numOfUncensorProp});
+router.get('/',authenticate.adminAndStaffAuthen , async(req, res, next) => {
+    if (req.user.role.admin)
+    res.redirect('/dashboard/user-management');
+    else
+    res.redirect('/dashboard/property-management');
 });
 
 router.get('/user-management',authenticate.adminAuthen, async(req, res, next)=>{
     var users = await User.findAllUserWith({'role.user': true})
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
-    res.render('dashboard', {users, route: "user-management", numOfUncensorProp});
+    res.render('dashboard', {user: req.user, users, route: "user-management", numOfUncensorProp});
 })
 
 router.get('/staff-management',authenticate.adminAuthen, async(req, res, next)=>{
+    var users = await User.findAllUserWith({'role.staff': true})
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
-    res.render('dashboard', {route: "staff-management", numOfUncensorProp});
+    res.render('dashboard', {user: req.user, route: "staff-management",users, numOfUncensorProp});
 })
 
-router.get('/uncensor-property',authenticate.adminAuthen, async(req, res, next)=>{
+router.get('/uncensor-property',authenticate.adminAndStaffAuthen, async(req, res, next)=>{
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
     var properties = await Property.getAllProperty({status: false, authen: false})
-    res.render('dashboard', {properties, route: "uncensor-property", numOfUncensorProp});
+    res.render('dashboard', {user: req.user, properties, route: "uncensor-property", numOfUncensorProp});
 })
 
-router.get('/property-management',authenticate.adminAuthen, async(req, res, next)=>{
+router.get('/property-management',authenticate.adminAndStaffAuthen, async(req, res, next)=>{
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
     var properties = await Property.getAllProperty({})
-    res.render('dashboard', {properties, route: "property-management", numOfUncensorProp});
+    res.render('dashboard', {user: req.user, properties, route: "property-management", numOfUncensorProp});
 })
 
 
@@ -48,7 +53,7 @@ router.delete('/account/:id', authenticate.adminAuthen, async(req, res, next) =>
 })
 
 // GET: /id => get user inform
-router.get('/account/:id', authenticate.adminAuthen, async (req, res, next)=>{
+router.get('/account/user/:id', authenticate.adminAuthen, async (req, res, next)=>{
     var userId = req.params.id
     try {
       var user = await User.findUserById(userId)
@@ -61,4 +66,41 @@ router.get('/account/:id', authenticate.adminAuthen, async (req, res, next)=>{
       return res.json({code: -2, message:"Cannot find user"})
     }
   })
+
+// GET: /id => get staff inform
+router.get('/account/staff/:id', authenticate.adminAuthen, async (req, res, next)=>{
+    var userId = req.params.id
+    try {
+      var user = await User.findUserById(userId)
+
+      if (user.code === 0){
+        var numOfCensor = await Censor.countDocuments({author: user.data._id})
+        return res.json({...user, numOfCensor})
+      }
+      return res.json(user)
+    }catch{
+      return res.json({code: -2, message:"Cannot find user"})
+    }
+  })
+
+router.post('/account/staff', validator.registerValidator(), async(req, res, next) => {
+    var validate = validationResult(req)
+    if (validate.errors.length) {
+        let errors = validate.mapped()
+        for (field in errors ){
+            return res.json({code: -3, err: errors[field], data: req.body})
+        }
+    } else {
+        return Account.createStaff(req.body)
+        .then(newAccount=>{
+            if (newAccount.code === 0){
+                return res.json( {code: 0, data: newAccount.data})
+            }else if (newAccount.code === -1){
+                return res.json( {code: -3, err: newAccount.err, data: req.body})
+            }
+        }).catch(err=> {
+                return res.json({code: -1, message:"Tạo tài khoản thất bại"})
+        })
+    }
+})
 module.exports = router

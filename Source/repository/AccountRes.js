@@ -44,6 +44,39 @@ module.exports = {
         }
     },
 
+    createStaff: async (payload) => {
+        var check = await User.find({ $or: [{ email: payload.email }, { username: payload.username }] }).exec()
+        if (check.length) {
+            for (err of check){
+                if (err.email === payload.email)
+                return {code: -1, err:{msg: "Email đã tồn tại", param:"email"}}
+                else if (err.username === payload.username)
+                return {code: -1, err:{msg: "Username đã tồn tại", param:"username"}}
+            }
+        }else{
+            var newAccount = await new Account({
+                username: payload.username,
+                password: payload.password
+            }).save()
+            if (newAccount){
+                var newStaff = await new User({
+                    accountId: newAccount._id,
+                    username: payload.username,
+                    name: payload.name,
+                    email: payload.email,
+                    position: payload.position,
+                    phone: '',
+                    role: {
+                        staff: true
+                    },
+                }).save()
+                return {code: 0, message:"Tạo tài khoản thành công", data: newStaff}
+            }else{
+                return {code: -1, message:"Đã xảy ra lỗi khi tạo tài khoản"}
+            }
+        }
+    },
+
     removeAccount: async(accountId) =>{
         return User.findOneAndDelete({accountId}).exec()
         .then(async userRes => {
@@ -58,6 +91,20 @@ module.exports = {
         .catch(err=>{
             return {code: -3, message: "Lỗi khi xoá tài khoản"}
         })
+    },
+    
+    updatePassword: async (accountId, oldPassword, newPassword) =>{
+        return await Account.findOneAndUpdate({ _id: accountId , password: oldPassword }, {password: newPassword}).exec()
+        .then(result => {
+            if (result){
+                return {code: 0}
+            }else{
+                return {code: -3}
+            }
+        }).catch(err => {
+            return {code:-1, err: err.msg}
+        })
     }
+
 
 }

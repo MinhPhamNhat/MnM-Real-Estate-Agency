@@ -1,11 +1,11 @@
 const Property = require('../models/PropertySchema')
 const CityRes = require('./CityRes')
 const DistrictRes = require('./DistrictRes')
-const Contact = require('../models/ContactSchema')
-const User = require('../models/UserSchema')
-const func = require('../function/function');
 const Inform = require('../models/InformationSchema')
 const Censor = require('../models/CensorSchema')
+const Contact = require('../models/ContactSchema')
+const Warn = require('../models/WarnSchema')
+const User = require('../models/UserSchema')
 
 const parseBaseProperty = async (property) => {
     var city = await CityRes.getCityById(property.location.cityId)
@@ -170,8 +170,8 @@ module.exports = {
             else
                 var oldProperty = await Property.findOneAndDelete({_id, authorId}).exec()
             if (oldProperty) {
+                await Warn.deleteMany({propertyId: oldProperty._id}).exec()
                 await Contact.deleteMany({propertyId: oldProperty._id}).exec()
-                await Censor.deleteMany({propertyId: oldProperty._id}).exec()
                 await Inform.deleteMany({propertyId: oldProperty._id}).exec()
                 return { code: 0, message: "Thành công"}
             } else {

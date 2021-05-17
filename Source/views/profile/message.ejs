@@ -1,0 +1,35 @@
+
+<h1>Thông báo</h1>
+<hr>
+<div class="contact-list">
+    <table>
+        <tr>
+            <th>
+                Tình trạng
+            </th>
+            <th>
+                Thời gian
+            </th>
+            <th>
+                Loại
+            </th>
+            <th>
+                Tin
+            </th>
+            <th></th>
+        </tr>
+        <%inform.forEach(value=>{%>
+            <tr class="inform-detail inform-<%=value._id%> <%= value.isRead?'':'new'%>" data-id=<%=value._id%>>
+                <td data-id=<%=value._id%>><%= value.isRead?'Đã xem':'Chưa xem' %></td>
+                <td data-id=<%=value._id%>><%= locals.shorterFormatForDateTime(value.date) %></td>
+                <td data-id=<%=value._id%>><%= value.type==='censor'?"Tin kiểm duyệt":value.type==='contact'?"Yêu cầu liên hệ":"Cảnh báo" %></td>
+                <%if(!value.propertyId){%>
+                    <td data-id=<%=value._id%> class="inform-title">Không có</td>
+                <%}else{%>
+                <td data-id=<%=value._id%> title="<%= value[value.type].propertyId.title %>" class="inform-title"><%= value[value.type].propertyId.title %></td>
+                <%}%>
+                <td class="delete-inform-btn"><a data-id=<%=value._id%> class="delete-inform"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+            </tr>
+        <%})%>
+    </table>
+</div>

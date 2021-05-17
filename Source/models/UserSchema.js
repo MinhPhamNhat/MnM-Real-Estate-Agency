@@ -23,6 +23,8 @@ const userSchema = mongoose.Schema({
         staff: Boolean,
         user: Boolean
     },
+    picture: String,
+    position: String,
 })
 
 module.exports = mongoose.model("users", userSchema)

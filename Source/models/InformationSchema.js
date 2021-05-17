@@ -9,7 +9,7 @@ const informationSchema = mongoose.Schema({
     type:  {
         type: String, 
         require: true,
-        enum: ["contact", "censor"],
+        enum: ["contact", "censor", "warn"],
     },
     propertyId:{
         type: mongoose.Schema.Types.ObjectId, 
@@ -22,6 +22,10 @@ const informationSchema = mongoose.Schema({
     censor: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'censors'
+    },
+    warn: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'warns'
     },
     isRead:  {
         type: Boolean, 

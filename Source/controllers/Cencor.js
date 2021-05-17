@@ -5,15 +5,6 @@ const Statistic = require('../repository/StatisticRes')
 const User = require('../repository/UserRes')
 const authenticate = require('../middleware/authenticate')
 
-// GET: / => Get censor page
-router.get('/',authenticate.adminAuthen , async(req, res, next) => {
-    var data = await Property.getBaseProperty({status: false, authen: false},0,undefined,{date:-1})
-    if (data.code==0)
-    res.status(200).render('admin', {data:data.data});
-    else
-    res.status(404).render('404')
-});
-
 // GET: /id => Get property that is uncencor
 router.get('/:id', async(req, res, next) => {
     var id = req.params.id
@@ -36,7 +27,6 @@ router.get('/:id', async(req, res, next) => {
         res.status(404).render("404")
     }
 })
-
 
 // POST: / => property require cencor to admin
 router.post('/', async(req, res, next) => {
