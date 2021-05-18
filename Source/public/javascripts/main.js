@@ -396,7 +396,7 @@ $(document).ready(() => {
                 $(".staff-password input").val('')
                 $(".staff-confirm-password input").val('')
                 $(".staff-list tbody").prepend(`
-                <tr class="user-row user-${staff.accountId}" onclick=getUserInfo(this) data-id="${staff.accountId}">
+                <tr class="user-row user-${staff.accountId}" onclick=getStaffInfo(this) data-id="${staff.accountId}">
                     <td>
                         ${staff.name}
                     </td>
