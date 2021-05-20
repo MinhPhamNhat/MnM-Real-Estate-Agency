@@ -179,8 +179,13 @@
               </div>
               
                 <% if(data.status){ %>
-                  <div class="contact-require" data-id="<%=data.author.accountId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
-                <% } %>
+                  <% if (locals.user) {%>
+                    <% if (!(data.author.accountId===locals.user.accountId)){%>
+                      <div class="contact-require" data-id="<%=data.author.accountId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
+                    <%}%>
+                  <%} else{%>
+                    <div class="contact-require" data-id="<%=data.author.accountId%>"  data-property="<%=data._id%>" >Yêu cầu liên hệ lại</div>
+                <% }} %>
             </div>
               <!-- Start Single properties sidebar -->
             <% if(authorProperty.length) {%>

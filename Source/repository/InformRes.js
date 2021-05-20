@@ -116,14 +116,14 @@ module.exports = {
                 path: 'contact',
                 populate: {
                     path: 'propertyId',
-                    select: 'title _id'
+                    select: 'title _id status'
                 }
             })
             .populate({
                 path: 'censor',
                 populate: [{
                     path: 'propertyId',
-                    select: 'title   _id'
+                    select: 'title  _id status'
                 },{
                     path: 'author',
                     select: 'name role'
@@ -133,7 +133,7 @@ module.exports = {
                 path: 'warn',
                 populate: [{
                     path: 'propertyId',
-                    select: 'title   _id'
+                    select: 'title  _id status'
                 },{
                     path: 'author',
                     select: 'name role'

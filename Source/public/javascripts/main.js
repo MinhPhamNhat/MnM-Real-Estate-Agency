@@ -239,7 +239,7 @@ $(document).ready(() => {
                     }
                     $(".modal-date-censor").text(formatDateTime(new Date(inform.date)))
                     $(".modal-title-censor a").text(inform.propertyId.title)
-                    $(".modal-title-censor a").attr("href", `/${inform.isApproved?'property':'censor'}/${inform.propertyId._id}`)
+                    $(".modal-title-censor a").attr("href", `/${inform.propertyId.status?'property':'censor'}/${inform.propertyId._id}`)
                     $(".censor-modal").modal("show")
                 } else{
                     $(".modal-name-warn").text(inform.author.name)
@@ -252,7 +252,8 @@ $(document).ready(() => {
                     if (inform.propertyId){
                         $(".asdasdasd").show()
                         $(".modal-title-warn a").text(inform.propertyId.title)
-                        $(".modal-title-warn a").attr("href", `/${inform.isApproved?'property':'censor'}/${inform.propertyId._id}`)
+                        console.log(inform.propertyId)
+                        $(".modal-title-warn a").attr("href", `/${inform.propertyId.status?'property':'censor'}/${inform.propertyId._id}`)
                     }else{
                         $(".asdasdasd").hide()
                         $(".modal-title-warn a").text('')
