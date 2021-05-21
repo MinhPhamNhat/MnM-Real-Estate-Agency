@@ -54,6 +54,18 @@
             <!-- Start properties content body -->
             <div class="properties-content-body">
               <ul class="properties-nav">
+              <%if(!data.length){%>
+                <div class="error-template">
+                    <img src="/images/shortcut.png" class="error-background">
+                    <h1>
+                        Oops!</h1>
+                    <h2>
+                        Không có bất động sản nào</h2>
+                    <div class="error-actions">
+                        <a href="/" class="btn btn-primary btn-lg">Trang chủ</a>
+                    </div>
+                </div>
+              <%}else{%>
                 <% data.forEach(value=>{%>
                   <li>
                     <article class="properties-item item-<%=value._id%>">
@@ -115,6 +127,7 @@
                     </article>
                   </li>
                 <%})%>
+              <%}%>
               </ul>
             </div>
             <!-- Start properties content bottom -->

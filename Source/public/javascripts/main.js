@@ -738,7 +738,7 @@ var swiper = new Swiper('.swiper-container', {
     
     var container = $(".properties-nav")
     container.find("li").remove()
-
+    container.find(".error-template").remove()
     var tag = `
     <li>
       <article class="properties-item">
@@ -777,6 +777,7 @@ var swiper = new Swiper('.swiper-container', {
     fetch(`/property/search?${new URLSearchParams(formData)}`, {method: "GET",headers:{'Content-Type': 'application/json'}, }).then(data=>data.json())
     .then(result=>{
         container.find("li").remove()
+        container.find(".error-template").remove()
         var data = result.data
         var userId = result.userId
         var isAdmin = result.isAdmin
@@ -788,63 +789,79 @@ var swiper = new Swiper('.swiper-container', {
         })
         $(".pagination .previous-page a").attr("onclick", `searchData(${pageRange[0]})`)
         $(".pagination .next-page a").attr("onclick", `searchData(${pageRange[pageRange.length - 1]})`)
-        data.forEach(value=> {
-            var tag;
-            if (userId){
-                if (userId === value.author.accountId){
-                    tag = `<div class="property-btn option-${value._id}" onclick=toggleOption(this) data-id="${value._id}">
-                                <img src="/images/option.png">
-                                <div class="option-btn">
-                                    <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
-                                    <div class="edit-property-btn" data-id="${value._id}">Thay đổi tin</div>
+        if (data.length){
+            data.forEach(value=> {
+                var tag;
+                if (userId){
+                    if (userId === value.author.accountId){
+                        tag = `<div class="property-btn option-${value._id}" onclick=toggleOption(this) data-id="${value._id}">
+                                    <img src="/images/option.png">
+                                    <div class="option-btn">
+                                        <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
+                                        <div class="edit-property-btn" data-id="${value._id}">Thay đổi tin</div>
+                                    </div>
                                 </div>
-                            </div>
-                            `
-                }else if (isAdmin){
-                    tag = `<div class="property-btn option-${value._id}" onclick=toggleOption(this) data-id="${value._id}">
-                                <img src="/images/option.png">
-                                <div class="option-btn">
-                                    <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
+                                `
+                    }else if (isAdmin){
+                        tag = `<div class="property-btn option-${value._id}" onclick=toggleOption(this) data-id="${value._id}">
+                                    <img src="/images/option.png">
+                                    <div class="option-btn">
+                                        <div class="delete-property-btn" data-id="${value._id}">Xoá tin</div>
+                                    </div>
                                 </div>
-                            </div>
-                            `
+                                `
+                    }
                 }
-            }
+                container.append(`
+                    <li>
+                        <article class="properties-item item-${value._id}">
+                        <a href="/property/${value._id}" class="properties-item-img">
+                            <img src="${value.thumbnail||"/images/no-image.png"}" alt="img">
+                        </a>
+                        ${tag||''}
+                        <div class="tag for-${value.isSale ? "sale":"rent"}">
+                            ${ value.isSale?"Bán":"Cho Thuê" }
+                        </div>
+                        <div class="properties-item-content">
+                            <div class="properties-info">
+                            ${value.features.rooms?`<span>${value.features.rooms} Phòng</span>`:''}
+                            ${value.features.bathrooms?`<span>${value.features.bathrooms} Phòng vệ sinh</span>`:''}
+                            ${value.features.bedrooms?`<span>${value.features.bedrooms} Phòng ngủ</span>`:''}
+                            ${value.features.floors?`<span>${value.features.floors} Tầng</span>`:''}
+                            </div>
+                            <div class="properties-about">
+                                <h3>
+                                    <a href="/property/${value._id}" title="${ value.title }">
+                                        ${ value.title }
+                                    </a>
+                                </h3>
+                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> ${ value.location.district.name }, ${ value.location.city.name }</p>
+                            </div>
+                            <div class="properties-detial">
+                                <span class="price">
+                                        <strong>${ value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")}${ value.isSale?"":" / tháng"}</strong><span class="dot">·</span><strong>${ value.area} m²</strong>
+                                </span>
+                                <a href="/property/${value._id}" class="btn" ${ value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` }> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </article>
+                </li>`)
+            })
+        }else{
             container.append(`
-                <li>
-                    <article class="properties-item item-${value._id}">
-                    <a href="/property/${value._id}" class="properties-item-img">
-                        <img src="${value.thumbnail||"/images/no-image.png"}" alt="img">
-                    </a>
-                    ${tag||''}
-                    <div class="tag for-${value.isSale ? "sale":"rent"}">
-                        ${ value.isSale?"Bán":"Cho Thuê" }
+                <div class="error-template">
+                    <img src="/images/shortcut.png" class="error-background">
+                    <h1>
+                        Oops!</h1>
+                    <h2>
+                        Không có bất động sản nào</h2>
+                    <div class="error-actions">
+                        <a href="/" class="btn btn-primary btn-lg">Trang chủ</a>
                     </div>
-                    <div class="properties-item-content">
-                        <div class="properties-info">
-                        ${value.features.rooms?`<span>${value.features.rooms} Phòng</span>`:''}
-                        ${value.features.bathrooms?`<span>${value.features.bathrooms} Phòng vệ sinh</span>`:''}
-                        ${value.features.bedrooms?`<span>${value.features.bedrooms} Phòng ngủ</span>`:''}
-                        ${value.features.floors?`<span>${value.features.floors} Tầng</span>`:''}
-                        </div>
-                        <div class="properties-about">
-                            <h3>
-                                <a href="/property/${value._id}" title="${ value.title }">
-                                    ${ value.title }
-                                </a>
-                            </h3>
-                            <p><i class="fa fa-map-marker" aria-hidden="true"></i> ${ value.location.district.name }, ${ value.location.city.name }</p>
-                        </div>
-                        <div class="properties-detial">
-                            <span class="price">
-                                    <strong>${ value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")}${ value.isSale?"":" / tháng"}</strong><span class="dot">·</span><strong>${ value.area} m²</strong>
-                            </span>
-                            <a href="/property/${value._id}" class="btn" ${ value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` }> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </article>
-            </li>`)
-        })
+                </div>
+            `)
+            
+        }
     })
   }
 
