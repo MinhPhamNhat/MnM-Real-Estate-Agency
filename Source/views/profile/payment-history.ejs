@@ -1,5 +1,5 @@
 
-<h1>Thông báo</h1>
+<h1>Lịch sử nạp tiền</h1>
 <hr>
 <div class="contact-list">
     <table>
@@ -14,6 +14,9 @@
                 Mã seri
             </th>
             <th>
+                Mệnh giá
+            </th>
+            <th>
                 Tình trạng
             </th>
             <th>
@@ -23,13 +26,16 @@
         <%payments.forEach(value=>{%>
             <tr>
                 <td>
-                        <%=value.cardType%>
+                    <%=value.cardType%>
                 </td>
                 <td>
-                        <%=value.code%>
+                    <%=value.code%>
                 </td>
                 <td>
                     <%=value.seri%>
+                </td>
+                <td>
+                    <%=value.denom?(value.denom+".000 VNĐ"):" VNĐ"%>
                 </td>
                 <td>
                     <%=value.status&&value.isAproved?"Nạp thành công":!value.isAproved&&value.status?"Đang chờ xử lý":"Nạp thất bại"%>

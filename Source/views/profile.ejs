@@ -58,7 +58,7 @@
                                     <%}else{%>
                                         <% if (locals.user){%>
                                             <% if (locals.user.accountId === profile.accountId){%>
-                                        <div>Số dư tài khoản: <%=profile.balance+".000"%> VNĐ</div>
+                                        <div>Số dư tài khoản: <%=profile.balance?(profile.balance+".000 VNĐ"):"0 VNĐ"%></div>
                                         <%}}%>
                                     <%}%>
                                 </div>
