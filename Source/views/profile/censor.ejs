@@ -20,87 +20,100 @@
     <!-- Start properties content body -->
     <div class="properties-content-body">
         <ul class="properties-nav">
-        <% data.forEach(value=>{%>
-            <li>
-            <article class="properties-item item-<%=value._id%>">
-                <a href="/censor/<%=value._id%>" class="properties-item-img">
-                    <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
-                </a>
-                <% if (locals.user){%>
-                    <% if(locals.user.accountId===value.authorId){%>
-                        <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
-                            <img src="/images/option.png">
-                            <div class="option-btn">
-                                <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
-                                <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
+        <%if (!data.length) {%>
+            <div class="error-template">
+                <img src="/images/shortcut.png" class="error-background">
+                <h1>
+                    Oops!</h1>
+                <h2>
+                    Không có bất động sản nào</h2>
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary btn-lg">Trang chủ</a>
+                </div>
+            </div>
+        <%}else{%>
+            <% data.forEach(value=>{%>
+                <li>
+                <article class="properties-item item-<%=value._id%>">
+                    <a href="/censor/<%=value._id%>" class="properties-item-img">
+                        <img src="<%=value.thumbnail||"/images/no-image.png"%>" alt="img">
+                    </a>
+                    <% if (locals.user){%>
+                        <% if(locals.user.accountId===value.authorId){%>
+                            <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
+                                <img src="/images/option.png">
+                                <div class="option-btn">
+                                    <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
+                                    <div class="edit-property-btn" data-id="<%=value._id%>">Thay đổi tin</div>
+                                </div>
                             </div>
-                        </div>
-                    <%}else if(user.role.admin||user.role.staff) {%>
-                        <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
-                            <img src="/images/option.png">
-                            <div class="option-btn">
-                                <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
+                        <%}else if(user.role.admin||user.role.staff) {%>
+                            <div class="property-btn option-<%=value._id%>" onclick=toggleOption(this) data-id="<%=value._id%>">
+                                <img src="/images/option.png">
+                                <div class="option-btn">
+                                    <div class="delete-property-btn" data-id="<%=value._id%>">Xoá tin</div>
+                                </div>
                             </div>
-                        </div>
+                        <%}%>
                     <%}%>
-                <%}%>
-                
-                <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
-                    <%= value.isSale?"Bán":"Cho Thuê" %>
-                </div>
-                <div class="properties-item-content">
-                    <div class="properties-info">
-                        <% if (value.features.rooms) {%>
-                            <span><%=value.features.rooms%> Phòng</span>
-                        <%}%>
-                        <% if (value.features.bathrooms) {%>
-                            <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
-                        <%}%>
-                        <% if (value.features.bedrooms) {%>
-                            <span><%=value.features.bedrooms%> Phòng ngủ</span>
-                        <%}%>
-                        <% if (value.features.floors) {%>
-                            <span><%=value.features.floors%> Tầng</span>
-                        <%}%>
+                    
+                    <div class="tag for-<%=value.isSale ? "sale":"rent"%>">
+                        <%= value.isSale?"Bán":"Cho Thuê" %>
                     </div>
-                    <div class="properties-about">
-                        <h3>
-                            <a href="/censor/<%=value._id%>" title="<%= value.title %>">
-                                <%= value.title %>
-                            </a>
-                        </h3>
-                        <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district.name %>, <%= value.location.city.name %></p>
+                    <div class="properties-item-content">
+                        <div class="properties-info">
+                            <% if (value.features.rooms) {%>
+                                <span><%=value.features.rooms%> Phòng</span>
+                            <%}%>
+                            <% if (value.features.bathrooms) {%>
+                                <span><%=value.features.bathrooms%> Phòng vệ sinh</span>
+                            <%}%>
+                            <% if (value.features.bedrooms) {%>
+                                <span><%=value.features.bedrooms%> Phòng ngủ</span>
+                            <%}%>
+                            <% if (value.features.floors) {%>
+                                <span><%=value.features.floors%> Tầng</span>
+                            <%}%>
+                        </div>
+                        <div class="properties-about">
+                            <h3>
+                                <a href="/censor/<%=value._id%>" title="<%= value.title %>">
+                                    <%= value.title %>
+                                </a>
+                            </h3>
+                            <p><i class="fa fa-map-marker" aria-hidden="true"></i> <%= value.location.district.name %>, <%= value.location.city.name %></p>
+                        </div>
+                        <div class="properties-detial">
+                            <span class="price">
+                                    <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
+                            </span>
+                            <a href="/censor/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                        </div>
                     </div>
-                    <div class="properties-detial">
-                        <span class="price">
-                                <strong><%= value.price===0?"Giá thoả thuận":value.price<1000?(value.price.toString()+" triệu"):(Number(locals.getFlooredFixed(value.price / 1000, 2)).toString() + " tỷ")%><%= value.isSale?"":" / tháng"%></strong><span class="dot">·</span><strong><%= value.area%> m²</strong>
-                        </span>
-                        <a href="/censor/<%=value._id%>" class="btn" <%= value.isSale?`style=background-color:darkviolet;color:white`:`style=background-color:darkgoldenrod;color:white` %>> Xem chi tiết <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </article>
-            </li>
-        <%})%>
+                </article>
+                </li>
+            <%})%>
+        <%}%>
         </ul>
     </div>
     <!-- Start properties content bottom -->
     <div class="properties-content-bottom">
-        <nav>
-            <ul class="pagination">
-            <li class="previous-page" >
-                <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-                <% pageRange.forEach(value=>{%>
-                <li class="pagination-<%=value%> <%= page===value?'active':'' %>"><a onclick=searchData(<%=value%>)><%=value%></a></li>
-                <%})%>
-            <li class="next-page">
-                <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-            </ul>
-        </nav>
+            <nav>
+                <ul class="pagination">
+                <li class="previous-page" >
+                    <a onclick=searchData(<%=pageRange[0]%>) aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                    <% pageRange.forEach(value=>{%>
+                        <li class="pagination-<%=value%> <%= page===value?'active':'' %>"><a onclick=searchData(<%=value%>)><%=value%></a></li>
+                    <%})%>
+                <li class="next-page">
+                    <a onclick=searchData(<%=pageRange[pageRange.length-1]%>)  aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                </ul>
+            </nav>
     </div>
 </div>
