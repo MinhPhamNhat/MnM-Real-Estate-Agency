@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('partial/head', {title: "Trang cá nhân"}) -%>
-    <body <%- locals.requireInformation?requireInformation?`onload='showToast("Đăng tin", "Vui lòng cập nhật số điện thoại để có thể đăng tin", "warning")'`:"":"" -%>>
+    <body <%- locals.requireInformation?requireInformation?`onload='showToast("Đăng tin", "${requireInformation}", "warning")'`:"":"" -%>>
         <!-- Pre Loader -->
         <div id="preloader-area">
             <div class="pulse"></div>
@@ -55,8 +55,12 @@
                                         <span class="admin">Admin</span>
                                     <% }else if(profile.role.staff){%>
                                         <span class="staff">Kiểm duyệt viên</span>
+                                    <%}else{%>
+                                        <% if (locals.user){%>
+                                            <% if (locals.user.accountId === profile.accountId){%>
+                                        <div>Số dư tài khoản: <%=profile.balance+".000"%> VNĐ</div>
+                                        <%}}%>
                                     <%}%>
-                                    
                                 </div>
                                 <hr>
                                 <nav class="side-menu">
@@ -73,6 +77,8 @@
                                                     <%}%>
                                                     <% if (!(profile.role.admin || profile.role.staff)){%>
                                                         <li><a href="/profile/censor"><span class="fa fa-calendar"></span> Chờ kiểm duyệt</a></li>
+                                                        <li><a href="/profile/payment"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nạp tiền</a></li>
+                                                        <li><a href="/profile/payment-history"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Lịch sử nạp tiền</a></li>
                                                     <%}%>
                                                     <li><a href="/profile/change-password"><span class="fa fa-cog"></span> Đổi mật khẩu</a></li>
                                             <%}}%>
@@ -88,6 +94,8 @@
                                                     <%}%>
                                                     <% if (!(profile.role.admin || profile.role.staff)){%>
                                                         <li><a href="/profile/censor"><span class="fa fa-calendar"></span> Chờ kiểm duyệt</a></li>
+                                                        <li><a href="/profile/payment"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nạp tiền</a></li>
+                                                        <li><a href="/profile/payment-history"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Lịch sử nạp tiền</a></li>
                                                     <%}%>
                                                     <li><a href="/profile/change-password"><span class="fa fa-cog"></span> Đổi mật khẩu</a></li>
                                             <%}}%>
@@ -103,7 +111,8 @@
                                                     <%}%>
                                                     <% if (!(profile.role.admin || profile.role.staff)){%>
                                                         <li class="active"><a href="/profile/censor"><span class="fa fa-calendar"></span> Chờ kiểm duyệt</a></li>
-                                                    
+                                                        <li><a href="/profile/payment"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nạp tiền</a></li>
+                                                        <li><a href="/profile/payment-history"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Lịch sử nạp tiền</a></li>
                                                     <%}%>
                                                     <li><a href="/profile/change-password"><span class="fa fa-cog"></span> Đổi mật khẩu</a></li>
                                             <%}}%>
@@ -120,6 +129,8 @@
                                                     <%}%>
                                                     <% if (!(profile.role.admin || profile.role.staff)){%>
                                                         <li><a href="/profile/censor"><span class="fa fa-calendar"></span> Chờ kiểm duyệt</a></li>
+                                                        <li><a href="/profile/payment"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nạp tiền</a></li>
+                                                        <li><a href="/profile/payment-history"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Lịch sử nạp tiền</a></li>
                                                     <%}%>
                                                     <li><a href="/profile/change-password"><span class="fa fa-cog"></span> Đổi mật khẩu</a></li>
                                             <%}}%>
@@ -136,10 +147,48 @@
                                                         <%}%>
                                                         <% if (!(profile.role.admin || profile.role.staff)){%>
                                                             <li><a href="/profile/censor"><span class="fa fa-calendar"></span> Chờ kiểm duyệt</a></li>
+                                                            <li><a href="/profile/payment"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nạp tiền</a></li>
+                                                            <li><a href="/profile/payment-history"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Lịch sử nạp tiền</a></li>
                                                         <%}%>
                                                         <li class="active"><a href="/profile/change-password"><span class="fa fa-cog"></span> Đổi mật khẩu</a></li>
                                                 <%}}%>
-                                            <%}%>
+                                            <%} else if(route === "payment") {%>
+                                                    <li><a href="/profile/<%= profile.accountId %>"><span class="fa fa-user"></span> Thông tin</a></li>
+                                                    
+                                                    <% if (!(profile.role.admin || profile.role.staff)){%>
+                                                    <li><a href="/profile/property/<%= profile.accountId %>"><span class="fa fa-home"></span> Bất động sản</a></li>
+                                                    <%}%>
+                                                    <% if (locals.user){%>
+                                                        <% if (locals.user.accountId === profile.accountId){%>
+                                                            <% if (!(profile.role.admin)){ %>
+                                                                <li><a href="/profile/inform"><span class="fa fa-envelope"></span> Thông báo <span class="badge badge-pill badge-danger"><%=numOfUnreadInform||''%></span></a></li>
+                                                            <%}%>
+                                                            <% if (!(profile.role.admin || profile.role.staff)){%>
+                                                                <li><a href="/profile/censor"><span class="fa fa-calendar"></span> Chờ kiểm duyệt</a></li>
+                                                                <li class="active"><a href="/profile/payment"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nạp tiền</a></li>
+                                                                <li><a href="/profile/payment-history"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Lịch sử nạp tiền</a></li>
+                                                            <%}%>
+                                                            <li><a href="/profile/change-password"><span class="fa fa-cog"></span> Đổi mật khẩu</a></li>
+                                                    <%}}%>
+                                                <%} else if(route === "payment-history") {%>
+                                                    <li><a href="/profile/<%= profile.accountId %>"><span class="fa fa-user"></span> Thông tin</a></li>
+                                                    
+                                                    <% if (!(profile.role.admin || profile.role.staff)){%>
+                                                    <li><a href="/profile/property/<%= profile.accountId %>"><span class="fa fa-home"></span> Bất động sản</a></li>
+                                                    <%}%>
+                                                    <% if (locals.user){%>
+                                                        <% if (locals.user.accountId === profile.accountId){%>
+                                                            <% if (!(profile.role.admin)){ %>
+                                                                <li><a href="/profile/inform"><span class="fa fa-envelope"></span> Thông báo <span class="badge badge-pill badge-danger"><%=numOfUnreadInform||''%></span></a></li>
+                                                            <%}%>
+                                                            <% if (!(profile.role.admin || profile.role.staff)){%>
+                                                                <li><a href="/profile/censor"><span class="fa fa-calendar"></span> Chờ kiểm duyệt</a></li>
+                                                                <li><a href="/profile/payment"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Nạp tiền</a></li>
+                                                                <li class="active"><a href="/profile/payment-history"><i class="fa fa-credit-card-alt" aria-hidden="true"></i>Lịch sử nạp tiền</a></li>
+                                                            <%}%>
+                                                            <li><a href="/profile/change-password"><span class="fa fa-cog"></span> Đổi mật khẩu</a></li>
+                                                    <%}}%>
+                                                <%}%>
                                     </ul>
                                 </nav>
                             </div>
@@ -155,6 +204,10 @@
                                 <%-include('profile/infor')-%>
                             <%} else if(route === "change-password") {%>
                                 <%-include('profile/change-password')-%>
+                            <%} else if(route === "payment") {%>
+                                <%-include('profile/pay')-%>
+                            <%} else if(route === "payment-history") {%>
+                                <%-include('profile/payment-history')-%>
                             <%}%>
                         </div>
                     </div>

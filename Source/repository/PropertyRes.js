@@ -93,7 +93,7 @@ module.exports = {
     },
     getAllProperty: async(query) =>{
         return await Property.find(query)
-        .sort({date: -1}).exec()
+        .sort({date: 1}).exec()
         .then(async properties=>{
             var data = properties.map(value=> {
                 return parseBaseProperty(value)

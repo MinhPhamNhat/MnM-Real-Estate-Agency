@@ -1,0 +1,43 @@
+
+<h1>Thông báo</h1>
+<hr>
+<div class="contact-list">
+    <table>
+        <tr>
+            <th>
+                Loại thẻ
+            </th>
+            <th>
+                Mã thẻ
+            </th>
+            <th>
+                Mã seri
+            </th>
+            <th>
+                Tình trạng
+            </th>
+            <th>
+                Thời gian
+            </th>
+        </tr>
+        <%payments.forEach(value=>{%>
+            <tr>
+                <td>
+                        <%=value.cardType%>
+                </td>
+                <td>
+                        <%=value.code%>
+                </td>
+                <td>
+                    <%=value.seri%>
+                </td>
+                <td>
+                    <%=value.status&&value.isAproved?"Nạp thành công":!value.isAproved&&value.status?"Đang chờ xử lý":"Nạp thất bại"%>
+                </td>
+                <td>
+                    <%=locals.shorterFormatForDateTime(value.date)%>
+                </td>
+            </tr>
+        <%})%>
+    </table>
+</div>

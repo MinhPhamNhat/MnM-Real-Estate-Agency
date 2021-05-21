@@ -12,7 +12,7 @@ router.get('/:id', async(req, res, next) => {
         var data = await Property.getProperty({_id: id, status:false})
         if (data.code===0){
             var author = await User.findUserById(data.data.authorId)
-            var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId, status:true},0,3,{date: -1})
+            var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId, status:true},0,3,{date: 1})
             var numOfDoc = await Statistic.getNumberOfProperty({authorId: data.data.authorId, status:true})
             res.status(200).render('detail', {
                 data: data.data, 

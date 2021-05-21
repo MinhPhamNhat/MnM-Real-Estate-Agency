@@ -32,6 +32,7 @@ module.exports = {
                     username: payload.username,
                     name: payload.name,
                     email: payload.email,
+                    balance: 0,
                     phone: '',
                     role: {
                         user: true

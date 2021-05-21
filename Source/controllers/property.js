@@ -18,9 +18,15 @@ const User = require('../repository/UserRes');
 router.get('/add-property',authenticate.authen,async (req, res, next) => {
     var user = await User.findUserById(req.user.accountId)
     if (user.data.phone)
-        res.status(200).render('add-property', {type: false})
+        if (user.data.balance < 100){
+            req.flash('requireInformation',"Vui lòng nạp thên tiền để có thể đăng hoặc sửa tin bất động sản")
+            res.redirect(`/profile/payment`)
+        }else{
+            
+            res.status(200).render('add-property', {type: false})
+        }
     else{
-        req.flash('requireInformation',true)
+        req.flash('requireInformation',"Vui lòng cập nhập số điện thoại của bạn để có thể đăng tin bất động sản")
         res.redirect(`/profile/${user.data.accountId}`)
     }
 })
@@ -86,9 +92,9 @@ router.get('/:id', async(req, res, next) => {
                 'location.cityId': data.data.location.city.id, 
                 'location.districtId': data.data.location.district.id,
                 status: true
-            }, 0, undefined, {date: -1})
+            }, 0, undefined, {date: 1})
             var author = await User.findUserById(data.data.authorId)
-            var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId, status: true},0,3,{date: -1})
+            var authorProperty = await Property.getBaseProperty({authorId: data.data.authorId, status: true},0,3,{date: 1})
             var numOfDoc = await Statistic.getNumberOfProperty({authorId: data.data.authorId, status: true})
             res.status(200).render('detail', {
                 data: data.data, 

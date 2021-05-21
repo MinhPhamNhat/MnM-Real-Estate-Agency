@@ -4,6 +4,7 @@ const User = require('../repository/UserRes')
 const Account = require('../repository/AccountRes')
 const Statistic = require('../repository/StatisticRes')
 const Property = require('../repository/PropertyRes')
+const Payment = require('../repository/PaymentRes')
 const authenticate = require('../middleware/authenticate')
 const validator = require('../middleware/validator')
 const {validationResult} = require('express-validator')
@@ -19,28 +20,50 @@ router.get('/',authenticate.adminAndStaffAuthen , async(req, res, next) => {
 router.get('/user-management',authenticate.adminAuthen, async(req, res, next)=>{
     var users = await User.findAllUserWith({'role.user': true})
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
-    res.render('dashboard', {user: req.user, users, route: "user-management", numOfUncensorProp});
+    var numOfPayment = await Statistic.getNumOfPayment({isAproved: true, status: true})
+    var numOfUnauthenPayment = await Statistic.getNumOfPayment({isAproved: false, status: true})
+    res.render('dashboard', {user: req.user, users, route: "user-management", numOfUncensorProp, numOfPayment, numOfUnauthenPayment});
 })
 
 router.get('/staff-management',authenticate.adminAuthen, async(req, res, next)=>{
     var users = await User.findAllUserWith({'role.staff': true})
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
-    res.render('dashboard', {user: req.user, route: "staff-management",users, numOfUncensorProp});
+    var numOfPayment = await Statistic.getNumOfPayment({isAproved: true, status: true})
+    var numOfUnauthenPayment = await Statistic.getNumOfPayment({isAproved: false, status: true})
+    res.render('dashboard', {user: req.user, route: "staff-management",users, numOfUncensorProp, numOfPayment, numOfUnauthenPayment});
 })
 
 router.get('/uncensor-property',authenticate.adminAndStaffAuthen, async(req, res, next)=>{
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
     var properties = await Property.getAllProperty({status: false, authen: false})
-    res.render('dashboard', {user: req.user, properties, route: "uncensor-property", numOfUncensorProp});
+    var numOfPayment = await Statistic.getNumOfPayment({isAproved: true, status: true})
+    var numOfUnauthenPayment = await Statistic.getNumOfPayment({isAproved: false, status: true})
+    res.render('dashboard', {user: req.user, properties, route: "uncensor-property", numOfUncensorProp, numOfPayment, numOfUnauthenPayment});
 })
 
 router.get('/property-management',authenticate.adminAndStaffAuthen, async(req, res, next)=>{
     var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
     var properties = await Property.getAllProperty({})
-    res.render('dashboard', {user: req.user, properties, route: "property-management", numOfUncensorProp});
+    var numOfPayment = await Statistic.getNumOfPayment({isAproved: true, status: true})
+    var numOfUnauthenPayment = await Statistic.getNumOfPayment({isAproved: false, status: true})
+    res.render('dashboard', {user: req.user, properties, route: "property-management", numOfUncensorProp, numOfPayment, numOfUnauthenPayment});
 })
 
+router.get('/pay-history',authenticate.adminAndStaffAuthen, async(req, res, next)=>{
+    var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
+    var payments = await Payment.getPayment({})
+    var numOfPayment = await Statistic.getNumOfPayment({isAproved: true, status: true})
+    var numOfUnauthenPayment = await Statistic.getNumOfPayment({isAproved: false, status: true})
+    res.render('dashboard', {user: req.user, payments, route: "pay-history", numOfUncensorProp, numOfPayment, numOfUnauthenPayment});
+})
 
+router.get('/pay-require',authenticate.adminAndStaffAuthen, async(req, res, next)=>{
+    var numOfUncensorProp = await Statistic.getNumberOfProperty({status: false, authen: false})
+    var payments = await Payment.getPayment({isAproved: false, status: true})
+    var numOfPayment = await Statistic.getNumOfPayment({isAproved: true, status: true})
+    var numOfUnauthenPayment = await Statistic.getNumOfPayment({isAproved: false, status: true})
+    res.render('dashboard', {user: req.user, payments, route: "pay-require", numOfUncensorProp, numOfPayment, numOfUnauthenPayment});
+})
 // DELETE: /id => delete user
 router.delete('/account/:id', authenticate.adminAuthen, async(req, res, next) => {
     var accountId = req.params.id

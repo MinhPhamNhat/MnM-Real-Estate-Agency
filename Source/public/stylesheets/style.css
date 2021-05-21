@@ -4225,7 +4225,8 @@ input::-webkit-inner-spin-button {
 
 .contact-modal td,
 .censor-modal td,
-.warn-modal td{
+.warn-modal td,
+.payment-modal td{
     padding: 10px;
 }
 
@@ -5095,4 +5096,48 @@ e-password{
 .error-template .error-background{
     background-image: url('/images/shortcut.png');
     width: 200px;
+}
+
+.paypick{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pay-seri{
+    display: flex;
+}
+
+.pay-seri div{
+    margin-top: 20px;
+    
+    margin-right: 20px;
+}
+
+.pay-denominations{
+    margin-top: 40px;
+}
+
+.paysubmit{
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #054153;
+    border: none;
+    color: white;
+    border-radius: 10px;
+}
+
+.accept{
+    padding: 10px;
+    background-color: #016920;
+    border: none;
+    color: white;
+    border-radius: 10px;
+}
+.declide{
+    padding: 10px;
+    background-color: #690101;
+    border: none;
+    color: white;
+    border-radius: 10px;
 }

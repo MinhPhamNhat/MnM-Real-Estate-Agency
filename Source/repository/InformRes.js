@@ -2,6 +2,7 @@ const Inform = require("../models/InformationSchema")
 const Contact = require("../repository/ContactRes")
 const Censor = require("../repository/CensorRes")
 const Warn = require("../repository/WarnRes")
+const User = require("../models/UserSchema")
 const Property = require("../models/PropertySchema")
 const mongoose = require("mongoose")
 module.exports = {
@@ -35,6 +36,9 @@ module.exports = {
                                     property.status = false
                                     property.save()
                                 } else {
+                                    var user = await User.findOne({accountId: property.authorId}).exec()
+                                    user.balance -= 100
+                                    user.save()
                                     property.authen = true
                                     property.status = true
                                     property.save()
@@ -138,6 +142,13 @@ module.exports = {
                     path: 'author',
                     select: 'name role'
                 }]
+            })
+            .populate({
+                path: 'payment',
+                populate: {
+                    path: 'author',
+                    select: 'name role'
+                }
             }).exec()
         inform.isRead = true
         inform.save()
@@ -168,6 +179,13 @@ module.exports = {
                 populate: {
                     path: 'propertyId',
                     select: 'title _id'
+                }
+            })
+            .populate({
+                path: 'payment',
+                populate: {
+                    path: 'author',
+                    select: 'name role'
                 }
             }).sort({ date: -1 }).exec()
         if (inform) {

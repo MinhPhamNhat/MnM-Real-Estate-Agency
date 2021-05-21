@@ -25,6 +25,7 @@ const userSchema = mongoose.Schema({
     },
     picture: String,
     position: String,
+    balance: Number,
 })
 
 module.exports = mongoose.model("users", userSchema)

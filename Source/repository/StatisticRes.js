@@ -4,7 +4,7 @@ const District = require("../models/DistrictSchema")
 const Property = require("../models/PropertySchema")
 const Contact = require("../models/ContactSchema");
 const Inform = require("../models/InformationSchema");
-
+const Payment = require("../models/PaymentShcema")
 module.exports = {
     getMinMaxRange: async () => {
         var _temp = await Property.aggregate([{
@@ -33,5 +33,9 @@ module.exports = {
         Object.keys(query).forEach(key => query[key] === undefined && delete query[key])
         return await Inform.countDocuments(query).exec()
     },
+
+    getNumOfPayment: async(query)=>{
+        return await Payment.countDocuments(query).exec()
+    }
 
 }

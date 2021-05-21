@@ -241,7 +241,7 @@ $(document).ready(() => {
                     $(".modal-title-censor a").text(inform.propertyId.title)
                     $(".modal-title-censor a").attr("href", `/${inform.propertyId.status?'property':'censor'}/${inform.propertyId._id}`)
                     $(".censor-modal").modal("show")
-                } else{
+                } else if (data.data.type==='warn'){
                     $(".modal-name-warn").text(inform.author.name)
                     $(".modal-role-warn").removeClass("admin")
                     $(".modal-role-warn").removeClass("staff")
@@ -252,7 +252,6 @@ $(document).ready(() => {
                     if (inform.propertyId){
                         $(".asdasdasd").show()
                         $(".modal-title-warn a").text(inform.propertyId.title)
-                        console.log(inform.propertyId)
                         $(".modal-title-warn a").attr("href", `/${inform.propertyId.status?'property':'censor'}/${inform.propertyId._id}`)
                     }else{
                         $(".asdasdasd").hide()
@@ -260,6 +259,22 @@ $(document).ready(() => {
                         $(".modal-title-warn a").removeAttr("href")
                     }
                     $(".warn-modal").modal("show")
+                }else if (data.data.type==='payment'){
+                    $(".modal-name-payment").text(inform.author.name)
+                    $(".modal-role-payment").removeClass("admin")
+                    $(".modal-role-payment").removeClass("staff")
+                    $(".modal-role-payment").text(inform.author.role.staff?"Kiểm duyệt viên":"Admin")
+                    $(".modal-role-payment").addClass(inform.author.role.staff?"staff":"admin")
+
+                    $(".payment-type span").text(inform.cardType)
+                    $(".payment-code span").text(inform.code)
+                    $(".payment-seri span").text(inform.seri)
+                    $(".payment-denom span").text(inform.denom + ".000 VNĐ")
+                    $(".payment-content span").text(inform.isAproved?"Đã nạp thành công":`Nạp thất bại: ${inform.reason}`)
+
+                    $(".modal-date-payment").text(formatDateTime(new Date(inform.date)))
+
+                    $(".payment-modal").modal("show")
                 }
                 $(`.inform-${data.data._id}`).removeClass("new")
             }
@@ -273,18 +288,13 @@ $(document).ready(() => {
         setTimeout(()=>{$( ".modal-inform" ).fadeOut(1600)}, 1000)
     })
 
-    $(".delete-inform-btn").click((e)=>{
-        e.preventDefault()
-        var id = e.target.dataset.id
-        $(".confirm-inform-modal").modal("show")
-        $(".confirm-inform-modal .confirm-remove").attr("data-id", id)
-    })
 
     $(".confirm-inform-modal .confirm-remove").click((e)=>{
         var id = e.target.dataset.id
         fetch(`/inform/${id}`, {method: "DELETE"}).then(data=>data.json())
         .then(data=>{
             if (data.code===0){
+                $(`.inform-${id}`).remove()
                 showToast("Xoá thông báo", "Đã xoá thông báo", "success")
             }else{
                 showToast("Xoá thông báo", "Xoá thông báo thất bại", "error")
@@ -946,6 +956,8 @@ const profileUserInfoTag = (u) => `
             ${u.data.phone?`<h6 data-phone="${u.data.phone}">${formatPhone(u.data.phone)}</h6> `:`<h6>Chưa cập nhật</h6>`}
             <small class="text-muted p-t-30 db">Số lượng bất động sản</small>
             <h6>${u.numOfProperty}</h6>
+            <small class="text-muted p-t-30 db">Số dư tài khoản</small>
+            <h6>${u.data.balance?(u.data.balance+".000 VNĐ"):"0 VNĐ"}</h6>
             <br>
             <button class="remove-user-btn" onclick=removeUserModal(this) data-id="${u.data.accountId}" data-name="${u.data.name}">Xoá người dùng</button>
             <button class="warn-user-btn" onclick=warnUserModal(this) data-id="${u.data.accountId}" data-name="${u.data.name}">Cảnh báo người dùng</button>
@@ -1086,4 +1098,57 @@ var showToast = (title, mess, type = "success", x = 20, y = 20) => {
             $(`.toastt-${toastNum + 1}`).remove()
         }, 300)
     }, 4000)
+}
+
+const acceptPay = (e) => {
+    var id = e.dataset.id
+    fetch('/payment/accept', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            isApproved: true,
+            id
+        })
+    })
+    .then(data => data.json())
+    .then(data => {
+        if (data.code===0){
+            $(`.pay-${id}`).remove()
+            showToast("Xác nhận nạp tiền", "Đã xác nhận")
+        }else{
+            showToast("Xác nhận nạp tiền", "Thất bại", "error")
+        }
+    })
+}
+
+
+const declidePay = (e) => {
+    var id = e.dataset.id
+    fetch('/payment/declide', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            isApproved: false,
+            id
+        })
+    })
+    .then(data => data.json())
+    .then(data => {
+        if (data.code===0){
+            $(`.pay-${id}`).remove()
+            showToast("Xác nhận nạp tiền", "Đã từ chối")
+        }else{
+            showToast("Xác nhận nạp tiền", "Thất bại", "error")
+        }
+    })
+}
+
+const removeInform= (e)=>{
+    var id = e.dataset.id
+    $(".confirm-inform-modal").modal("show")
+    $(".confirm-inform-modal .confirm-remove").attr("data-id", id)
 }

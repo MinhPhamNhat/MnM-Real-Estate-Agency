@@ -22,13 +22,13 @@
             <tr class="inform-detail inform-<%=value._id%> <%= value.isRead?'':'new'%>" data-id=<%=value._id%>>
                 <td data-id=<%=value._id%>><%= value.isRead?'Đã xem':'Chưa xem' %></td>
                 <td data-id=<%=value._id%>><%= locals.shorterFormatForDateTime(value.date) %></td>
-                <td data-id=<%=value._id%>><%= value.type==='censor'?"Tin kiểm duyệt":value.type==='contact'?"Yêu cầu liên hệ":"Cảnh báo" %></td>
+                <td data-id=<%=value._id%>><%= value.type==='censor'?"Tin kiểm duyệt":value.type==='contact'?"Yêu cầu liên hệ":value.type==='warn'?"Cảnh báo":"Nạp tiền" %></td>
                 <%if(!value.propertyId){%>
                     <td data-id=<%=value._id%> class="inform-title">Không có</td>
                 <%}else{%>
                 <td data-id=<%=value._id%> title="<%= value[value.type].propertyId.title %>" class="inform-title"><%= value[value.type].propertyId.title %></td>
                 <%}%>
-                <td class="delete-inform-btn"><a data-id=<%=value._id%> class="delete-inform"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                <td class="delete-inform-btn"><a class="delete-inform" onclick=removeInform(this) data-id=<%=value._id%>><i class="fa fa-trash" aria-hidden="true"></i></a></td>
             </tr>
         <%})%>
     </table>

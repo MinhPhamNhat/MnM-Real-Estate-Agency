@@ -1,0 +1,61 @@
+
+  <!-- sidebar-wrapper  -->
+  <main class="page-content">
+        <div class="container-fluid">
+            <h2>Lịch sử nạp</h2>
+            <hr>
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Loại thẻ</th>
+                        <th>Mệnh giá</th>
+                        <th>Mã thẻ</th>
+                        <th>Mã seri</th>
+                        <th>Người nạp</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% payments.forEach(p => {%>
+                    <tr class="pay-<%=p._id%>">
+                        <td>
+                            <%=locals.shorterFormatForDateTime(p.date)%>
+                        </td>
+                        <td>
+                            <%=p.cardType%>
+                        </td>
+                        <td>
+                            <%=p.denom%>
+                        </td>
+                        <td>
+                            <%=p.code%>
+                        </td>
+                        <td>
+                            <%=p.seri%>
+                        </td>
+                        <td>
+                            <a href="/profile/<%=p.accountId.accountId%>"><%=p.accountId.name%></a>
+                        </td>
+                        <td>
+                            <button data-id="<%=p._id%>" onclick=acceptPay(this) class="accept">Xác nhận</button>
+                            <button data-id="<%=p._id%>" onclick=declidePay(this) class="declide">Từ chối</button>
+                        </td>
+                    </tr>
+                    <%})%>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Loại thẻ</th>
+                        <th>Mệnh giá</th>
+                        <th>Mã thẻ</th>
+                        <th>Mã seri</th>
+                        <th>Người nạp</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </main>
+    <!-- page-content" -->

@@ -17,6 +17,7 @@ const profileRouter = require('./controllers/Profile');
 const informRouter = require('./controllers/Inform')
 const censorRouter = require('./controllers/Cencor')
 const dashboardRouter = require('./controllers/Dashboard')
+const paymentRouter = require('./controllers/Payment')
 
 const authenticate = require('./middleware/authenticate');
 const app = express();
@@ -56,6 +57,7 @@ app.use('/profile',authenticate.signUser, profileRouter);
 app.use('/inform',authenticate.signUser, informRouter);
 app.use('/censor',authenticate.signUser , censorRouter)
 app.use('/dashboard', authenticate.signUser, dashboardRouter)
+app.use('/payment', authenticate.signUser, paymentRouter)
 
 app.locals.getFlooredFixed = (v, d) => {
   return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);

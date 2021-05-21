@@ -47,6 +47,7 @@ router.post('/warn',authenticate.adminAndStaffAuthen , async(req, res, next) => 
 // DELETE: / => delete inform
 router.delete('/:id', async(req, res, next) => {
     var id = req.params.id
+    console.log(id)
     var inform = await Inform.removeInform({_id: id, ownerId: req.user.accountId})
     if (inform){
         res.status(200).json({code: 0})

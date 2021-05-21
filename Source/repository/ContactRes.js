@@ -10,7 +10,7 @@ module.exports = {
         return contact._id
     },
     getContact: async(query, skip, limit)=>{
-        var contacts = await Contact.find(query).sort({date: -1}).skip(skip).limit(limit).exec()
+        var contacts = await Contact.find(query).sort({date: 1}).skip(skip).limit(limit).exec()
         var temp = [...contacts]
         var data = contacts.map(async value=>{
             if (!value.isRead){

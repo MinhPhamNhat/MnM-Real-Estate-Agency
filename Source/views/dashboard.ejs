@@ -64,6 +64,22 @@
               <span>Nhân viên kiểm duyệt</span>
             </a>
           </li>
+          <li class="header-menu">
+            <span>Quản lý nạp tiền</span>
+          </li>
+          <li class="sidebar-dropdown">
+            <a href="/dashboard/pay-history">
+                <i class="fa fa-home" aria-hidden="true"></i>
+              <span>Lịch sử nạp</span>
+            </a>
+          </li>
+          <li class="sidebar-dropdown">
+            <a href="/dashboard/pay-require">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              <span>Yêu cầu nạp</span>
+              <span class="badge badge-pill badge-danger"><%=numOfUnauthenPayment%></span>
+            </a>
+          </li>
           <%}%>
           <li class="header-menu">
             <span>Quản lý Bất động sản</span>
@@ -100,6 +116,10 @@
     <%- include('dashboard/property-management') -%>
   <%}else if (route === "uncensor-property"){%>
     <%- include('dashboard/uncensor-property') -%>
+  <%}else if (route === "pay-history"){%>
+    <%- include('dashboard/pay-history') -%>
+  <%}else if (route === "pay-require"){%>
+    <%- include('dashboard/pay-require') -%>
   <%}%>
 </div>
 

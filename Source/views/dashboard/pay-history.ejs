@@ -1,0 +1,60 @@
+
+  <!-- sidebar-wrapper  -->
+  <main class="page-content">
+        <div class="container-fluid">
+            <h2>Lịch sử nạp</h2>
+            <hr>
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Loại thẻ</th>
+                        <th>Mệnh giá</th>
+                        <th>Mã thẻ</th>
+                        <th>Mã seri</th>
+                        <th>Người nạp</th>
+                        <th>Tình trạng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% payments.forEach(p => {%>
+                    <tr>
+                        <td>
+                            <%=locals.shorterFormatForDateTime(p.date)%>
+                        </td>
+                        <td>
+                            <%=p.cardType%>
+                        </td>
+                        <td>
+                            <%=p.denom%>
+                        </td>
+                        <td>
+                            <%=p.code%>
+                        </td>
+                        <td>
+                            <%=p.seri%>
+                        </td>
+                        <td>
+                                <a href="/profile/<%=p.accountId.accountId%>"><%=p.accountId.name%></a>
+                        </td>
+                        <td>
+                                <%=p.status&&p.isAproved?"Nạp thành công":!p.isAproved&&p.status?"Đang chờ xử lý":"Nạp thất bại"%>
+                        </td>
+                    </tr>
+                    <%})%>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Loại thẻ</th>
+                        <th>Mệnh giá</th>
+                        <th>Mã thẻ</th>
+                        <th>Mã seri</th>
+                        <th>Người nạp</th>
+                        <th>Tình trạng</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </main>
+    <!-- page-content" -->

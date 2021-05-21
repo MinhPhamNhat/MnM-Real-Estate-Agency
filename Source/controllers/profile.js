@@ -4,6 +4,7 @@ const User = require('../repository/UserRes')
 const Account = require('../repository/AccountRes')
 const Property = require('../repository/PropertyRes')
 const Statistic = require('../repository/StatisticRes')
+const Payment = require('../repository/PaymentRes')
 const func = require("../function/function")
 const authenticate = require('../middleware/authenticate');
 const Inform = require("../repository/InformRes")
@@ -140,6 +141,30 @@ router.post('/change-password', authenticate.authen, validator.updatePassword(),
   }
 })
 
+router.get('/payment',authenticate.authen, async (req, res, next) => {
+  var user = await User.findUserById(req.user.accountId)
+  var numOfUnreadInform = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
+  var requireInformation = req.flash('requireInformation')[0]
+  res.status(200).render('profile', {
+    route: "payment",
+    profile: user.data, 
+    numOfUnreadInform, 
+    requireInformation
+  });
+})
+
+router.get('/payment-history',authenticate.authen, async (req, res, next) => {
+  var user = await User.findUserById(req.user.accountId)
+  var numOfUnreadInform = await Statistic.getNumOfInform({ownerId: req.user.accountId, isRead: false})
+  var payments = await Payment.getPayment({accountId: req.user._id})
+  res.status(200).render('profile', {
+    route: "payment-history",
+    profile: user.data, 
+    numOfUnreadInform, 
+    payments
+  });
+})
+
 router.get('/:id', async (req, res, next) =>  {
   var id = req.params.id
   if (id){
@@ -158,6 +183,5 @@ router.get('/:id', async (req, res, next) =>  {
       }
   }
     res.render("404")
-  
 })
 module.exports = router;

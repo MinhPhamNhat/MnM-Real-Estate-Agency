@@ -1,0 +1,55 @@
+
+<h1>Nạp tiền</h1>
+<div class="payment">
+    <div class="suggestions">
+        <p>Bất động sản 21 chỉ hổ trợ nạp thẻ điện thoại</p>
+        <p>Giá đăng tin là 100.000 VNĐ một tin. Vui lòng nạp đủ số tiền để có thể đăng tin</p>
+        <p>Các trường có dấu <span class="required">(*)</span> là bắt buộc. Vui lòng nhập mã hợp lệ</p>
+    </div>
+    <form action="/payment" method="POST">
+        <div class="paypick">
+            <label>Chọn thẻ nạp <span class="required">(*)</span></label>
+            <div class="form-check ">
+                <input class="form-check-input" type="radio" name="card-type" value="viettel" id="flexRadioDefault1" checked>
+                <img src="https://upload.wikimedia.org/wikipedia/vi/thumb/e/e8/Logo_Viettel.svg/1200px-Logo_Viettel.svg.png" height="100" width="100">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="card-type" value="mobi" id="flexRadioDefault2">
+                <img src="https://blog.topcv.vn/wp-content/uploads/2018/04/mobifone-logo.png" height="100" width="100">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="card-type" value="vina" id="flexRadioDefault2">
+                <img src="https://cdn.tgdd.vn/Files/2015/04/21/634843/cach-dang-ki-cuoc-goi-va-nhan-tin-mien-phi-vinaphone-2.jpg" height="100" width="100">
+            </div>
+        </div>
+        <div class="pay-denominations">
+            <label class="input-group-text" id="inputGroup-sizing-sm">Vui lòng chọn mệnh giá <span class="required">(*)</span></label>
+            <select class="form-select" aria-label="Default select example" name="denom" required>
+                <option value="">Chọn mệnh giá</option>
+                <option value="50">50.000 VND</option>
+                <option value="100">100.000 VND</option>
+                <option value="200">200.000 VND</option>
+                <option value="500">500.000 VND</option>
+            </select>
+        </div>
+        <div class="pay-seri">
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" id="inputGroup-sizing-sm">Số seri <span class="required">(*)</span></label>
+                </div>
+                <input type="text" class="form-control" aria-label="Small" name="seri" required aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" id="inputGroup-sizing-sm">Mã thẻ <span class="required">(*)</span></label>
+                </div>
+                <input type="text" class="form-control" aria-label="Small" name="code" required aria-describedby="inputGroup-sizing-sm">
+            </div>
+        </div>
+        <br>
+        <div class="suggestions">
+            <p>Sau khi xác nhận nạp thẻ, hệ thống sẽ kiểm tra lại sau 5-10 phút và xác nhận tiền cho bạn</p>
+        </div>
+        <input type="submit" class="paysubmit" value="Xác nhận">
+    </form>
+</div>
