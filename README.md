@@ -2,7 +2,7 @@
 
 Trang web cho phép người dùng có thể tìm bất động sản mong muốn và người dùng cũng có thể đăng tin bán hoặc cho thuê bất động sản của riêng mình.
 
-Trang web được up lên host <a href="https://batdongsan21.herokuapp.com/">tại đây</a>
+Trang web được up lên host <a href="http://real-estate-mnm.herokuapp.com/">tại đây</a>
 
 ## Nền tảng
 
